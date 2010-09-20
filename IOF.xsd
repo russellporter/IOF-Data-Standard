@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- This file describes the IOF data exchange format for a wide
    selection of orienteering information regarding an orienteering
    event.
@@ -39,7 +39,7 @@
    Date:
      01-2002
     
-   Revised 07-2010:
+   Revised 07-2010 - 09-2010:
     Mats Troeng, SWE
 -->
 
@@ -334,6 +334,13 @@
         <xs:element ref="ClubId"/>
         <xs:element ref="Name" minOccurs="0"/>
         <xs:element ref="ShortName"/>
+        <!-- BEGIN 2.1 proposal -->
+        <!-- The name of the club as appearing in press result lists. -->
+        <xs:element ref="PressName" minOccurs="0"/>
+        <!-- The home city or geographical location of the club as appearing in press result lists. -->
+        <!-- To be considered: should PressName and HomeCity be replaced with a single element containing all information? -->
+        <xs:element ref="HomeCity"  minOccurs="0"/>
+        <!-- END 2.1 proposal -->
         <xs:element ref="OrganisationId" minOccurs="0"/>
         <xs:choice>
           <xs:element ref="CountryId"/>
@@ -2246,6 +2253,18 @@
       <xs:attribute name="idManager" type="xs:string"/>
     </xs:complexType>
   </xs:element>
+
+  <!-- BEGIN 2.1 proposal -->
+  <!-- The name of the club as appearing in press result lists. -->
+  <xs:element name="PressName">
+    <xs:complexType mixed="true" />
+  </xs:element>
+  <!-- The home city or geographical location of the club as appearing in press result lists. -->
+  <!-- To be considered: should PressName and HomeCity be replaced with a single element containing all information? -->
+  <xs:element name="HomeCity">
+    <xs:complexType mixed="true" />
+  </xs:element>
+  <!-- END 2.1 proposal -->
 
   <!-- Press
     A special organisation that can contain a request for a
