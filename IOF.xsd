@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- This file describes the IOF data exchange format for a wide
    selection of orienteering information regarding an orienteering
    event.
@@ -91,11 +91,11 @@
       <xs:sequence>
         <xs:element ref="PersonName"/>
         <xs:element ref="PersonId"/>
-        <xs:element ref="BirthDate" minOccurs="0"/>
+        <xs:element name="BirthDate" type="xs:date" minOccurs="0"/>
         <xs:element ref="Address" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="Tele" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="Nationality" minOccurs="0"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="sex">
         <xs:simpleType>
@@ -139,13 +139,6 @@
       <xs:attribute name="idManager" type="xs:string"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="BirthDate">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="Date"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
   <xs:element name="Nationality">
     <xs:complexType>
       <xs:choice>
@@ -162,7 +155,7 @@
           <xs:element ref="Person"/>
         </xs:choice>
         <xs:element ref="ContactType"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -230,7 +223,7 @@
         <xs:element ref="PreSelectedClass" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="CCard" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="Rank" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -244,9 +237,9 @@
         </xs:choice>
         <xs:element ref="RankPosition"/>
         <xs:element ref="RankValue"/>
-        <xs:element ref="ValidFromDate" minOccurs="0"/>
-        <xs:element ref="ValidToDate" minOccurs="0"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ValidFromDate" type="xs:date" minOccurs="0"/>
+        <xs:element name="ValidToDate" type="xs:date" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -256,20 +249,6 @@
   <xs:element name="RankValue">
     <xs:complexType mixed="true"/>
   </xs:element>
-  <xs:element name="ValidFromDate">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="Date"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ValidToDate">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="Date"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
 
   <!-- Control Card -->
   <xs:element name="CCard">
@@ -277,7 +256,7 @@
       <xs:sequence>
         <xs:element ref="CCardId"/>
         <xs:element ref="PunchingUnitType"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="miscData" type="xs:string"/>
     </xs:complexType>
@@ -351,7 +330,7 @@
         <xs:element ref="WebURL" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="Account" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="Contact" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -420,8 +399,8 @@
           <xs:element ref="EventClassificationId"/>
           <xs:element ref="EventClassification"/>
         </xs:choice>
-        <xs:element ref="StartDate"/>
-        <xs:element ref="FinishDate" minOccurs="0"/>
+        <xs:element name="StartDate" type="dateAndOptionalTime" />
+        <xs:element name="FinishDate" type="dateAndOptionalTime" minOccurs="0"/>
         <xs:element ref="EventOfficial" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="Organiser" minOccurs="0"/>
         <xs:element ref="EventClass" minOccurs="0" maxOccurs="unbounded"/>
@@ -430,7 +409,7 @@
         <xs:element ref="EntryData" minOccurs="0"/>
         <xs:element ref="Service" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="Account" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="eventForm" default="IndSingleDay">
         <xs:simpleType>
@@ -461,22 +440,8 @@
       <xs:attribute name="idManager" type="xs:string"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="StartDate">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="Date"/>
-        <xs:element ref="Clock" minOccurs="0"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="FinishDate">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="Date"/>
-        <xs:element ref="Clock" minOccurs="0"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+  <xs:element name="StartDate" type="dateAndOptionalTime" />
+  <xs:element name="FinishDate" type="dateAndOptionalTime" />
   <xs:element name="Organiser">
     <xs:complexType>
       <xs:sequence>
@@ -536,7 +501,7 @@
           <xs:element ref="TransferedToClass" minOccurs="0"/>
           <xs:element ref="DividedIntoClass"/>
         </xs:choice>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -574,7 +539,7 @@
       <xs:sequence>
         <xs:element ref="EventClassificationId"/>
         <xs:element ref="Name"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -601,28 +566,20 @@
       - one event race for a single day event
       - N event races for an N day event
       - two event races for a qualification and final (even if they
-        are the same day - then use Clock to distinguish)
+        are the same day)
   -->
   <xs:element name="EventRace">
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="EventRaceId"/>
         <xs:element ref="Name"/>
-        <xs:element ref="RaceDate"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="RaceDate" type="dateAndOptionalTime"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="EventRaceId">
     <xs:complexType mixed="true"/>
-  </xs:element>
-  <xs:element name="RaceDate">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="Date"/>
-        <xs:element ref="Clock" minOccurs="0"/>
-      </xs:sequence>
-    </xs:complexType>
   </xs:element>
   
   <!-- Fee
@@ -638,17 +595,17 @@
         <!-- The amount within an entry fee that is to be considered as an external fee (e g a federation tax). The Amount element includes the external fee. -->
         <xs:element ref="ExternalFee" minOccurs="0"/>
         <!-- The first entry date that the entry fee is valid for. -->
-        <xs:element ref="ValidFromDate" minOccurs="0"/>
+        <xs:element name="ValidFromDate" type="xs:dateTime" minOccurs="0"/>
         <!-- The last entry date that the entry fee is valid for. -->
-        <xs:element ref="ValidToDate" minOccurs="0"/>
+        <xs:element name="ValidToDate" type="xs:dateTime" minOccurs="0"/>
         <!-- The start of the birth date interval that the entry fee should be applied to. -->
-        <xs:element ref="FromDateOfBirth" minOccurs="0"/>
+        <xs:element name="FromDateOfBirth" type="xs:date" minOccurs="0"/>
         <!-- The end of the birth date interval that the entry fee should be applied to. -->
-        <xs:element ref="ToDateOfBirth" minOccurs="0"/>
+        <xs:element name="ToDateOfBirth" type="xs:date" minOccurs="0"/>
         <!-- The order in which this entry fee is applied when calculating the total entry fee for a competitor. -->
         <xs:element ref="Sequence"/>
         <!-- END 2.1 proposal -->
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="taxIncluded" default="Y">
         <xs:simpleType>
@@ -793,8 +750,8 @@
         <xs:element ref="EntryFee" minOccurs="0" maxOccurs="unbounded"/>
         <!-- END 2.1 proposal -->
         <xs:element ref="AllocationControl" minOccurs="0"/>
-        <xs:element ref="EntryDate"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="EntryDate" type="xs:dateTime"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="nonCompetitor" default="N">
         <xs:simpleType>
@@ -814,14 +771,6 @@
   </xs:element>
   <xs:element name="TeamSequence">
     <xs:complexType mixed="true"/>
-  </xs:element>
-  <xs:element name="EntryDate">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="Date"/>
-        <xs:element ref="Clock" minOccurs="0"/>
-      </xs:sequence>
-    </xs:complexType>
   </xs:element>
 
   <!-- AllocationControl
@@ -894,7 +843,7 @@
         </xs:choice>
         <xs:element ref="EventRaceId" minOccurs="0"/>
         <xs:element ref="ClassStart" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -972,7 +921,7 @@
           <xs:element ref="CCardId"/>
           <xs:element ref="CCard"/>
         </xs:choice>
-        <xs:element ref="StartTime" minOccurs="0"/>
+        <xs:element name="StartTime" type="xs:dateTime" minOccurs="0"/>
         <xs:element ref="TeamSequence" minOccurs="0"/>
         <!-- BEGIN 2.1 proposal -->
         <!-- Support for defining the competitor starting order within a team at a parallel relay leg (e g 25-manna) -->
@@ -980,7 +929,7 @@
         <!-- END 2.1 proposal -->
         <xs:element ref="CourseLength"/>
         <xs:element ref="StartId" minOccurs="0"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1033,7 +982,7 @@
         </xs:choice>
         <xs:element ref="EventRaceId" minOccurs="0"/>
         <xs:element ref="ClassResult" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="status" default="complete">
         <xs:simpleType>
@@ -1095,9 +1044,9 @@
         </xs:choice>
         <xs:element ref="StartNumber" minOccurs="0"/>
         <xs:element ref="BibNumber" minOccurs="0"/>
-        <xs:element ref="StartTime" minOccurs="0"/>
-        <xs:element ref="FinishTime" minOccurs="0"/>
-        <xs:element ref="Time" minOccurs="0"/>
+        <xs:element name="StartTime" type="xs:dateTime" minOccurs="0"/>
+        <xs:element name="FinishTime" type="xs:dateTime" minOccurs="0"/>
+        <xs:element name="Time" type="timeSpan" minOccurs="0"/>
         <xs:element ref="ResultPosition" minOccurs="0"/>
         <xs:element ref="TeamStatus"/>
         <xs:element ref="Rank" minOccurs="0" maxOccurs="unbounded"/>
@@ -1120,9 +1069,9 @@
           <xs:element ref="CCardId"/>
           <xs:element ref="CCard"/>
         </xs:choice>
-        <xs:element ref="StartTime" minOccurs="0"/>
-        <xs:element ref="FinishTime" minOccurs="0"/>
-        <xs:element ref="Time" minOccurs="0"/>
+        <xs:element name="StartTime" type="xs:dateTime" minOccurs="0"/>
+        <xs:element name="FinishTime" type="xs:dateTime" minOccurs="0"/>
+        <xs:element name="Time" type="timeSpan" minOccurs="0"/>
         <xs:element ref="ResultPosition" minOccurs="0"/>
         <xs:element ref="CompetitorStatus"/>
         <xs:element ref="TeamSequence" minOccurs="0"/>
@@ -1147,7 +1096,7 @@
           <xs:element ref="BadgeValue"/>
         </xs:choice>
         <xs:element ref="Point" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1255,7 +1204,7 @@
           <xs:element ref="ControlCode"/>
           <xs:element ref="Control"/>
         </xs:choice>
-        <xs:element ref="Time" minOccurs="0"/>
+        <xs:element name="Time" type="timeSpan" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="sequence" use="required" type="xs:integer"/>
     </xs:complexType>
@@ -1277,7 +1226,7 @@
         <xs:element ref="BadgeValueId"/>
         <xs:element ref="Name"/>
         <xs:element ref="ShortName" minOccurs="0"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1313,7 +1262,7 @@
           <xs:element ref="ClassType"/>
         </xs:choice>
         <xs:element ref="TimeFactor"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1347,7 +1296,7 @@
         <!-- BEGIN 2.1 proposal: proposal by Per-Erik Modig -->
         <xs:element ref="MaxPosition" minOccurs="0"/>
         <!-- END 2.1 proposal -->
-        <xs:element ref="ModifyDate"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1388,7 +1337,7 @@
       <xs:sequence>
         <xs:element ref="ClassTypeId"/>
         <xs:element ref="Name"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1433,7 +1382,7 @@
           <xs:element ref="EntryFeeId"/>
           <xs:element ref="EntryFee"/>
         </xs:choice>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="lowAge" type="xs:integer"/>
       <xs:attribute name="highAge" type="xs:integer"/>
@@ -1549,16 +1498,16 @@
   <xs:element name="ClassRaceInfo">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="FirstStart" minOccurs="0"/>
-        <xs:element ref="StartInterval" minOccurs="0"/>
-        <xs:element ref="EstimatedBestTime" minOccurs="0"/>
-        <xs:element ref="EstimatedLastPrizeTime" minOccurs="0"/>
-        <xs:element ref="PrizeCeremonyTime" minOccurs="0"/>
+        <xs:element name="FirstStart" type="xs:dateTime" minOccurs="0"/>
+        <xs:element name="StartInterval" type="timeSpan" minOccurs="0"/>
+        <xs:element name="EstimatedBestTime" type="timeSpan" minOccurs="0"/>
+        <xs:element name="EstimatedLastPrizeTime" type="xs:dateTime" minOccurs="0"/>
+        <xs:element name="PrizeCeremonyTime" type="xs:dateTime" minOccurs="0"/>
         <xs:element ref="AllocationMethod" minOccurs="0"/>
         <xs:element ref="StartMethod" minOccurs="0"/>
         <xs:element ref="ClassRaceStatus"/>
         <xs:element ref="CourseVariationId" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="numberOfVacants" type="xs:integer"/>
       <xs:attribute name="rankingRace" default="N">
@@ -1621,43 +1570,6 @@
       </xs:attribute>
     </xs:complexType>
   </xs:element>
-  <xs:element name="FirstStart">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="Date" minOccurs="0"/>
-        <xs:element ref="Clock"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="StartInterval">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="Time"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="EstimatedBestTime">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="Time"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="EstimatedLastPrizeTime">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="Time"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="PrizeCeremonyTime">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="Date" minOccurs="0"/>
-        <xs:element ref="Clock"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
 
   <!--
     ##########
@@ -1708,7 +1620,7 @@
         <xs:element ref="PunchingUnitType" minOccurs="0"/>
         <xs:element ref="MapPosition" minOccurs="0"/>
         <xs:element ref="Comment" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1716,7 +1628,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="Box" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1842,7 +1754,7 @@
         <xs:element ref="MapPosition" minOccurs="0"/>
         <xs:element ref="Comment" minOccurs="0"/>
         <xs:element ref="DistanceFromStart" minOccurs="0"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1884,7 +1796,7 @@
         <xs:element ref="PunchingUnitType" minOccurs="0"/>
         <xs:element ref="MapPosition" minOccurs="0"/>
         <xs:element ref="Comment" minOccurs="0"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1944,7 +1856,7 @@
           <xs:element ref="FinishPoint"/>
         </xs:choice>
         <xs:element ref="DistanceToFinish" minOccurs="0"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="numberOfRunners" type="xs:integer"/>
     </xs:complexType>
@@ -2094,7 +2006,7 @@
       <xs:sequence>
         <xs:element ref="UnitCode"/>
         <xs:element ref="PunchingUnitType"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2178,7 +2090,7 @@
         <xs:element ref="Account" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="Contact" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="SubOrganisation" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2233,7 +2145,7 @@
         <xs:element ref="OrganisationTypeId"/>
         <xs:element ref="Name"/>
         <xs:element ref="SubOrganisationType" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2284,7 +2196,7 @@
           <xs:element ref="CountryId"/>
         </xs:choice>
         <xs:element ref="ResultSelection" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="mediaType" use="required">
         <xs:simpleType>
@@ -2324,7 +2236,7 @@
         <xs:element ref="Amount"/>
         <xs:element ref="Comment" minOccurs="0"/>
         <xs:element ref="MaxNumber" minOccurs="0"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2390,7 +2302,7 @@
         <xs:element ref="RequestedQuantity"/>
         <xs:element ref="DeliveredQuantity" minOccurs="0"/>
         <xs:element ref="Comment" minOccurs="0"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2443,7 +2355,7 @@
         <xs:element ref="ForeignAccount" minOccurs="0"/>
         <!-- BEGIN 2.1 proposal: added minOccurs="0" -->
         <!-- Sometimes it is not necessary to include information about the transaction date. -->
-        <xs:element ref="Date" minOccurs="0" />
+        <xs:element name="Date" type="xs:dateTime" minOccurs="0" />
         <!-- END 2.1 proposal -->
         <xs:element ref="Amount"/>
         <xs:choice>
@@ -2462,7 +2374,7 @@
           <xs:element ref="ServiceId"/>
           <xs:element ref="Service"/>
         </xs:choice>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2499,7 +2411,7 @@
           <xs:element ref="CountryId"/>
           <xs:element ref="Country"/>
         </xs:choice>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="careOf" type="xs:string"/>
       <xs:attribute name="street" use="required" type="xs:string"/>
@@ -2536,7 +2448,7 @@
       <xs:sequence>
         <xs:element ref="CountryId"/>
         <xs:element ref="Name" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2635,7 +2547,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="TeleType" minOccurs="0"/>
-        <xs:element ref="ModifyDate" minOccurs="0"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="phoneNumber" type="xs:string"/>
       <xs:attribute name="faxNumber" type="xs:string"/>
@@ -2662,62 +2574,6 @@
   <xs:element name="WebURL">
     <xs:complexType mixed="true"/>
   </xs:element>
-
-  <!-- Date
-    Element for general purpose dates
-  -->
-  <xs:element name="Date">
-    <xs:complexType mixed="true">
-      <xs:attribute name="dateFormat" default="YYYY-MM-DD" type="xs:string"/>
-    </xs:complexType>
-  </xs:element>
-
-  <!-- Clock
-    Specifies a time of the day, e.g. a start time.
-  -->
-  <xs:element name="Clock">
-    <xs:complexType mixed="true">
-      <xs:attribute name="clockFormat" default="HH:MM:SS" type="xs:string"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="StartTime">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="Date" minOccurs="0"/>
-        <xs:element ref="Clock"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="FinishTime">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="Date" minOccurs="0"/>
-        <xs:element ref="Clock"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-
-  <!-- Time
-    Specifies a time period, e.g. a running time.
-  -->
-  <xs:element name="Time">
-    <xs:complexType mixed="true">
-      <xs:attribute name="timeFormat" default="MM:SS" type="xs:string"/>
-    </xs:complexType>
-  </xs:element>
-
-  <!-- ModifyDate
-    Used frequently to specify a timestamp of last modification
-    of an element.
-  -->
-  <xs:element name="ModifyDate">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="Date"/>
-        <xs:element ref="Clock" minOccurs="0"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
  
   
   <!-- BEGIN 2.1 proposal -->
@@ -2726,24 +2582,6 @@
   <xs:element name="ExternalFee">
     <xs:complexType mixed="true">
       <xs:attribute name="currency" type="xs:string"/>
-    </xs:complexType>
-  </xs:element>
-  
-  <!-- The start of an age interval. -->
-  <xs:element name="FromDateOfBirth">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="Date"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  
-  <!-- Specifies the end of an age interval. -->
-  <xs:element name="ToDateOfBirth">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="Date"/>
-      </xs:sequence>
     </xs:complexType>
   </xs:element>
   
@@ -2758,7 +2596,7 @@
       <xs:sequence>
         <xs:element ref="Answer"/>
         <xs:element ref="CorrectAnswer"/>
-        <xs:element ref="Time" minOccurs="0"/>
+        <xs:element name="Time" type="timeSpan" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2869,4 +2707,18 @@
   </xs:element>
 
   <!-- END 2.1 proposal -->
+  
+  
+  <!-- 1234-12-31Z01:23:45.6Z and 1234-12-31 are both valid -->
+  <xs:simpleType name="dateAndOptionalTime">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])(T([0-1][0-9]|2[0-3])(:[0-5][0-9]){2}(\.[0-9]*)?(Z|((\-|\+)(0[0-9]|1[0-2]):[0-5][0-9])))?"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="timeSpan">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(([0-9])*:)?(:[0-5][0-9]){2}(\.[0-9]*)?"/>
+    </xs:restriction>
+  </xs:simpleType>
 </xs:schema>
