@@ -6,7 +6,7 @@
    The file is organized in a number of sections:
    - Person
    - Competitor
-   - Club
+   - Organisation
    - Event
    - Entries
    - Start List
@@ -22,10 +22,10 @@
    - PersonList - rarely used
    - CompetitorList - "brutto" list, e.g. a national database
    - RankList - competitors in a ranking list, e.g. World Ranking
-   - ClubList - club database, national or event specific
+   - OrganisationList - organisation database, national or event specific
    - EventList - used for fixtures
    - ServiceRequestList - rarely used
-   - EntryList - club ordered entries for an event
+   - EntryList - organisation ordered entries for an event
    - StartList - class ordered start list
    - ResultList - class ordered results, not necessarily complete
    - ClassData - list of classes, national or event specific
@@ -38,7 +38,7 @@
      
    Date:
      01-2002
-    
+   
    Revised 07-2010 - 09-2010:
     Mats Troeng, SWE
 -->
@@ -55,13 +55,33 @@
     </xs:complexType>
   </xs:element>
 
-  <!-- 
+  <!-- Id
+     Identifier element, used extensively.
+  -->
+  <xs:element name="Id">
+    <xs:complexType mixed="true">
+      <xs:attribute name="type">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="reg"/>
+            <xs:enumeration value="other"/>
+            <xs:enumeration value="nat"/>
+            <xs:enumeration value="loc"/>
+            <xs:enumeration value="int"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="idManager" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+
+  <!--
     ##########
     ### Person
     ##########
    
     Represents a person. This could either be a Competitor (see the
-    Competitor section) or contact persons in a Club (see the Club
+    Competitor section) or contact persons in an organisation (see the Organisation
     section) or press (see the "Office" section).
 
     Lists to exchange:
@@ -81,7 +101,7 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  
+
   <!-- Person
     Basic information of a person, either a competitor, contact,
     press etc.
@@ -89,8 +109,8 @@
   <xs:element name="Person">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="PersonName"/>
-        <xs:element ref="PersonId"/>
+        <xs:element ref="Id" minOccurs="0"/>
+        <xs:element ref="PersonName" minOccurs="0"/>
         <xs:element name="BirthDate" type="xs:date" minOccurs="0"/>
         <xs:element ref="Address" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="Tele" minOccurs="0" maxOccurs="unbounded"/>
@@ -115,45 +135,17 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="Family">
-    <xs:complexType mixed="true"/>
-  </xs:element>
+  <xs:element name="Family" type="xs:string"/>
   <xs:element name="Given">
     <xs:complexType mixed="true">
       <xs:attribute name="sequence" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="PersonId">
-    <xs:complexType mixed="true">
-      <xs:attribute name="type">
-        <xs:simpleType>
-          <xs:restriction base="xs:NMTOKEN">
-            <xs:enumeration value="reg"/>
-            <xs:enumeration value="other"/>
-            <xs:enumeration value="nat"/>
-            <xs:enumeration value="loc"/>
-            <xs:enumeration value="int"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
-      <xs:attribute name="idManager" type="xs:string"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="Nationality">
-    <xs:complexType>
-      <xs:choice>
-        <xs:element ref="CountryId"/>
-        <xs:element ref="Country"/>
-      </xs:choice>
-    </xs:complexType>
-  </xs:element>
+  <xs:element name="Nationality" type="xs:string" />
   <xs:element name="Contact">
     <xs:complexType>
       <xs:sequence>
-        <xs:choice>
-          <xs:element ref="PersonId"/>
-          <xs:element ref="Person"/>
-        </xs:choice>
+        <xs:element ref="Person"/>
         <xs:element ref="ContactType"/>
         <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
@@ -176,7 +168,7 @@
     </xs:complexType>
   </xs:element>
 
-  <!-- 
+  <!--
     ##########
     ### Competitor
     ##########
@@ -210,16 +202,9 @@
   <xs:element name="Competitor">
     <xs:complexType>
       <xs:sequence>
-        <xs:choice>
-          <xs:element ref="PersonId"/>
-          <xs:element ref="Person"/>
-        </xs:choice>
-        <xs:choice>
-          <xs:element ref="ClubId"/>
-          <xs:element ref="Club"/>
-          <xs:element ref="Country"/>
-          <xs:element ref="CountryId"/>
-        </xs:choice>
+        <xs:element ref="Person"/>
+        <xs:element ref="Organisation"/>
+        <xs:element name="Country" type="xs:string" />
         <xs:element ref="PreSelectedClass" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="CCard" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="Rank" minOccurs="0" maxOccurs="unbounded"/>
@@ -230,11 +215,8 @@
   <xs:element name="Rank">
     <xs:complexType>
       <xs:sequence>
-        <xs:choice>
-          <xs:element ref="Name"/>
-          <xs:element ref="OrganisationId"/>
-          <xs:element ref="Organisation"/>
-        </xs:choice>
+        <xs:element ref="Name" minOccurs="0"/>
+        <xs:element ref="Organisation" minOccurs="0"/>
         <xs:element ref="RankPosition"/>
         <xs:element ref="RankValue"/>
         <xs:element name="ValidFromDate" type="xs:date" minOccurs="0"/>
@@ -243,12 +225,8 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="RankPosition">
-    <xs:complexType mixed="true"/>
-  </xs:element>
-  <xs:element name="RankValue">
-    <xs:complexType mixed="true"/>
-  </xs:element>
+  <xs:element name="RankPosition" type="xs:string"/>
+  <xs:element name="RankValue" type="xs:string"/>
 
   <!-- Control Card -->
   <xs:element name="CCard">
@@ -261,10 +239,8 @@
       <xs:attribute name="miscData" type="xs:string"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="CCardId">
-    <xs:complexType mixed="true"/>
-  </xs:element>
- 
+  <xs:element name="CCardId" type="xs:string" />
+
   <!-- RankList
     List of competitors in a specific ranking list identified
     by the Name subelement, e.g. 'World Ranking List'.
@@ -274,10 +250,7 @@
       <xs:sequence>
         <xs:element ref="IOFVersion" minOccurs="0"/>
         <xs:element ref="Name"/>
-        <xs:choice minOccurs="0">
-          <xs:element ref="OrganisationId"/>
-          <xs:element ref="Organisation"/>
-        </xs:choice>
+        <xs:element ref="Organisation" minOccurs="0"/>
         <xs:element ref="Competitor" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
@@ -285,46 +258,44 @@
 
   <!--
     ##########
-    ### Club
+    ### Organisation
     ##########
    
-    Information about a Club, i.e. address, contact person(s) etc.
+    Information about a Organisation, i.e. address, contact person(s) etc.
     Makes some use of the elements in the "Office" section.
     Lists to exchange:
-      - ClubList
+      - OrganisationList
   -->
 
-  <!-- Club List
-    List of clubs including address and contact information.
+  <!-- Organisation List
+    List of organisations including address and contact information.
   -->
-  <xs:element name="ClubList">
+  <xs:element name="OrganisationList">
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="IOFVersion" minOccurs="0"/>
-        <xs:element ref="Club" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="Organisation" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
 
-  <!-- Club -->
-  <xs:element name="Club">
+  <!-- Organisation -->
+  <xs:element name="Organisation">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="ClubId"/>
+        <xs:element ref="Id" minOccurs="0"/>
         <xs:element ref="Name" minOccurs="0"/>
-        <xs:element ref="ShortName"/>
+        <xs:element ref="ShortName" minOccurs="0"/>
         <!-- BEGIN 2.1 proposal -->
-        <!-- The name of the club as appearing in press result lists. -->
-        <xs:element ref="PressName" minOccurs="0"/>
-        <!-- The home city or geographical location of the club as appearing in press result lists. -->
+        <!-- The name of the organisation as appearing in press result lists. -->
+        <xs:element name="PressName" type="xs:string" minOccurs="0"/>
+        <!-- The home city or geographical location of the organisation as appearing in press result lists. -->
         <!-- To be considered: should PressName and HomeCity be replaced with a single element containing all information? -->
-        <xs:element ref="HomeCity"  minOccurs="0"/>
+        <xs:element name="HomeCity" type="xs:string" minOccurs="0"/>
         <!-- END 2.1 proposal -->
-        <xs:element ref="OrganisationId" minOccurs="0"/>
-        <xs:choice>
-          <xs:element ref="CountryId"/>
-          <xs:element ref="Country"/>
-        </xs:choice>
+        <xs:element name="OrganisationType" type="xs:string" minOccurs="0"/>
+        <xs:element ref="SubOrganisations" minOccurs="0"/>
+        <xs:element name="Country" type="xs:string" minOccurs="0"/>
         <xs:element ref="Address" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="Tele" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="WebURL" minOccurs="0" maxOccurs="unbounded"/>
@@ -334,20 +305,12 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ClubId">
-    <xs:complexType mixed="true">
-      <xs:attribute name="type">
-        <xs:simpleType>
-          <xs:restriction base="xs:NMTOKEN">
-            <xs:enumeration value="reg"/>
-            <xs:enumeration value="other"/>
-            <xs:enumeration value="nat"/>
-            <xs:enumeration value="loc"/>
-            <xs:enumeration value="int"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
-      <xs:attribute name="idManager" type="xs:string"/>
+
+  <xs:element name="SubOrganisations">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Organisation" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
 
@@ -381,7 +344,7 @@
     The main event element:
       - name of the event
       - start and finish dates (to support multiday events)
-      - organizing club(s)
+      - organizing organisation(s)
       - event officials
       - classes
       - races (i.e. event "days")
@@ -393,14 +356,11 @@
   <xs:element name="Event">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="EventId"/>
-        <xs:element ref="Name"/>
-        <xs:choice>
-          <xs:element ref="EventClassificationId"/>
-          <xs:element ref="EventClassification"/>
-        </xs:choice>
-        <xs:element name="StartDate" type="dateAndOptionalTime" />
-        <xs:element name="FinishDate" type="dateAndOptionalTime" minOccurs="0"/>
+        <xs:element ref="Id" minOccurs="0"/>
+        <xs:element ref="Name" minOccurs="0"/>
+        <xs:element ref="EventClassification" minOccurs="0"/>
+        <xs:element name="StartDate" type="DateAndOptionalTime" minOccurs="0"/>
+        <xs:element name="FinishDate" type="DateAndOptionalTime" minOccurs="0"/>
         <xs:element ref="EventOfficial" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="Organiser" minOccurs="0"/>
         <xs:element ref="EventClass" minOccurs="0" maxOccurs="unbounded"/>
@@ -411,44 +371,25 @@
         <xs:element ref="Account" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
-      <xs:attribute name="eventForm" default="IndSingleDay">
+      <xs:attribute name="eventForm" default="indSingleDay">
         <xs:simpleType>
           <xs:restriction base="xs:NMTOKEN">
-            <xs:enumeration value="IndSingleDay"/>
+            <xs:enumeration value="indSingleDay"/>
             <xs:enumeration value="teamMultiDay"/>
             <xs:enumeration value="teamSingleDay"/>
             <xs:enumeration value="relay"/>
-            <xs:enumeration value="IndMultiDay"/>
+            <xs:enumeration value="indMultiDay"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
     </xs:complexType>
   </xs:element>
-  <xs:element name="EventId">
-    <xs:complexType mixed="true">
-      <xs:attribute name="type">
-        <xs:simpleType>
-          <xs:restriction base="xs:NMTOKEN">
-            <xs:enumeration value="reg"/>
-            <xs:enumeration value="other"/>
-            <xs:enumeration value="nat"/>
-            <xs:enumeration value="loc"/>
-            <xs:enumeration value="int"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
-      <xs:attribute name="idManager" type="xs:string"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="StartDate" type="dateAndOptionalTime" />
-  <xs:element name="FinishDate" type="dateAndOptionalTime" />
+  <xs:element name="StartDate" type="DateAndOptionalTime" />
+  <xs:element name="FinishDate" type="DateAndOptionalTime" />
   <xs:element name="Organiser">
     <xs:complexType>
       <xs:sequence>
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:element ref="ClubId"/>
-          <xs:element ref="Club"/>
-        </xs:choice>
+        <xs:element ref="Organisation" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -456,16 +397,11 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="EventOfficialRole"/>
-        <xs:choice>
-          <xs:element ref="PersonId"/>
-          <xs:element ref="Person"/>
-        </xs:choice>
+        <xs:element ref="Person"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="EventOfficialRole">
-    <xs:complexType mixed="true"/>
-  </xs:element>
+  <xs:element name="EventOfficialRole" type="xs:string"/>
   <xs:element name="EntryData">
     <xs:complexType>
       <xs:sequence minOccurs="0" maxOccurs="unbounded">
@@ -482,35 +418,21 @@
   <xs:element name="EventClass">
     <xs:complexType>
       <xs:sequence>
-        <xs:choice>
-          <xs:element ref="ClassId"/>
-          <xs:element ref="Class"/>
-        </xs:choice>
-        <xs:choice minOccurs="0">
-          <xs:choice>
-            <xs:sequence>
-              <xs:element ref="ClassRaceInfo"/>
-              <xs:element ref="PunchingUnitType"/>
-            </xs:sequence>
-            <xs:sequence maxOccurs="unbounded">
-              <xs:element ref="EventRaceId"/>
-              <xs:element ref="ClassRaceInfo"/>
-              <xs:element ref="PunchingUnitType"/>
-            </xs:sequence>
-          </xs:choice>
-          <xs:element ref="TransferedToClass" minOccurs="0"/>
-          <xs:element ref="DividedIntoClass"/>
-        </xs:choice>
+        <xs:element ref="Class"/>
+        <xs:element ref="EventRace" minOccurs="0"/>
+        <xs:element ref="ClassRaceInfo" minOccurs="0"/>
+        <xs:element ref="PunchingUnitType" minOccurs="0"/>
+        <xs:element ref="TransferedToClass" minOccurs="0"/>
+        <xs:element ref="DividedIntoClass" minOccurs="0"/>
         <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="TransferedToClass">
     <xs:complexType>
-      <xs:choice>
-        <xs:element ref="ClassId"/>
-        <xs:element ref="ClassShortName"/>
-      </xs:choice>
+      <xs:sequence>
+        <xs:element ref="Class"/>
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="DividedIntoClass">
@@ -522,11 +444,9 @@
   </xs:element>
   <xs:element name="EntryClass">
     <xs:complexType>
-      <xs:choice>
-        <xs:element ref="ClassId"/>
-        <xs:element ref="ClassShortName"/>
+      <xs:sequence>
         <xs:element ref="EventClass"/>
-      </xs:choice>
+      </xs:sequence>
       <xs:attribute name="sequence" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
@@ -537,30 +457,14 @@
   <xs:element name="EventClassification">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="EventClassificationId"/>
-        <xs:element ref="Name"/>
+        <xs:element ref="Id" minOccurs="0"/>
+        <xs:element ref="Name" minOccurs="0"/>
         <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="EventClassificationId">
-    <xs:complexType mixed="true">
-      <xs:attribute name="type">
-        <xs:simpleType>
-          <xs:restriction base="xs:NMTOKEN">
-            <xs:enumeration value="reg"/>
-            <xs:enumeration value="other"/>
-            <xs:enumeration value="nat"/>
-            <xs:enumeration value="loc"/>
-            <xs:enumeration value="int"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
-      <xs:attribute name="idManager" type="xs:string"/>
-    </xs:complexType>
-  </xs:element>
 
-  <!-- Event Race 
+  <!-- Event Race
     An event consists of a number of event races. The number is equal
     to the number of times a competitor should start:
       - one event race for a single day event
@@ -571,26 +475,24 @@
   <xs:element name="EventRace">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="EventRaceId"/>
-        <xs:element ref="Name"/>
-        <xs:element name="RaceDate" type="dateAndOptionalTime"/>
+        <xs:element ref="Id" minOccurs="0"/>
+        <xs:element ref="Name" minOccurs="0"/>
+        <xs:element name="RaceDate" type="DateAndOptionalTime" minOccurs="0"/>
         <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="EventRaceId">
-    <xs:complexType mixed="true"/>
-  </xs:element>
-  
+
   <!-- Fee
     Competitor fees for entering the event.
   -->
+  <!-- TODO: make revisions as discussed in http://code.google.com/p/iofdatastandard/issues/detail?id=10 -->
   <xs:element name="EntryFee">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="EntryFeeId" minOccurs="0"/>
+        <xs:element ref="Id" minOccurs="0"/>
         <xs:element ref="Name" minOccurs="0"/>
-        <xs:element ref="Amount"/>
+        <xs:element ref="Amount" minOccurs="0"/>
         <!-- BEGIN 2.1 proposal -->
         <!-- The amount within an entry fee that is to be considered as an external fee (e g a federation tax). The Amount element includes the external fee. -->
         <xs:element ref="ExternalFee" minOccurs="0"/>
@@ -628,29 +530,13 @@
       <!-- END 2.1 proposal -->
     </xs:complexType>
   </xs:element>
-  <xs:element name="EntryFeeId">
-    <xs:complexType mixed="true">
-      <xs:attribute name="type">
-        <xs:simpleType>
-          <xs:restriction base="xs:NMTOKEN">
-            <xs:enumeration value="reg"/>
-            <xs:enumeration value="other"/>
-            <xs:enumeration value="nat"/>
-            <xs:enumeration value="loc"/>
-            <xs:enumeration value="int"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
-      <xs:attribute name="idManager" type="xs:string"/>
-    </xs:complexType>
-  </xs:element>
   <xs:element name="Amount">
     <xs:complexType mixed="true">
       <xs:attribute name="currency" type="xs:string"/>
     </xs:complexType>
   </xs:element>
 
-  <!-- 
+  <!--
     ##########
     ### Entries
     ##########
@@ -663,7 +549,7 @@
   -->
 
   <!-- EntryList
-    A number of Club Entries each holding a club, a club contact and
+    A number of Organisation Entries each holding an organisation, an organisation contact and
     the persons entering the competition, probably aggregated
     into teams if it is for a relay.
   -->
@@ -671,23 +557,20 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="IOFVersion" minOccurs="0"/>
-        <xs:element ref="ClubEntry" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="OrganisationEntry" minOccurs="0" maxOccurs="unbounded"/>
         <!-- BEGIN 2.1 proposal -->
-        <!-- Should be able to include entries that are not bound to a club. -->
+        <!-- Should be able to include entries that are not bound to an organisation. -->
         <xs:element ref="Entry" minOccurs="0" maxOccurs="unbounded"/>
         <!-- END 2.1 proposal -->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ClubEntry">
+  <xs:element name="OrganisationEntry">
     <xs:complexType>
       <xs:sequence>
         <!-- BEGIN 2.1 proposal: added maxOccurs="unbounded" -->
-        <!-- Support for multiple-club relay teams. -->
-        <xs:choice maxOccurs="unbounded">
-          <xs:element ref="ClubId"/>
-          <xs:element ref="Club"/>
-        </xs:choice>
+        <!-- Support for multiple-organisation relay teams. -->
+        <xs:element ref="Organisation" maxOccurs="unbounded"/>
         <!-- END 2.1 proposal -->
         <xs:element ref="Contact" minOccurs="0"/>
         <xs:element ref="Entry" minOccurs="0" maxOccurs="unbounded"/>
@@ -696,7 +579,7 @@
   </xs:element>
 
   <!-- Entry
-    An entry consists of 
+    An entry consists of
     1) a person, his/hers personal control card, and a rank
        (e.g. from a ranking list, this could be needed by the event
        software to allocate starting times).
@@ -706,44 +589,14 @@
   <xs:element name="Entry">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="EntryId" minOccurs="0"/>
-        <xs:choice>
-          <xs:sequence>
-            <xs:choice>
-              <xs:element ref="PersonId"/>
-              <xs:element ref="Person"/>
-            </xs:choice>
-            <!-- BEGIN 2.1 proposal -->
-            <!-- Should be able to bind a person to a club, e g to define club membership for a person in a multiple-club relay team. -->
-            <xs:choice>
-              <xs:element ref="ClubId"/>
-              <xs:element ref="Club"/>
-            </xs:choice>
-            <!-- END 2.1 proposal -->
-            <xs:element ref="CCard" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element ref="Rank" minOccurs="0" maxOccurs="unbounded"/>
-          </xs:sequence>
-          <xs:sequence>
-            <xs:element ref="TeamName"/>
-            <xs:sequence minOccurs="0" maxOccurs="unbounded">
-              <xs:choice>
-                <xs:element ref="PersonId"/>
-                <xs:element ref="Person"/>
-              </xs:choice>
-              <xs:choice minOccurs="0">
-                <xs:element ref="ClubId"/>
-                <xs:element ref="Club"/>
-              </xs:choice>
-              <xs:element ref="CCard" minOccurs="0" maxOccurs="unbounded"/>
-              <xs:element ref="Rank" minOccurs="0" maxOccurs="unbounded"/>
-              <xs:element ref="TeamSequence" minOccurs="0"/>
-              <!-- BEGIN 2.1 proposal -->
-              <!-- Support for defining the competitor starting order within a team at a parallel relay leg (e g 25-manna) -->
-              <xs:element ref="LegOrder" minOccurs="0"/>
-              <!-- END 2.1 proposal -->
-            </xs:sequence>
-          </xs:sequence>
-        </xs:choice>
+        <xs:element ref="Id" minOccurs="0"/>
+        <xs:element ref="Person"/>
+        <!-- BEGIN 2.1 proposal -->
+        <!-- Should be able to bind a person to an organisation, e g to define organisation membership for a person in a multiple-organisation relay team. -->
+        <xs:element ref="Organisation" minOccurs="0"/>
+        <!-- END 2.1 proposal -->
+        <xs:element ref="CCard" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="Rank" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="EntryClass" minOccurs="0" maxOccurs="unbounded"/>
         <!-- BEGIN 2.1 proposal -->
         <!-- Assign entry fees per person, not just per class, since competitors may have to pay different fees according to age, entry date, etc. -->
@@ -763,23 +616,52 @@
       </xs:attribute>
     </xs:complexType>
   </xs:element>
-  <xs:element name="EntryId">
-    <xs:complexType mixed="true"/>
+  
+  <xs:element name="TeamEntry">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Id" minOccurs="0"/>
+        <xs:element ref="TeamName"/>
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="Person"/>
+          <xs:element ref="Organisation" minOccurs="0"/>
+          <xs:element ref="CCard" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:element ref="Rank" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:element ref="TeamSequence" minOccurs="0"/>
+          <!-- BEGIN 2.1 proposal -->
+          <!-- Support for defining the competitor starting order within a team at a parallel relay leg (e g 25-manna) -->
+          <xs:element ref="LegOrder" minOccurs="0"/>
+          <!-- END 2.1 proposal -->
+        </xs:sequence>
+        <xs:element ref="EntryClass" minOccurs="0" maxOccurs="unbounded"/>
+        <!-- BEGIN 2.1 proposal -->
+        <!-- Assign entry fees per person, not just per class, since competitors may have to pay different fees according to age, entry date, etc. -->
+        <xs:element ref="EntryFee" minOccurs="0" maxOccurs="unbounded"/>
+        <!-- END 2.1 proposal -->
+        <xs:element ref="AllocationControl" minOccurs="0"/>
+        <xs:element name="EntryDate" type="xs:dateTime"/>
+        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="nonCompetitor" default="N">
+        <xs:simpleType>
+          <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="N"/>
+            <xs:enumeration value="Y"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
   </xs:element>
-  <xs:element name="TeamName">
-    <xs:complexType mixed="true"/>
-  </xs:element>
-  <xs:element name="TeamSequence">
-    <xs:complexType mixed="true"/>
-  </xs:element>
+  <xs:element name="TeamName" type="xs:string"/>
+  <xs:element name="TeamSequence" type="xs:integer"/>
 
   <!-- AllocationControl
     Used to state start time allocation requests.
-    It consists of a possible reference Club or Person and the
+    It consists of a possible reference Organisation or Person and the
     allocation request, e.g. late start or grouped with the reference
-    Club/Person.
+    Organisation/Person.
     This way it is possible to state requests to the event organizer
-    so that e.g. all members of a club has start times close to each
+    so that e.g. all members of an organisation has start times close to each
     other - or parents have start times far from each other.
     It is totally up to the event software and organizers whether
     they will support such requests.
@@ -787,16 +669,8 @@
   <xs:element name="AllocationControl">
     <xs:complexType>
       <xs:sequence>
-        <xs:choice minOccurs="0">
-          <xs:choice>
-            <xs:element ref="ClubId"/>
-            <xs:element ref="Club"/>
-          </xs:choice>
-          <xs:choice>
-            <xs:element ref="PersonId"/>
-            <xs:element ref="Person"/>
-          </xs:choice>
-        </xs:choice>
+        <xs:element ref="Organisation" minOccurs="0"/>
+        <xs:element ref="Person" minOccurs="0"/>
         <xs:element ref="AllocationControlType"/>
       </xs:sequence>
     </xs:complexType>
@@ -818,7 +692,7 @@
     </xs:complexType>
   </xs:element>
 
-  <!-- 
+  <!--
     ##########
     ### Start List
     ##########
@@ -837,11 +711,8 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="IOFVersion" minOccurs="0"/>
-        <xs:choice minOccurs="0">
-          <xs:element ref="EventId"/>
-          <xs:element ref="Event"/>
-        </xs:choice>
-        <xs:element ref="EventRaceId" minOccurs="0"/>
+        <xs:element ref="Event" minOccurs="0"/>
+        <xs:element ref="EventRace" minOccurs="0"/>
         <xs:element ref="ClassStart" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
@@ -855,19 +726,13 @@
   <xs:element name="ClassStart">
     <xs:complexType>
       <xs:sequence>
-        <xs:choice>
-          <xs:element ref="ClassId"/>
-          <xs:element ref="ClassShortName"/>
-          <xs:element ref="EventClass"/>
-        </xs:choice>
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:element ref="PersonStart"/>
-          <xs:element ref="TeamStart"/>
-        </xs:choice>
+        <xs:element ref="EventClass"/>
+        <xs:element ref="PersonStart" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="TeamStart" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
- 
+
   <!-- PersonStart
     The start time(s) of a single competitor. In case of a multi day
     event all start times are listed.
@@ -875,21 +740,12 @@
   <xs:element name="PersonStart">
     <xs:complexType>
       <xs:sequence>
-        <xs:choice>
-          <xs:element ref="PersonId"/>
-          <xs:element ref="Person"/>
-        </xs:choice>
-        <xs:choice minOccurs="0">
-          <xs:element ref="ClubId"/>
-          <xs:element ref="Club"/>
-          <xs:element ref="CountryId"/>
-          <xs:element ref="Country"/>
-        </xs:choice>
+        <xs:element ref="Person"/>
+        <xs:element ref="Organisation" minOccurs="0"/>
+        <xs:element name="Country" type="xs:string" minOccurs="0"/>
         <xs:element ref="Rank" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:choice>
-          <xs:element ref="Start"/>
-          <xs:element ref="RaceStart" maxOccurs="unbounded"/>
-        </xs:choice>
+        <xs:element ref="Start" minOccurs="0"/>
+        <xs:element ref="RaceStart" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -897,10 +753,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="TeamName"/>
-        <xs:choice minOccurs="0">
-          <xs:element ref="CountryId"/>
-          <xs:element ref="Country"/>
-        </xs:choice>
+        <xs:element name="Country" type="xs:string" minOccurs="0"/>
         <xs:element ref="PersonStart" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
@@ -917,10 +770,7 @@
       <xs:sequence>
         <xs:element ref="StartNumber" minOccurs="0"/>
         <xs:element ref="BibNumber" minOccurs="0"/>
-        <xs:choice minOccurs="0">
-          <xs:element ref="CCardId"/>
-          <xs:element ref="CCard"/>
-        </xs:choice>
+        <xs:element ref="CCard" minOccurs="0"/>
         <xs:element name="StartTime" type="xs:dateTime" minOccurs="0"/>
         <xs:element ref="TeamSequence" minOccurs="0"/>
         <!-- BEGIN 2.1 proposal -->
@@ -936,24 +786,17 @@
   <xs:element name="RaceStart">
     <xs:complexType>
       <xs:sequence>
-        <xs:choice>
-          <xs:element ref="EventRaceId"/>
-          <xs:element ref="EventRace"/>
-        </xs:choice>
+        <xs:element ref="EventRace"/>
         <xs:element ref="Start"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
 
   <!-- Start- and Bibnumber -->
-  <xs:element name="StartNumber">
-    <xs:complexType mixed="true"/>
-  </xs:element>
-  <xs:element name="BibNumber">
-    <xs:complexType mixed="true"/>
-  </xs:element>
+  <xs:element name="StartNumber" type="xs:string"/>
+  <xs:element name="BibNumber" type="xs:string"/>
 
-  <!-- 
+  <!--
     ##########
     ### ResultList
     ##########
@@ -976,11 +819,8 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="IOFVersion" minOccurs="0"/>
-        <xs:choice minOccurs="0">
-          <xs:element ref="EventId"/>
-          <xs:element ref="Event"/>
-        </xs:choice>
-        <xs:element ref="EventRaceId" minOccurs="0"/>
+        <xs:element ref="Event" minOccurs="0"/>
+        <xs:element ref="EventRace" minOccurs="0"/>
         <xs:element ref="ClassResult" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
@@ -1003,31 +843,18 @@
   <xs:element name="ClassResult">
     <xs:complexType>
       <xs:sequence>
-        <xs:choice>
-          <xs:element ref="ClassId"/>
-          <xs:element ref="ClassShortName"/>
-          <xs:element ref="EventClass"/>
-        </xs:choice>
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:element ref="PersonResult"/>
-          <xs:element ref="TeamResult"/>
-        </xs:choice>
+        <xs:element ref="EventClass"/>
+        <xs:element ref="PersonResult" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="TeamResult" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="PersonResult">
     <xs:complexType>
       <xs:sequence>
-        <xs:choice>
-          <xs:element ref="PersonId"/>
-          <xs:element ref="Person"/>
-        </xs:choice>
-        <xs:choice minOccurs="0">
-          <xs:element ref="ClubId"/>
-          <xs:element ref="Club"/>
-          <xs:element ref="CountryId"/>
-          <xs:element ref="Country"/>
-        </xs:choice>
+        <xs:element ref="Person"/>
+        <xs:element ref="Organisation" minOccurs="0"/>
+        <xs:element name="Country" type="xs:string" minOccurs="0"/>
         <xs:element ref="Rank" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="Result"/>
         <xs:element ref="RaceResult" minOccurs="0" maxOccurs="unbounded"/>
@@ -1038,15 +865,12 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="TeamName"/>
-        <xs:choice minOccurs="0">
-          <xs:element ref="CountryId"/>
-          <xs:element ref="Country"/>
-        </xs:choice>
+        <xs:element name="Country" type="xs:string" minOccurs="0"/>
         <xs:element ref="StartNumber" minOccurs="0"/>
         <xs:element ref="BibNumber" minOccurs="0"/>
         <xs:element name="StartTime" type="xs:dateTime" minOccurs="0"/>
         <xs:element name="FinishTime" type="xs:dateTime" minOccurs="0"/>
-        <xs:element name="Time" type="timeSpan" minOccurs="0"/>
+        <xs:element name="Time" type="xs:double" minOccurs="0"/>
         <xs:element ref="ResultPosition" minOccurs="0"/>
         <xs:element ref="TeamStatus"/>
         <xs:element ref="Rank" minOccurs="0" maxOccurs="unbounded"/>
@@ -1065,13 +889,10 @@
       <xs:sequence>
         <xs:element ref="StartNumber" minOccurs="0"/>
         <xs:element ref="BibNumber" minOccurs="0"/>
-        <xs:choice minOccurs="0">
-          <xs:element ref="CCardId"/>
-          <xs:element ref="CCard"/>
-        </xs:choice>
+        <xs:element ref="CCard" minOccurs="0"/>
         <xs:element name="StartTime" type="xs:dateTime" minOccurs="0"/>
         <xs:element name="FinishTime" type="xs:dateTime" minOccurs="0"/>
-        <xs:element name="Time" type="timeSpan" minOccurs="0"/>
+        <xs:element name="Time" type="xs:double" minOccurs="0"/>
         <xs:element ref="ResultPosition" minOccurs="0"/>
         <xs:element ref="CompetitorStatus"/>
         <xs:element ref="TeamSequence" minOccurs="0"/>
@@ -1079,11 +900,7 @@
         <!-- Support for defining the competitor starting order within a team at a parallel relay leg (e g 25-manna) -->
         <xs:element ref="LegOrder" minOccurs="0"/>
         <!-- END 2.1 proposal -->
-        <xs:choice minOccurs="0">
-          <xs:element ref="CourseVariationId"/>
-          <xs:element ref="CourseVariation"/>
-          <xs:element ref="CourseLength"/>
-        </xs:choice>
+        <xs:element ref="CourseVariation" minOccurs="0"/>
         <xs:element ref="SplitTime" minOccurs="0" maxOccurs="unbounded"/>
         <!-- BEGIN 2.1 proposal -->
         <!-- Support for Trail-O results. -->
@@ -1091,31 +908,25 @@
         <!-- Support for GPS routes/tracking. -->
         <xs:element ref="Route" minOccurs="0"/>
         <!-- END 2.1 proposal -->
-        <xs:choice minOccurs="0">
-          <xs:element ref="BadgeValueId"/>
-          <xs:element ref="BadgeValue"/>
-        </xs:choice>
+        <xs:element ref="BadgeValue" minOccurs="0"/>
         <xs:element ref="Point" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  
+
   <!-- RaceResult
     Result for a single Competitor in a single Event Race
   -->
   <xs:element name="RaceResult">
     <xs:complexType>
       <xs:sequence>
-        <xs:choice>
-          <xs:element ref="EventRaceId"/>
-          <xs:element ref="EventRace"/>
-        </xs:choice>
+        <xs:element ref="EventRace"/>
         <xs:element ref="Result"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  
+
   <!-- Status
     The status of the competitor or team at the time of the result
     generation:
@@ -1183,7 +994,7 @@
       </xs:attribute>
     </xs:complexType>
   </xs:element>
-  
+
   <!-- Point
     The point earned in this event for some purpose, e.g. a ranking
     list. The 'type' attribute is used to specify which purpose.
@@ -1194,22 +1005,17 @@
       <xs:attribute name="value" use="required" type="xs:decimal"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ResultPosition">
-    <xs:complexType mixed="true"/>
-  </xs:element>
+  <xs:element name="ResultPosition" type="xs:integer"/>
   <xs:element name="SplitTime">
     <xs:complexType>
       <xs:sequence>
-        <xs:choice minOccurs="0">
-          <xs:element ref="ControlCode"/>
-          <xs:element ref="Control"/>
-        </xs:choice>
-        <xs:element name="Time" type="timeSpan" minOccurs="0"/>
+        <xs:element ref="Control"/>
+        <xs:element name="Time" type="xs:double" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="sequence" use="required" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
-  
+
   <!-- Competition Badge -->
   <xs:element name="BadgeList">
     <xs:complexType>
@@ -1223,75 +1029,37 @@
   <xs:element name="BadgeValue">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="BadgeValueId"/>
-        <xs:element ref="Name"/>
+        <xs:element ref="Id" minOccurs="0"/>
+        <xs:element ref="Name" minOccurs="0"/>
         <xs:element ref="ShortName" minOccurs="0"/>
         <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="BadgeValueId">
-    <xs:complexType mixed="true">
-      <xs:attribute name="type">
-        <xs:simpleType>
-          <xs:restriction base="xs:NMTOKEN">
-            <xs:enumeration value="reg"/>
-            <xs:enumeration value="other"/>
-            <xs:enumeration value="nat"/>
-            <xs:enumeration value="loc"/>
-            <xs:enumeration value="int"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
-      <xs:attribute name="idManager" type="xs:string"/>
-    </xs:complexType>
-  </xs:element>
   <xs:element name="BadgeLimit">
     <xs:complexType>
       <xs:sequence>
-        <xs:choice>
-          <xs:element ref="BadgeValueId"/>
-          <xs:element ref="BadgeValue"/>
-        </xs:choice>
-        <xs:choice>
-          <xs:element ref="EventClassificationId"/>
-          <xs:element ref="EventClassification"/>
-        </xs:choice>
-        <xs:choice minOccurs="0">
-          <xs:element ref="ClassTypeId"/>
-          <xs:element ref="ClassType"/>
-        </xs:choice>
+        <xs:element ref="BadgeValue"/>
+        <xs:element ref="EventClassification"/>
+        <xs:element ref="ClassType" minOccurs="0"/>
         <xs:element ref="TimeFactor"/>
         <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="TimeFactor">
-    <xs:complexType mixed="true"/>
-  </xs:element>
+  <xs:element name="TimeFactor" type="xs:decimal"/>
 
   <!-- Result Selection
     Used to specify subresults of interest for the press (see the
     Press element in the "Office" section). The selection consists
-    of a list of organisations, clubs, classes and a max position
+    of a list of organisations, classes and a max position
     in the list, e.g. the top 3.
   -->
   <xs:element name="ResultSelection">
     <xs:complexType>
       <xs:sequence>
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:element ref="OrganisationId"/>
-          <xs:element ref="Organisation"/>
-        </xs:choice>
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:element ref="ClubId"/>
-          <xs:element ref="Club"/>
-        </xs:choice>
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:element ref="ClassId"/>
-          <xs:element ref="ClassShortName"/>
-          <xs:element ref="Class"/>
-        </xs:choice>
+        <xs:element ref="Organisation" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="Class" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="Position"/>
         <!-- BEGIN 2.1 proposal: proposal by Per-Erik Modig -->
         <xs:element ref="MaxPosition" minOccurs="0"/>
@@ -1300,13 +1068,9 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="Position">
-    <xs:complexType mixed="true"/>
-  </xs:element>
+  <xs:element name="Position" type="xs:integer"/>
   <!-- BEGIN 2.1 proposal: proposal by Per-Erik Modig -->
-  <xs:element name="MaxPosition">
-    <xs:complexType mixed="true"/>
-  </xs:element>
+  <xs:element name="MaxPosition" type="xs:integer"/>
   <!-- END 2.1 proposal -->
 
   <!--
@@ -1335,26 +1099,10 @@
   <xs:element name="ClassType">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="ClassTypeId"/>
-        <xs:element ref="Name"/>
+        <xs:element ref="Id" minOccurs="0"/>
+        <xs:element ref="Name" minOccurs="0"/>
         <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ClassTypeId">
-    <xs:complexType mixed="true">
-      <xs:attribute name="type">
-        <xs:simpleType>
-          <xs:restriction base="xs:NMTOKEN">
-            <xs:enumeration value="reg"/>
-            <xs:enumeration value="other"/>
-            <xs:enumeration value="nat"/>
-            <xs:enumeration value="loc"/>
-            <xs:enumeration value="int"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
-      <xs:attribute name="idManager" type="xs:string"/>
     </xs:complexType>
   </xs:element>
 
@@ -1362,31 +1110,22 @@
   <xs:element name="Class">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="ClassId"/>
+        <xs:element ref="Id" minOccurs="0"/>
         <xs:element ref="Name" minOccurs="0"/>
-        <xs:element ref="ClassShortName"/>
+        <xs:element ref="ClassShortName" minOccurs="0"/>
         <!-- BEGIN 2.1 proposal -->
         <!-- Keeping track of status of class (e g if results should be considered invalid due to misplaced constrols) -->
         <xs:element ref="EventClassStatus" minOccurs="0"/>
         <!-- END 2.1 proposal -->
-        <!-- BEGIN 2.1 proposal: added maxOccurs="unbounded" -->
-        <!-- One class may have multiple class types. -->
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-          <!-- END 2.1 proposal -->
-          <xs:element ref="ClassTypeId"/>
-          <xs:element ref="ClassType"/>
-        </xs:choice>
+        <xs:element ref="ClassType" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="SubstituteClass" minOccurs="0"/>
         <xs:element ref="NotQualifiedSubstituteClass" minOccurs="0"/>
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:element ref="EntryFeeId"/>
-          <xs:element ref="EntryFee"/>
-        </xs:choice>
+        <xs:element ref="EntryFee" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="lowAge" type="xs:integer"/>
       <xs:attribute name="highAge" type="xs:integer"/>
-      <xs:attribute name="sex" use="required">
+      <xs:attribute name="sex">
         <xs:simpleType>
           <xs:restriction base="xs:NMTOKEN">
             <xs:enumeration value="B"/>
@@ -1425,27 +1164,7 @@
       <xs:attribute name="allowedMaxAge" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ClassId">
-    <xs:complexType mixed="true">
-      <xs:attribute name="type">
-        <xs:simpleType>
-          <xs:restriction base="xs:NMTOKEN">
-            <xs:enumeration value="reg"/>
-            <xs:enumeration value="other"/>
-            <xs:enumeration value="nat"/>
-            <xs:enumeration value="loc"/>
-            <xs:enumeration value="int"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
-      <xs:attribute name="idManager" type="xs:string"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ClassShortName">
-    <xs:complexType mixed="true">
-      <xs:attribute name="idManager" type="xs:string"/>
-    </xs:complexType>
-  </xs:element>
+  <xs:element name="ClassShortName" type="xs:string"/>
   <!-- BEGIN 2.1 proposal -->
   <xs:element name="EventClassStatus">
     <xs:complexType>
@@ -1463,29 +1182,23 @@
   <!-- END 2.1 proposal -->
   <xs:element name="SubstituteClass">
     <xs:complexType>
-      <xs:choice>
-        <xs:element ref="ClassId"/>
-        <xs:element ref="ClassShortName"/>
+      <xs:sequence>
         <xs:element ref="Class"/>
-      </xs:choice>
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="NotQualifiedSubstituteClass">
     <xs:complexType>
-      <xs:choice>
-        <xs:element ref="ClassId"/>
-        <xs:element ref="ClassShortName"/>
+      <xs:sequence>
         <xs:element ref="Class"/>
-      </xs:choice>
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="PreSelectedClass">
     <xs:complexType>
-      <xs:choice>
-        <xs:element ref="ClassId"/>
-        <xs:element ref="ClassShortName"/>
+      <xs:sequence>
         <xs:element ref="Class"/>
-      </xs:choice>
+      </xs:sequence>
       <xs:attribute name="sequence" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
@@ -1499,14 +1212,14 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element name="FirstStart" type="xs:dateTime" minOccurs="0"/>
-        <xs:element name="StartInterval" type="timeSpan" minOccurs="0"/>
-        <xs:element name="EstimatedBestTime" type="timeSpan" minOccurs="0"/>
+        <xs:element name="StartInterval" type="xs:double" minOccurs="0"/>
+        <xs:element name="EstimatedBestTime" type="xs:double" minOccurs="0"/>
         <xs:element name="EstimatedLastPrizeTime" type="xs:dateTime" minOccurs="0"/>
         <xs:element name="PrizeCeremonyTime" type="xs:dateTime" minOccurs="0"/>
         <xs:element ref="AllocationMethod" minOccurs="0"/>
         <xs:element ref="StartMethod" minOccurs="0"/>
         <xs:element ref="ClassRaceStatus"/>
-        <xs:element ref="CourseVariationId" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="CourseVariation" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="numberOfVacants" type="xs:integer"/>
@@ -1546,10 +1259,10 @@
       <xs:attribute name="value" use="required">
         <xs:simpleType>
           <xs:restriction base="xs:NMTOKEN">
-            <xs:enumeration value="allocatTime"/>
-            <xs:enumeration value="limitedPunching"/>
-            <xs:enumeration value="other"/>
-            <xs:enumeration value="punching"/>
+            <xs:enumeration value="AllocateTime"/>
+            <xs:enumeration value="LimitedPunching"/>
+            <xs:enumeration value="Other"/>
+            <xs:enumeration value="Punching"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
@@ -1560,11 +1273,11 @@
       <xs:attribute name="value" use="required">
         <xs:simpleType>
           <xs:restriction base="xs:NMTOKEN">
-            <xs:enumeration value="notAllocated"/>
-            <xs:enumeration value="finished"/>
-            <xs:enumeration value="deleted"/>
-            <xs:enumeration value="allocated"/>
-            <xs:enumeration value="started"/>
+            <xs:enumeration value="NotAllocated"/>
+            <xs:enumeration value="Finished"/>
+            <xs:enumeration value="Deleted"/>
+            <xs:enumeration value="Allocated"/>
+            <xs:enumeration value="Started"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
@@ -1613,10 +1326,8 @@
         <xs:element ref="ControlCode"/>
         <xs:element ref="Description" minOccurs="0"/>
         <xs:element ref="ControlPosition" minOccurs="0"/>
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:element ref="PunchingUnit"/>
-          <xs:element ref="PunchPattern"/>
-        </xs:choice>
+        <xs:element ref="PunchingUnit" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="PunchPattern" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="PunchingUnitType" minOccurs="0"/>
         <xs:element ref="MapPosition" minOccurs="0"/>
         <xs:element ref="Comment" minOccurs="0" maxOccurs="unbounded"/>
@@ -1634,10 +1345,10 @@
   </xs:element>
   <xs:element name="Box">
     <xs:complexType>
-      <xs:choice minOccurs="0">
-        <xs:element ref="Symbol" maxOccurs="unbounded"/>
-        <xs:element ref="Text"/>
-      </xs:choice>
+      <xs:sequence>
+        <xs:element ref="Symbol" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="Text" minOccurs="0" />
+      </xs:sequence>
       <xs:attribute name="column" use="required">
         <xs:simpleType>
           <xs:restriction base="xs:NMTOKEN">
@@ -1670,18 +1381,14 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SymbolId">
-    <xs:complexType mixed="true"/>
-  </xs:element>
+  <xs:element name="SymbolId" type="xs:string"/>
   <xs:element name="Text">
     <xs:complexType mixed="true">
-      <xs:attribute name="languageId" type="xs:string"/>
+      <xs:attribute name="language" type="xs:string"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ControlCode">
-    <xs:complexType mixed="true"/>
-  </xs:element>
-  
+  <xs:element name="ControlCode" type="xs:string"/>
+
   <!-- ControlPosition
     Position of the Control in the terrain
   -->
@@ -1706,7 +1413,7 @@
       </xs:attribute>
     </xs:complexType>
   </xs:element>
-  
+
   <!-- Map
     Information of the map used, scale and upper left corner of the
     bitmap used in course setting software wrt. the "real" map (yes,
@@ -1720,10 +1427,8 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="Scale">
-    <xs:complexType mixed="true"/>
-  </xs:element>
-  
+  <xs:element name="Scale" type="xs:string"/>
+
   <!-- MapPosition
     Position of the Control on the Map
   -->
@@ -1758,9 +1463,7 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="StartPointCode">
-    <xs:complexType mixed="true"/>
-  </xs:element>
+  <xs:element name="StartPointCode" type="xs:string"/>
   <xs:element name="DistanceFromStart">
     <xs:complexType mixed="true">
       <xs:attribute name="unit" default="m">
@@ -1774,9 +1477,6 @@
       </xs:attribute>
     </xs:complexType>
   </xs:element>
-  <xs:element name="Info">
-    <xs:complexType mixed="true"/>
-  </xs:element>
 
   <!-- FinishPoint
     Special control positioned on the finish line. In case of
@@ -1789,20 +1489,16 @@
         <xs:element ref="FinishPointCode"/>
         <xs:element ref="Description" minOccurs="0"/>
         <xs:element ref="ControlPosition" minOccurs="0"/>
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:element ref="PunchingUnit"/>
-          <xs:element ref="PunchPattern"/>
-        </xs:choice>
+        <xs:element ref="PunchingUnit" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="PunchingUnitType" minOccurs="0"/>
+        <xs:element ref="PunchPattern" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="MapPosition" minOccurs="0"/>
         <xs:element ref="Comment" minOccurs="0"/>
         <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="FinishPointCode">
-    <xs:complexType mixed="true"/>
-  </xs:element>
+  <xs:element name="FinishPointCode" type="xs:string"/>
 
   <!-- Course
     A Course consists of one or more Course Variations. This is done
@@ -1811,26 +1507,18 @@
   <xs:element name="Course">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="CourseName"/>
-        <xs:element ref="CourseId" minOccurs="0"/>
-        <xs:element ref="EventId" minOccurs="0"/>
-        <xs:element ref="EventRaceId" minOccurs="0"/>
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:element ref="ClassId"/>
-          <xs:element ref="ClassShortName"/>
-        </xs:choice>
+        <xs:element ref="Id" minOccurs="0"/>
+        <xs:element ref="Name" minOccurs="0"/>
+        <xs:element ref="Event" minOccurs="0"/>
+        <xs:element ref="EventRace" minOccurs="0"/>
+        <xs:element ref="Class" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="CourseVariation" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="CourseSectionList" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="CourseName">
-    <xs:complexType mixed="true"/>
-  </xs:element>
-  <xs:element name="CourseId">
-    <xs:complexType mixed="true"/>
-  </xs:element>
-  
+  <xs:element name="CourseName" type="xs:string"/>
+
   <!-- Course Variation
     Consists of a name, length, climb, start point, a number of
     course controls and a finish.
@@ -1838,31 +1526,22 @@
   <xs:element name="CourseVariation">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="CourseVariationId"/>
+        <xs:element ref="Id" minOccurs="0"/>
         <xs:element ref="Name" minOccurs="0"/>
-        <xs:element ref="CourseLength"/>
+        <xs:element ref="CourseLength" minOccurs="0"/>
         <xs:element ref="CourseClimb" minOccurs="0"/>
-        <xs:choice minOccurs="0">
-          <xs:element ref="StartPointCode"/>
-          <xs:element ref="StartPoint"/>
-        </xs:choice>
+        <xs:element ref="StartPoint" minOccurs="0"/>
         <xs:element ref="FinishChute" minOccurs="0"/>
         <!-- BEGIN 2.1 addition -->
         <!-- added minOccurs="0" - might sometimes want to express course variation id and course length but not the controls -->
         <xs:element ref="CourseControl" minOccurs="0" maxOccurs="unbounded"/>
         <!-- END 2.1 addition -->
-        <xs:choice minOccurs="0">
-          <xs:element ref="FinishPointCode"/>
-          <xs:element ref="FinishPoint"/>
-        </xs:choice>
+        <xs:element ref="FinishPoint" minOccurs="0"/>
         <xs:element ref="DistanceToFinish" minOccurs="0"/>
         <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="numberOfRunners" type="xs:integer"/>
     </xs:complexType>
-  </xs:element>
-  <xs:element name="CourseVariationId">
-    <xs:complexType mixed="true"/>
   </xs:element>
   <xs:element name="CourseLength">
     <xs:complexType mixed="true">
@@ -1890,15 +1569,8 @@
       </xs:attribute>
     </xs:complexType>
   </xs:element>
-  <xs:element name="StartId">
-    <xs:complexType mixed="true"/>
-  </xs:element>
-  <xs:element name="FinishChute">
-    <xs:complexType mixed="true"/>
-  </xs:element>
-  <xs:element name="FinishId">
-    <xs:complexType mixed="true"/>
-  </xs:element>
+  <xs:element name="StartId" type="xs:string"/>
+  <xs:element name="FinishChute" type="xs:string"/>
   <xs:element name="DistanceToFinish">
     <xs:complexType mixed="true">
       <!-- TODO: what attribute type? -->
@@ -1917,9 +1589,9 @@
   <xs:element name="CourseSectionList">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="StartPointCode" minOccurs="0"/>
+        <xs:element ref="StartPoint" minOccurs="0"/>
         <xs:element ref="CourseSection" maxOccurs="unbounded"/>
-        <xs:element ref="FinishPointCode" minOccurs="0"/>
+        <xs:element ref="FinishPoint" minOccurs="0"/>
         <xs:element ref="DistanceToFinish" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
@@ -1932,19 +1604,14 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="CourseSectionId">
-    <xs:complexType mixed="true"/>
-  </xs:element>
+  <xs:element name="CourseSectionId" type="xs:string"/>
   <xs:element name="CourseBranch">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="CourseBranchId"/>
+        <xs:element ref="Id"/>
         <xs:element ref="CourseControl" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
-  </xs:element>
-  <xs:element name="CourseBranchId">
-    <xs:complexType mixed="true"/>
   </xs:element>
 
   <!-- CourseControl
@@ -1956,10 +1623,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="Sequence"/>
-        <xs:choice>
-          <xs:element ref="ControlCode"/>
-          <xs:element ref="Control"/>
-        </xs:choice>
+        <xs:element ref="Control"/>
         <xs:element ref="Comment" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="LegLength" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="MapTextPosition" minOccurs="0"/>
@@ -1989,9 +1653,7 @@
       </xs:attribute>
     </xs:complexType>
   </xs:element>
-  <xs:element name="Sequence">
-    <xs:complexType mixed="true"/>
-  </xs:element>
+  <xs:element name="Sequence" type="xs:integer"/>
   <xs:element name="MapTextPosition">
     <xs:complexType>
       <xs:sequence>
@@ -2010,9 +1672,7 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="UnitCode">
-    <xs:complexType mixed="true"/>
-  </xs:element>
+  <xs:element name="UnitCode" type="xs:string"/>
   <xs:element name="PunchingUnitType">
     <xs:complexType>
       <xs:attribute name="value" use="required">
@@ -2027,11 +1687,9 @@
       </xs:attribute>
     </xs:complexType>
   </xs:element>
-  <xs:element name="PunchPattern">
-    <xs:complexType mixed="true"/>
-  </xs:element>
+  <xs:element name="PunchPattern" type="xs:string"/>
 
-  <!-- 
+  <!--
     ##########
     ### "Office" elements
     ##########
@@ -2049,12 +1707,12 @@
   <!-- Name -->
   <xs:element name="Name">
     <xs:complexType mixed="true">
-      <xs:attribute name="languageId" type="xs:string"/>
+      <xs:attribute name="language" type="xs:string"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="ShortName">
     <xs:complexType mixed="true">
-      <xs:attribute name="languageId" type="xs:string"/>
+      <xs:attribute name="language" type="xs:string"/>
     </xs:complexType>
   </xs:element>
 
@@ -2062,121 +1720,9 @@
   <xs:element name="Comment">
     <xs:complexType mixed="true">
       <!-- TODO: what attribute type? -->
-      <xs:attribute name="languageId" type="xs:string"/>
+      <xs:attribute name="language" type="xs:string"/>
     </xs:complexType>
   </xs:element>
-
-  <!-- Organisation
-    An element representing "organisations" in a wider sense, i.e.
-    clubs, federations, authorities, tv, etc.
-    An organisation can contain suborganisations.
-  -->
-  <xs:element name="Organisation">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="OrganisationId"/>
-        <xs:element ref="Name"/>
-        <xs:element ref="ShortName" minOccurs="0"/>
-        <xs:choice>
-          <xs:element ref="OrganisationTypeId"/>
-          <xs:element ref="OrganisationType"/>
-        </xs:choice>
-        <xs:choice minOccurs="0">
-          <xs:element ref="CountryId"/>
-          <xs:element ref="Country"/>
-        </xs:choice>
-        <xs:element ref="Address" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="Tele" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="Account" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="Contact" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="SubOrganisation" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="OrganisationId">
-    <xs:complexType mixed="true">
-      <xs:attribute name="type">
-        <xs:simpleType>
-          <xs:restriction base="xs:NMTOKEN">
-            <xs:enumeration value="reg"/>
-            <xs:enumeration value="other"/>
-            <xs:enumeration value="nat"/>
-            <xs:enumeration value="loc"/>
-            <xs:enumeration value="int"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
-      <xs:attribute name="idManager" type="xs:string"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SubOrganisationType">
-    <xs:complexType>
-      <xs:choice>
-        <xs:element ref="OrganisationTypeId"/>
-        <xs:element ref="OrganisationType"/>
-      </xs:choice>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SubOrganisation">
-    <xs:complexType>
-      <xs:choice>
-        <xs:element ref="OrganisationId"/>
-        <xs:element ref="Organisation"/>
-      </xs:choice>
-    </xs:complexType>
-  </xs:element>
-
-  <!-- OrganisationList
-    List of organisations and their types.
-  -->
-  <xs:element name="OrganisationList">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="IOFVersion" minOccurs="0"/>
-        <xs:element ref="OrganisationType" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="Organisation" minOccurs="0" maxOccurs="unbounded"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="OrganisationType">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="OrganisationTypeId"/>
-        <xs:element ref="Name"/>
-        <xs:element ref="SubOrganisationType" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="OrganisationTypeId">
-    <xs:complexType mixed="true">
-      <xs:attribute name="type">
-        <xs:simpleType>
-          <xs:restriction base="xs:NMTOKEN">
-            <xs:enumeration value="reg"/>
-            <xs:enumeration value="other"/>
-            <xs:enumeration value="nat"/>
-            <xs:enumeration value="loc"/>
-            <xs:enumeration value="int"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
-      <xs:attribute name="idManager" type="xs:string"/>
-    </xs:complexType>
-  </xs:element>
-
-  <!-- BEGIN 2.1 proposal -->
-  <!-- The name of the club as appearing in press result lists. -->
-  <xs:element name="PressName">
-    <xs:complexType mixed="true" />
-  </xs:element>
-  <!-- The home city or geographical location of the club as appearing in press result lists. -->
-  <!-- To be considered: should PressName and HomeCity be replaced with a single element containing all information? -->
-  <xs:element name="HomeCity">
-    <xs:complexType mixed="true" />
-  </xs:element>
-  <!-- END 2.1 proposal -->
 
   <!-- Press
     A special organisation that can contain a request for a
@@ -2191,10 +1737,7 @@
         <xs:element ref="Contact" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="Address" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="Tele" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:choice>
-          <xs:element ref="Country"/>
-          <xs:element ref="CountryId"/>
-        </xs:choice>
+        <xs:element name="Country" type="xs:string" minOccurs="0"/>
         <xs:element ref="ResultSelection" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
@@ -2231,50 +1774,31 @@
   <xs:element name="Service">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="ServiceId"/>
-        <xs:element ref="Name"/>
-        <xs:element ref="Amount"/>
+        <xs:element ref="Id" minOccurs="0"/>
+        <xs:element ref="Name" minOccurs="0"/>
+        <xs:element ref="Amount" minOccurs="0"/>
         <xs:element ref="Comment" minOccurs="0"/>
         <xs:element ref="MaxNumber" minOccurs="0"/>
         <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ServiceId">
-    <xs:complexType mixed="true"/>
-  </xs:element>
 
   <!-- Service Request List
-    List of requests from clubs and organisations.
+    List of requests from organisations.
   -->
   <xs:element name="ServiceRequestList">
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="IOFVersion" minOccurs="0"/>
-        <xs:element ref="ClubServiceRequest" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="OrganisationServiceRequest" minOccurs="0" maxOccurs="unbounded"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ClubServiceRequest">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:choice>
-          <xs:element ref="ClubId"/>
-          <xs:element ref="Club"/>
-        </xs:choice>
-        <xs:element ref="ServiceRequest" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="PersonServiceRequest" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="OrganisationServiceRequest">
     <xs:complexType>
       <xs:sequence>
-        <xs:choice>
-          <xs:element ref="OrganisationId"/>
-          <xs:element ref="Organisation"/>
-        </xs:choice>
+        <xs:element ref="Organisation"/>
         <xs:element ref="ServiceRequest" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="PersonServiceRequest" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
@@ -2283,10 +1807,7 @@
   <xs:element name="PersonServiceRequest">
     <xs:complexType>
       <xs:sequence>
-        <xs:choice>
-          <xs:element ref="PersonId"/>
-          <xs:element ref="Person"/>
-        </xs:choice>
+        <xs:element ref="Person"/>
         <xs:element ref="ServiceRequest" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
@@ -2294,10 +1815,7 @@
   <xs:element name="ServiceRequest">
     <xs:complexType>
       <xs:sequence>
-        <xs:choice>
-          <xs:element ref="ServiceId"/>
-          <xs:element ref="Service"/>
-        </xs:choice>
+        <xs:element ref="Service"/>
         <xs:element ref="ServiceOrderNumber" minOccurs="0"/>
         <xs:element ref="RequestedQuantity"/>
         <xs:element ref="DeliveredQuantity" minOccurs="0"/>
@@ -2321,9 +1839,7 @@
       <xs:attribute name="unit" default="Pcs" type="xs:string"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ServiceOrderNumber">
-    <xs:complexType mixed="true"/>
-  </xs:element>
+  <xs:element name="ServiceOrderNumber" type="xs:string"/>
 
   <!-- Account -->
   <xs:element name="Account">
@@ -2358,20 +1874,11 @@
         <xs:element name="Date" type="xs:dateTime" minOccurs="0" />
         <!-- END 2.1 proposal -->
         <xs:element ref="Amount"/>
-        <xs:choice>
-          <xs:element ref="ClubId"/>
-          <xs:element ref="Club"/>
-          <xs:element ref="OrganisationId"/>
-          <xs:element ref="Organisation"/>
-        </xs:choice>
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:element ref="PersonId"/>
-          <xs:element ref="Person"/>
-        </xs:choice>
-        <xs:element ref="EntryId" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="Organisation" minOccurs="0"/>
+        <xs:element ref="Person" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="Entry" minOccurs="0" maxOccurs="unbounded"/>
         <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:element ref="ServiceOrderNumber"/>
-          <xs:element ref="ServiceId"/>
           <xs:element ref="Service"/>
         </xs:choice>
         <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
@@ -2393,10 +1900,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="IOFVersion" minOccurs="0"/>
-        <xs:choice>
-          <xs:element ref="EventId"/>
-          <xs:element ref="Event"/>
-        </xs:choice>
+        <xs:element ref="Event"/>
         <xs:element ref="Transaction" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
@@ -2407,10 +1911,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="AddressType" minOccurs="0"/>
-        <xs:choice minOccurs="0">
-          <xs:element ref="CountryId"/>
-          <xs:element ref="Country"/>
-        </xs:choice>
+        <xs:element name="Country" type="xs:string"/>
         <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
       </xs:sequence>
       <xs:attribute name="careOf" type="xs:string"/>
@@ -2437,108 +1938,8 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="IOFVersion" minOccurs="0"/>
-        <xs:element ref="Country" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="Country" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  
-  <!-- Country -->
-  <xs:element name="Country">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="CountryId"/>
-        <xs:element ref="Name" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element name="ModifyDate" type="xs:dateTime" minOccurs="0"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-
-  <!-- BEGIN 2.1 proposal -->
-  <!-- TODO: use ISO 3166 country codes instead of enumeration -->
-  <!-- Problem: ISO 3166 and IOF country codes differ in some cases, use two attributes "value" (for iso) and "iofCode"? Or move "iofCode" to Country element? -->
-  <!-- Proposal :
-  <xs:element name="CountryId">
-    <xs:complexType>
-      <xs:attribute name="value" use="required" />
-      <xs:attribute name="iofCode" use="optional" />
-    </xs:complexType>
-  </xs:element>
-  -->
-  <!-- END 2.1 proposal -->
-  <xs:element name="CountryId">
-    <xs:complexType>
-      <xs:attribute name="value" use="required">
-        <xs:simpleType>
-          <xs:restriction base="xs:NMTOKEN">
-            <xs:enumeration value="IRL"/>
-            <xs:enumeration value="POL"/>
-            <xs:enumeration value="GBR"/>
-            <xs:enumeration value="CRO"/>
-            <xs:enumeration value="POR"/>
-            <xs:enumeration value="HKG"/>
-            <xs:enumeration value="ISL"/>
-            <xs:enumeration value="MDA"/>
-            <xs:enumeration value="ITA"/>
-            <xs:enumeration value="ISR"/>
-            <xs:enumeration value="JPN"/>
-            <xs:enumeration value="VEN"/>
-            <xs:enumeration value="LTU"/>
-            <xs:enumeration value="CHI"/>
-            <xs:enumeration value="RUS"/>
-            <xs:enumeration value="CHN"/>
-            <xs:enumeration value="CUB"/>
-            <xs:enumeration value="BLR"/>
-            <xs:enumeration value="PRK"/>
-            <xs:enumeration value="FIN"/>
-            <xs:enumeration value="NZL"/>
-            <xs:enumeration value="GER"/>
-            <xs:enumeration value="DEN"/>
-            <xs:enumeration value="GRE"/>
-            <xs:enumeration value="KAZ"/>
-            <xs:enumeration value="ARG"/>
-            <xs:enumeration value="AFG"/>
-            <xs:enumeration value="UKR"/>
-            <xs:enumeration value="TPE"/>
-            <xs:enumeration value="NOR"/>
-            <xs:enumeration value="other"/>
-            <xs:enumeration value="KOR"/>
-            <xs:enumeration value="YUG"/>
-            <xs:enumeration value="SUI"/>
-            <xs:enumeration value="ECU"/>
-            <xs:enumeration value="NED"/>
-            <xs:enumeration value="SVK"/>
-            <xs:enumeration value="LAT"/>
-            <xs:enumeration value="INA"/>
-            <xs:enumeration value="IND"/>
-            <xs:enumeration value="BEL"/>
-            <xs:enumeration value="SWE"/>
-            <xs:enumeration value="CAN"/>
-            <xs:enumeration value="BRA"/>
-            <xs:enumeration value="CZE"/>
-            <xs:enumeration value="AUS"/>
-            <xs:enumeration value="AUT"/>
-            <xs:enumeration value="MKD"/>
-            <xs:enumeration value="SKN"/>
-            <xs:enumeration value="ROM"/>
-            <xs:enumeration value="SWZ"/>
-            <xs:enumeration value="SLO"/>
-            <xs:enumeration value="COL"/>
-            <xs:enumeration value="ESP"/>
-            <xs:enumeration value="EST"/>
-            <xs:enumeration value="ALG"/>
-            <xs:enumeration value="PAK"/>
-            <xs:enumeration value="JAM"/>
-            <xs:enumeration value="MAS"/>
-            <xs:enumeration value="HUN"/>
-            <xs:enumeration value="USA"/>
-            <xs:enumeration value="YOG"/>
-            <xs:enumeration value="URU"/>
-            <xs:enumeration value="RSA"/>
-            <xs:enumeration value="FRA"/>
-            <xs:enumeration value="BUL"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
     </xs:complexType>
   </xs:element>
 
@@ -2571,56 +1972,48 @@
   </xs:element>
 
   <!-- Web -->
-  <xs:element name="WebURL">
-    <xs:complexType mixed="true"/>
-  </xs:element>
- 
-  
+  <xs:element name="WebURL" type="xs:string"/>
+
+
   <!-- BEGIN 2.1 proposal -->
-  
+
   <!-- The amount within an entry fee that is to be considered as an external fee (e g a federation tax). -->
   <xs:element name="ExternalFee">
     <xs:complexType mixed="true">
       <xs:attribute name="currency" type="xs:string"/>
     </xs:complexType>
   </xs:element>
-  
+
   <!-- Describes the starting order on a parallel relay leg for a competitor (e g 25-manna). -->
-  <xs:element name="LegOrder">
-    <xs:complexType mixed="true"/>
-  </xs:element>
-  
+  <xs:element name="LegOrder" type="xs:integer"/>
+
   <!-- Element describing the correct answer, the selected answer and the time used on a Trail-O control. -->
   <xs:element name="ControlAnswer">
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="Answer"/>
         <xs:element ref="CorrectAnswer"/>
-        <xs:element name="Time" type="timeSpan" minOccurs="0"/>
+        <xs:element name="Time" type="xs:double" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  
+
   <!-- Element describing the correct answer for a Trail-O control. -->
-  <xs:element name="CorrectAnswer">
-    <xs:complexType mixed="true"/>
-  </xs:element>
+  <xs:element name="CorrectAnswer" type="xs:string"/>
 
   <!-- Element describing the answer selected by the competitor for a Trail-O control. -->
-  <xs:element name="Answer">
-    <xs:complexType mixed="true"/>
-  </xs:element>
+  <xs:element name="Answer" type="xs:string"/>
 
-  <!-- 
+  <!--
   *** GPS ROUTES / TRACKING ***
 
-  Comment: Describing a route in xml is rather "chatty", leading to very large amount of data when there are many competitors. 
-  There is probably need for some compression (e g binary data expressed as a base64-encoded string). An idea is to place 
-  compressed data in the CompressedRelativeRoutePoints element, while uncompressed data is placed in multiple 
+  Comment: Describing a route in xml is rather "chatty", leading to very large amount of data when there are many competitors.
+  There is probably need for some compression (e g binary data expressed as a base64-encoded string). An idea is to place
+  compressed data in the CompressedRelativeRoutePoints element, while uncompressed data is placed in multiple
   RoutePoint/RelativeRoutePoint elements depending on the nature of the points.
   -->
-  
-  <!-- A competitor's route, recorded by a tracking device. A route contains a number of route points, 
+
+  <!-- A competitor's route, recorded by a tracking device. A route contains a number of route points,
   where every point has x coordinate, y coordinate, z coordinate (optionally) and time. -->
   <xs:element name="Route">
     <xs:complexType>
@@ -2628,11 +2021,9 @@
         <!-- The starting point of the route is always absolute -->
         <xs:element ref="RoutePoint"/>
         <!-- The rest of the points may be absolute, relative or compressed relative -->
-        <xs:choice>
-          <xs:element ref="RoutePoint" minOccurs="1" maxOccurs="unbounded"/>
-          <xs:element ref="RelativeRoutePoint" minOccurs="1" maxOccurs="unbounded"/>
-          <xs:element ref="CompressedRelativeRoutePoints"/>
-        </xs:choice>
+        <xs:element ref="RoutePoint" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="RelativeRoutePoint" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="CompressedRelativeRoutePoints" minOccurs="0"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2702,23 +2093,15 @@
     </xs:complexType>
   </xs:element>
   <!-- Control card owner, proposed by Stefan Nordmark. -->
-  <xs:element name="CCardOwner">
-    <xs:complexType mixed="true"/>
-  </xs:element>
+  <xs:element name="CCardOwner" type="xs:string"/>
 
   <!-- END 2.1 proposal -->
-  
-  
-  <!-- 1234-12-31Z01:23:45.6Z and 1234-12-31 are both valid -->
-  <xs:simpleType name="dateAndOptionalTime">
-    <xs:restriction base="xs:string">
-      <xs:pattern value="[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])(T([0-1][0-9]|2[0-3])(:[0-5][0-9]){2}(\.[0-9]+)?(Z|((\-|\+)(0[0-9]|1[0-2]):[0-5][0-9])))?"/>
-    </xs:restriction>
-  </xs:simpleType>
 
-  <xs:simpleType name="timeSpan">
-    <xs:restriction base="xs:string">
-      <xs:pattern value="(([0-9])+:)?(:[0-5][0-9]){2}(\.[0-9]+)?"/>
-    </xs:restriction>
-  </xs:simpleType>
+  <xs:complexType name="DateAndOptionalTime">
+    <xs:sequence>
+      <xs:element name="Date" type="xs:date" />
+      <xs:element name="Time" type="xs:time" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
 </xs:schema>
+
