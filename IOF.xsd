@@ -10,450 +10,780 @@
   ##                                  DRAFT                                    ##
   ###############################################################################
 
-  This file describes the IOF data exchange format for a wide selection of 
-  orienteering information. The format supersedes the previous version 2.0.3.
-
-  Authors:
-    Mats Troeng, SWE
-  Date:
-    04-2011
 -->
 
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
-  <xs:import namespace="http://www.w3.org/XML/1998/namespace"/>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xml:lang="en">
+  <xsd:annotation>
+    <xsd:documentation>
+      This schema describes the IOF data exchange format for a wide selection of
+      orienteering information. The schema supersedes the previous version 2.0.3.
 
-  <!-- 
-    Identifier element, used extensively. 
-    The optional type attribute describes the issuer of the identity.
-  -->
-  <xs:complexType name="Id" mixed="false">
-    <xs:attribute name="type" type="xs:string" use="optional"/>
-  </xs:complexType>
-
-  <!--
-    ##########
-    ### Person
-    ##########
-   
-    Represents a person. This could either be a Competitor (see the
-    Competitor section) or contact persons in an organisation (see the Organisation
-    section) or press (see the "Office" section).
-
-    Lists to exchange:
-      - PersonList
-
-  -->
-
-  <!--
-    List of persons. This is NOT to be used to exchange competitors.
-    Use CompetitorList instead.
-  -->
-  <xs:element name="PersonList">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="Person" type="Person" minOccurs="0" maxOccurs="unbounded"/>
-      </xs:sequence>
-      <xs:attribute name="iofVersion" type="xs:string" fixed="3.0"/>
-    </xs:complexType>
-  </xs:element>
-
-  <!--
-    Basic information of a person, either a competitor, contact, press etc.
-  -->
-  <xs:complexType name="Person">
-    <xs:sequence>
-      <xs:element name="Id" type="Id" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Name" type="PersonName" minOccurs="0"/>
-      <xs:element name="BirthDate" type="xs:date" minOccurs="0"/>
-      <xs:element name="Address" type="Address" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Contact" type="Contact" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Nationality" type="Country" minOccurs="0"/>
-    </xs:sequence>
-    <xs:attribute name="sex">
-      <xs:simpleType>
-        <xs:restriction base="xs:NMTOKEN">
-          <xs:enumeration value="F"/>
-          <xs:enumeration value="M"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
-  <xs:complexType name="PersonName">
-    <xs:sequence>
-      <xs:element name="Family" type="xs:string"/>
-      <xs:element name="Given" type="xs:string" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="OrganisationRole">
-    <xs:sequence>
-      <xs:element name="Type" type="xs:string"/>
-      <xs:element name="Person" type="Person"/>
-    </xs:sequence>
-  </xs:complexType>
-  <!--
-    ##########
-    ### Competitor
-    ##########
-   
-    Elements associated with a Competitor from ranking to control
-    card.
-    Other elements, e.g. Class, are found in other sections.
-   
-    Lists to exchange:
-      - CompetitorList
-      - RankList
-
-  -->
-
-  <!-- CompetitorList
-    A list of competitors. This is used to exchange a "brutto" list
-    of possible competitors.
-    This should NOT be used to exchange entries, use EntryList
-    instead.
-  -->
-  <xs:element name="CompetitorList">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="Competitor" type="Competitor" minOccurs="0" maxOccurs="unbounded"/>
-      </xs:sequence>
-      <xs:attribute name="iofVersion" type="xs:string" fixed="3.0"/>
-    </xs:complexType>
-  </xs:element>
-
-  <!-- Competitor -->
-  <xs:complexType name="Competitor">
-    <xs:sequence>
-      <xs:element name="Person" type="Person"/>
-      <xs:element name="Organisation" type="Organisation" minOccurs="0"/>
-      <xs:element name="DefaultClass" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="ControlCard" type="ControlCard" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Score" type="Score" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
-
-  <!-- Control Card -->
-  <xs:complexType name="ControlCard">
-    <xs:sequence>
-      <xs:element name="Id" type="Id"/>
-      <xs:element name="PunchingSystem" type="PunchingSystem"/>
-    </xs:sequence>
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
-
-  <!--
-    List of competitors in a specific score or ranking list identified
-    by the Name subelement, e.g. 'World Ranking List'.
-  -->
-  <xs:element name="ScoreList">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="Name" type="xs:string"/>
-        <xs:element name="PersonScore" type="PersonScore" minOccurs="0" maxOccurs="unbounded"/>
-      </xs:sequence>
-      <xs:attribute name="iofVersion" type="xs:string" fixed="3.0"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:complexType name="PersonScore">
-    <xs:sequence>
-      <xs:element name="Person" type="Person"/>
-      <xs:element name="Score" type="Score"/>
-    </xs:sequence>
-  </xs:complexType>
-  <!--
-    The score earned in this event for some purpose, e.g. a ranking
-    list. The 'type' attribute is used to specify which purpose.
-  -->
-  <xs:complexType name="Score">
-    <xs:simpleContent>
-      <xs:extension base="xs:double">
-        <xs:attribute name="type" use="required" type="xs:string"/>
-      </xs:extension>
-    </xs:simpleContent>
-  </xs:complexType>
-
-
-  <!--
-    ##########
-    ### Organisation
-    ##########
-   
-    Information about an organisation, i.e. address, contact person(s) etc.
-    An organisation is a general term including federations, clubs, etc.
-    Makes some use of the elements in the "Office" section.
-    Lists to exchange:
-      - OrganisationList
-  -->
-
-  <!-- Organisation List
-    List of organisations including address and contact information.
-  -->
-  <xs:element name="OrganisationList">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
-      </xs:sequence>
-      <xs:attribute name="iofVersion" type="xs:string" fixed="3.0"/>
-    </xs:complexType>
-  </xs:element>
-
-  <!-- Organisation -->
-  <xs:complexType name="Organisation">
-    <xs:sequence>
-      <xs:element name="Id" type="Id" minOccurs="0"/>
-      <xs:element name="Name" type="xs:string" minOccurs="0"/>
-      <xs:element name="ShortName" type="xs:string" minOccurs="0"/>
-      <!-- The name of the organisation as appearing in press result lists. -->
-      <xs:element name="PressName" type="xs:string" minOccurs="0"/>
-      <!-- The home city or geographical location of the organisation as appearing in press result lists. -->
-      <!-- To be considered: should PressName and HomeCity be replaced with a single element containing all information? -->
-      <xs:element name="HomeCity" type="xs:string" minOccurs="0"/>
-      <xs:element name="Type" type="OrganisationType" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="ParentOrganisation" type="Organisation" minOccurs="0"/>
-      <xs:element name="ChildOrganisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Country" type="Country" minOccurs="0"/>
-      <xs:element name="Address" type="Address" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Contact" type="Contact" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Account" type="Account" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Role" type="OrganisationRole" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
-
-  <xs:simpleType name="OrganisationType">
-    <xs:restriction base="xs:NMTOKEN">
-      <xs:enumeration value="IOF"/>
-      <xs:enumeration value="IOFRegion"/>
-      <xs:enumeration value="NationalFederation"/>
-      <xs:enumeration value="NationalRegion"/>
-      <xs:enumeration value="Club"/>
-      <xs:enumeration value="School"/>
-      <xs:enumeration value="Company"/>
-      <xs:enumeration value="Military"/>
-      <xs:enumeration value="Other"/>
-    </xs:restriction>
-  </xs:simpleType>
-
-  <!--
-    ##########
-    ### Event
-    ##########
-   
-    Elemnts holding event specific information
-   
-    Lists to exchange:
-      - EventList
-      - ServiceRequestList
-  -->
-
-  <!-- EventList
-    A list holding a number of events and event classification.
-    This can be used to exchange fixtures.
-  -->
-  <xs:element name="EventList">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="Event" type="Event" minOccurs="0" maxOccurs="unbounded"/>
-      </xs:sequence>
-      <xs:attribute name="iofVersion" type="xs:string" fixed="3.0"/>
-    </xs:complexType>
-  </xs:element>
-
-  <!-- Event
-    The main event element:
-      - name of the event
-      - start and end dates (to support multiday events)
-      - organizing organisation(s)
-      - event officials
-      - classes
-      - races (i.e. event "days")
-      - entry data (where to deliver entries)
-      - services (e.g. accomodation)
-      - web site information
-      - accounts for fees
-  -->
-  <xs:complexType name="Event" mixed="false">
-    <xs:sequence>
-      <xs:element name="Id" type="Id" minOccurs="0"/>
-      <xs:element name="Name" type="xs:string" minOccurs="0"/>
-      <xs:element name="StartTime" type="DateAndOptionalTime" minOccurs="0"/>
-      <xs:element name="EndTime" type="DateAndOptionalTime" minOccurs="0"/>
-      <xs:element name="Form" type="EventForm" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Organiser" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Official" type="EventOfficial" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="EventClass" type="EventClass" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="EventRace" type="EventRace" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="EntryData" type="EntryData" minOccurs="0"/>
-      <xs:element name="Service" type="Service" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Account" type="Account" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="URL" type="EventURL" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Information" type="Information" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Schedule" type="Schedule" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="News" type="Information" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
-  <xs:complexType name="EventOfficial">
-    <xs:sequence>
-      <xs:element name="Person" type="Person"/>
-    </xs:sequence>
-    <xs:attribute name="type" type="xs:string" use="required"/>
-  </xs:complexType>
-  <xs:complexType name="EntryData">
-    <xs:sequence>
-      <xs:element name="Address" type="Address" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Contact" type="Contact" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:simpleType name="EventForm">
-    <xs:restriction base="xs:NMTOKEN">
-      <xs:enumeration value="Individual"/>
-      <xs:enumeration value="Team"/>
-      <xs:enumeration value="Relay"/>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:simpleType name="RaceDiscipline">
-    <xs:restriction base="xs:NMTOKEN">
-      <xs:enumeration value="Sprint"/>
-      <xs:enumeration value="Middle"/>
-      <xs:enumeration value="Long"/>
-      <xs:enumeration value="Ultralong"/>
-      <xs:enumeration value="Other"/>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:simpleType name="RaceClassification">
-    <xs:restriction base="xs:NMTOKEN">
-      <xs:enumeration value="International"/>
-      <xs:enumeration value="National"/>
-      <xs:enumeration value="Regional"/>
-      <xs:enumeration value="Local"/>
-      <xs:enumeration value="Club"/>
-    </xs:restriction>
-  </xs:simpleType>
-
-  <!-- Event Class
-    A Class extended with event specific information, e.g. whether
-    the class is transfered to another class due to lack of entries.
-  -->
-  <xs:complexType name="EventClass">
-    <xs:sequence>
-      <xs:element name="Class" type="Class"/>
-      <xs:element name="Fee" type="Fee" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="PunchingSystem" type="PunchingSystem" minOccurs="0"/>
-      <!-- Keeping track of status of class (e g if results should be considered invalid due to misplaced constrols) -->
-      <xs:element name="Status" type="EventClassStatus" minOccurs="0"/>
-      <xs:element name="EventRaceClass" type="EventRaceClass" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-    <xs:attribute name="numberOfCompetitors" type="xs:integer" use="optional"/> <!-- competitor: a person or a team -->
-    <xs:attribute name="maxNumberOfCompetitors" type="xs:integer" use="optional"/> <!-- competitor: a person or a team -->
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
-
-  <xs:simpleType name="EventClassStatus">
-    <xs:restriction base="xs:NMTOKEN">
-      <xs:enumeration value="Normal"/>
-      <xs:enumeration value="Invalidated"/>
-      <xs:enumeration value="InvalidatedNoFee"/>
-    </xs:restriction>
-  </xs:simpleType>
-
-
-  <!-- Event Race
-    An event consists of a number of event races. The number is equal
-    to the number of times a competitor should start:
-      - one event race for a single day event
-      - N event races for an N day event
-      - two event races for a qualification and final (even if they
-        are the same day)
-  -->
-  <xs:complexType name="EventRace">
-    <xs:sequence>
-      <xs:element name="Id" type="Id" minOccurs="0"/>
-      <xs:element name="Name" type="xs:string" minOccurs="0"/>
-      <xs:element name="StartTime" type="DateAndOptionalTime" minOccurs="0"/>
-      <xs:element name="EndTime" type="DateAndOptionalTime" minOccurs="0"/>
-      <xs:element name="Classification" type="RaceClassification" minOccurs="0"/>
-      <xs:element name="Position" type="GeoPosition" minOccurs="0"/>
-      <xs:element name="Discipline" type="RaceDiscipline" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Attribute" type="RaceAttribute" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Organiser" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Official" type="EventOfficial" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Service" type="Service" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="URL" type="EventURL" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Information" type="Information" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Schedule" type="Schedule" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="News" type="Information" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
-
-  <xs:complexType name="EventURL">
-    <xs:simpleContent>
-      <xs:extension base="xs:string">
-        <xs:attribute name="type" use="required">
-          <xs:simpleType>
-            <xs:restriction base="xs:NMTOKEN">
-              <xs:enumeration value="Website"/>
-              <xs:enumeration value="StartList"/>
-              <xs:enumeration value="ResultList"/>
-              <xs:enumeration value="Other"/>
-            </xs:restriction>
-          </xs:simpleType>
-        </xs:attribute>
-      </xs:extension>
-    </xs:simpleContent>
-  </xs:complexType>
-
-  <xs:complexType name="Schedule">
-    <xs:sequence>
-      <xs:element name="StartTime" type="xs:dateTime"/>
-      <xs:element name="EndTime" type="xs:dateTime" minOccurs="0"/>
-      <xs:element name="Title" type="xs:string"/>
-      <xs:element name="Venue" type="xs:string" minOccurs="0"/>
-      <xs:element name="Position" type="GeoPosition" minOccurs="0"/>
-      <xs:element name="Details" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
-
-  <!-- TODO: better name -->
-  <xs:complexType name="Information">
-    <xs:sequence>
-      <xs:element name="Title" type="xs:string"/>
-      <xs:element name="Content" type="xs:string"/>
-    </xs:sequence>
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
+      Authors:
+      Mats Troeng, SWE
+      
+      Date:
+      04-2011
+    </xsd:documentation>       
+  </xsd:annotation>
+  <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
 
 
 
-  <!-- Fee
-    Competitor fees for entering the event.
-  -->
-  <xs:complexType name="Fee">
-    <xs:sequence>
-      <xs:element name="Id" type="Id" minOccurs="0"/>
-      <xs:element name="Name" type="LanguageString" minOccurs="0"/>
-      <xs:element name="Amount" type="Amount" minOccurs="0"/>
-      <!-- The first entry time that the entry fee is valid for. -->
-      <xs:element name="ValidFromTime" type="xs:dateTime" minOccurs="0"/>
-      <!-- The last entry time that the entry fee is valid for. -->
-      <xs:element name="ValidToTime" type="xs:dateTime" minOccurs="0"/>
-      <!-- The start of the birth date interval that the entry fee should be applied to. -->
-      <xs:element name="FromDateOfBirth" type="xs:date" minOccurs="0"/>
-      <!-- The end of the birth date interval that the entry fee should be applied to. -->
-      <xs:element name="ToDateOfBirth" type="xs:date" minOccurs="0"/>
-    </xs:sequence>
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
-  <xs:complexType name="Amount">
-    <xs:simpleContent>
-      <xs:extension base="xs:decimal">
-        <xs:attribute name="currency" type="xs:string" use="optional"/>
-      </xs:extension>
-    </xs:simpleContent>
-  </xs:complexType>
+  <!-- GLOBAL ELEMENTS -->
+
+  <xsd:element name="PersonList">
+    <xsd:annotation>
+      <xsd:documentation>
+        List of persons. This should not be used to exchange competitors; use CompetitorList instead.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Person" type="Person" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="CompetitorList">
+    <xsd:annotation>
+      <xsd:documentation>
+        A list of competitors. This is used to exchange a "brutto" list of possible competitors. This should not be used to exchange entries; use EntryList instead.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Competitor" type="Competitor" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="OrganisationList">
+    <xsd:annotation>
+      <xsd:documentation>
+        A list of organisations, including address and contact information.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="ScoreList">
+    <xsd:annotation>
+      <xsd:documentation>
+        A list of competitors in a specific score or ranking list.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Name" type="xsd:string">
+          <xsd:annotation>
+            <xsd:documentation>
+              The name identifying the score or ranking list, e.g. 'World Ranking List'.
+            </xsd:documentation>
+          </xsd:annotation>
+        </xsd:element>
+        <xsd:element name="PersonScore" type="PersonScore" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="EventList">
+    <xsd:annotation>
+      <xsd:documentation>
+        A list of events. This can be used to exchange fixtures.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Event" type="Event" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="ClassList">
+    <xsd:annotation>
+      <xsd:documentation>
+        A list of classes, not connected to any particular event.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Class" type="Class" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="CourseData">
+    <xsd:annotation>
+      <xsd:documentation>
+        This element defines all the control and course information for an event or event race.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Event" type="Event" minOccurs="0"/>
+        <xsd:element name="EventRace" type="EventRace" minOccurs="0"/>
+        <xsd:element name="Map" type="Map" minOccurs="0"/>
+        <xsd:element name="Control" type="Control" minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="CourseClassData" type="CourseClassData" minOccurs="0" maxOccurs="unbounded">
+          <xsd:annotation>
+            <xsd:documentation>
+              The assignment of a course to classes.
+            </xsd:documentation>
+          </xsd:annotation>
+        </xsd:element>
+        <xsd:element name="TeamCourseCombination" type="TeamCourseCombination" minOccurs="0" maxOccurs="unbounded">
+          <xsd:annotation>
+            <xsd:documentation>
+              The assignment of courses to relay teams.
+            </xsd:documentation>
+          </xsd:annotation>
+        </xsd:element>
+      </xsd:sequence>
+      <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0"/>
+    </xsd:complexType>
+  </xsd:element>  
+  
+  
+  <!-- TODO: skip the type attribute, and introduce a new element SecondaryId what covers for e.g. World Ranking List needs? -->
+  <xsd:complexType name="Id" mixed="false">
+    <xsd:annotation>
+      <xsd:documentation>
+        Identifier element, used extensively. If an entity is known by both systems taking part in the data exchange, it is preferable to let the entity contain only the Id element in order to avoid information redundancy.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="type" type="xsd:string" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>
+          The issuer of the identity, e.g. World Ranking List.
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+
+  <xsd:complexType name="Person">
+    <xsd:annotation>
+      <xsd:documentation>
+        Represents a person. This could either be a competitor (see the Competitor element) or contact persons in an organisation (see the Organisation element) or press (see the "Office" element).
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <!-- TODO: allow multiple ids? -->
+      <xsd:element name="Id" type="Id" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Name" type="PersonName" minOccurs="0"/>
+      <xsd:element name="BirthDate" type="xsd:date" minOccurs="0"/>
+      <xsd:element name="Address" type="Address" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Contact" type="Contact" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Nationality" type="Country" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="sex" use="optional">
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:NMTOKEN">
+          <xsd:enumeration value="F"/>
+          <xsd:enumeration value="M"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
+  
+  <xsd:complexType name="PersonName">
+    <xsd:sequence>
+      <xsd:element name="Family" type="xsd:string"/>
+      <xsd:element name="Given" type="xsd:string" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="Competitor">
+    <xsd:annotation>
+      <xsd:documentation>
+        Represents information about a person in a competition context, i.e. including organisation and control card.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Person" type="Person"/>
+      <xsd:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
+      <!-- TODO: is this information really necessary? -->
+      <xsd:element name="DefaultClass" type="Class" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            The classes that the competitor prefer to take part in. Used to automatically pre-select a class when the person is about to submit an entry.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ControlCard" type="ControlCard" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Score" type="Score" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="ControlCard">
+    <xsd:sequence>
+      <xsd:element name="Id" type="Id">
+        <xsd:annotation>
+          <xsd:documentation>
+            The unique identifier of the control card, i.e. 'card number'.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="PunchingSystem" type="PunchingSystem">
+        <xsd:annotation>
+          <xsd:documentation>
+            The manufacturer of the punching system, e.g. 'SI' or 'Emit'.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="PersonScore">
+    <xsd:sequence>
+      <xsd:element name="Person" type="Person"/>
+      <xsd:element name="Score" type="Score"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Score">
+    <xsd:annotation>
+      <xsd:documentation>
+        The score earned in an event for some purpose, e.g. a ranking list. The 'type' attribute is used to specify which purpose.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:double">
+        <xsd:attribute name="type" use="required" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="Organisation">
+    <xsd:annotation>
+      <xsd:documentation>
+        Information about an organisation, i.e. address, contact person(s) etc. An organisation is a general term including federations, clubs, etc.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Id" type="Id" minOccurs="0"/>
+      <xsd:element name="Name" type="xsd:string" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            The full name of the organisation.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ShortName" type="xsd:string" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            The short (abbreviated) name of the organisation.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="PressName" type="xsd:string" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            The name of the organisation as appearing in press result lists.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Type" type="OrganisationType" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="ParentOrganisation" type="Organisation" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            The parent of this organisation, e.g. a regional organisation for a club.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ChildOrganisation" type="Organisation" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            The children of this organisation, e.g. a number of clubs for a regional organisation.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Country" type="Country" minOccurs="0"/>
+      <xsd:element name="Address" type="Address" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Contact" type="Contact" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Account" type="Account" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Role" type="Role" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            Persons having certain roles within the organisation, e.g. chairman, secretary, and treasurer.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
+
+  <xsd:simpleType name="OrganisationType">
+    <xsd:annotation>
+      <xsd:documentation>
+        The hierarchical level or type of an organisation.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:NMTOKEN">
+      <xsd:enumeration value="IOF"/>
+      <xsd:enumeration value="IOFRegion"/>
+      <xsd:enumeration value="NationalFederation"/>
+      <xsd:enumeration value="NationalRegion"/>
+      <xsd:enumeration value="Club"/>
+      <xsd:enumeration value="School"/>
+      <xsd:enumeration value="Company"/>
+      <xsd:enumeration value="Military"/>
+      <xsd:enumeration value="Other"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:complexType name="Role">
+    <xsd:sequence>
+      <xsd:element name="Person" type="Person"/>
+    </xsd:sequence>
+    <xsd:attribute name="type" type="xsd:string" use="required"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="Event" mixed="false">
+    <xsd:sequence>
+      <xsd:element name="Id" type="Id" minOccurs="0"/>
+      <xsd:element name="Name" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="StartTime" type="DateAndOptionalTime" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            The start time for the first starting competitor of the event. If the event contains multiple races, this is the start time for the first starting competitor of the first race.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="EndTime" type="DateAndOptionalTime" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            The expected finish time for the last finishing competitor of the event. If the event contains multiple races, this is the expected finish time for the last finishing competitor of the last race.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Form" type="EventForm" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Organiser" type="Organisation" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            The organisations that organise the event.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Official" type="Role" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            The main officials of the event, e.g. course setter and event president.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="EventClass" type="EventClass" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            The classes that are available at the event.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="EventRace" type="EventRace" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            An event consists of a number of races. The number is equal to the number of times a competitor should start. Most events contain a single race.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="EntryReceiver" type="EntryReceiver" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            Address and contact information to the person or organisation which registers the entries for the event.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Service" type="Service" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            The services available for the event, e.g. accomodation and transport.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <!-- TODO: is account information really necessary? -->
+      <xsd:element name="Account" type="Account" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="URL" type="EventURL" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            URLs to various types of additional information regarding the event, e.g. event website or result list.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Information" type="InformationItem" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            Presents arbitrary data about the event, e.g. "Accommodation", "Local Attractions", and so on. Information present here should be defined well in advance of the event, in contrast to the 'News' element.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Schedule" type="Schedule" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            Defines the schedule of events that comprise the entire orienteering event, e.g. entry deadlines, banquet and social events, and awards ceremonies.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="News" type="InformationItem" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            Presents "last minute information" about the event.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="EntryReceiver">
+    <xsd:sequence>
+      <xsd:element name="Address" type="Address" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Contact" type="Contact" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:simpleType name="EventForm">
+    <xsd:restriction base="xsd:NMTOKEN">
+      <xsd:enumeration value="Individual"/>
+      <xsd:enumeration value="Team"/>
+      <xsd:enumeration value="Relay"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:complexType name="EventRace">
+    <xsd:annotation>
+      <xsd:documentation>
+        An event consists of a number of event races. The number is equal to the number of times a competitor should start.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Id" type="Id" minOccurs="0"/>
+      <xsd:element name="Name" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="StartTime" type="DateAndOptionalTime" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            The start time for the first starting competitor of the race.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="EndTime" type="DateAndOptionalTime" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            The expected finish time for the last finishing competitor of the race.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Classification" type="RaceClassification" minOccurs="0"/>
+      <xsd:element name="Position" type="GeoPosition" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            The geographical location of the arena.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Discipline" type="RaceDiscipline" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Attribute" type="RaceAttribute" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            Any extra information for the race, e.g. whether the race is a championship race.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Organiser" type="Organisation" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            The organisations that organise the event.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Official" type="Role" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            The main officials of the event, e.g. course setter and event president.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Service" type="Service" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            The services available for the race, e.g. accomodation and transport.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="URL" type="EventURL" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            URLs to various types of additional information regarding the event, e.g. event website or result list.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
+
+  <xsd:simpleType name="RaceClassification">
+    <xsd:restriction base="xsd:NMTOKEN">
+      <xsd:enumeration value="International"/>
+      <xsd:enumeration value="National"/>
+      <xsd:enumeration value="Regional"/>
+      <xsd:enumeration value="Local"/>
+      <xsd:enumeration value="Club"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="RaceDiscipline">
+    <xsd:restriction base="xsd:NMTOKEN">
+      <xsd:enumeration value="Sprint"/>
+      <xsd:enumeration value="Middle"/>
+      <xsd:enumeration value="Long"/>
+      <xsd:enumeration value="Ultralong"/>
+      <xsd:enumeration value="Other"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:complexType name="EventURL">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="type" use="required">
+          <xsd:simpleType>
+            <xsd:restriction base="xsd:NMTOKEN">
+              <xsd:enumeration value="Website"/>
+              <xsd:enumeration value="StartList"/>
+              <xsd:enumeration value="ResultList"/>
+              <xsd:enumeration value="Other"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+        </xsd:attribute>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="Schedule">
+    <xsd:sequence>
+      <xsd:element name="StartTime" type="xsd:dateTime"/>
+      <xsd:element name="EndTime" type="xsd:dateTime" minOccurs="0"/>
+      <xsd:element name="Title" type="xsd:string"/>
+      <xsd:element name="Venue" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="Position" type="GeoPosition" minOccurs="0"/>
+      <xsd:element name="Details" type="xsd:string" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="InformationItem">
+    <xsd:sequence>
+      <xsd:element name="Title" type="xsd:string"/>
+      <xsd:element name="Content" type="xsd:string"/>
+    </xsd:sequence>
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="ClassAttribute" mixed="false">
+    <!-- todo: enum? -->
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string" />
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="Class">
+    <xsd:annotation>
+      <xsd:documentation>
+        A general class, not connected to any particular event.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Id" type="Id" minOccurs="0"/>
+      <xsd:element name="Name" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="ShortName" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="Leg" type="Leg" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            Information about the legs, if the class is a relay class.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Attribute" type="ClassAttribute" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            Any extra information for the class.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="minAge" type="xsd:integer" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>
+          The lowest allowed age for a competitor taking part in the class.
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="maxAge" type="xsd:integer" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>
+          The highest allowed age for a competitor taking part in the class.
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="sex" use="optional" default="B">
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:NMTOKEN">
+          <xsd:enumeration value="B"/>
+          <xsd:enumeration value="F"/>
+          <xsd:enumeration value="M"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="teamMinAge" type="xsd:integer" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>
+          The lowest allowed age sum of the team members for a team taking part in the class.
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="teamMaxAge" type="xsd:integer" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>
+          The highest allowed age sum of the team members for a team taking part in the class.
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="EventClass">
+    <xsd:annotation>
+      <xsd:documentation>
+        A class extended with event-specific information.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Class" type="Class">
+        <xsd:annotation>
+          <xsd:documentation>
+            Class information that is event-agnostic.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="PunchingSystem" type="PunchingSystem" minOccurs="0"/>
+      <xsd:element name="Status" type="EventClassStatus" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            The status of the class, e.g. if results should be considered invalid due to misplaced constrols.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="EventRaceClass" type="EventRaceClass" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            Race-specific information for the class, e.g. course(s) assigned to the class.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="numberOfCompetitors" type="xsd:integer" use="optional"/> <!-- competitor: a person or a team -->
+    <xsd:attribute name="maxNumberOfCompetitors" type="xsd:integer" use="optional"/> <!-- competitor: a person or a team -->
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
+
+  <xsd:simpleType name="EventClassStatus">
+    <xsd:restriction base="xsd:NMTOKEN">
+      <xsd:enumeration value="Normal"/>
+      <xsd:enumeration value="Invalidated"/>
+      <xsd:enumeration value="InvalidatedNoFee"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:complexType name="EventRaceClass">
+    <xsd:annotation>
+      <xsd:documentation>
+        Information about a class with respect to an event race.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="EventRace" type="EventRace"/>
+      <xsd:element name="Fee" type="Fee" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="FirstStart" type="xsd:dateTime" minOccurs="0"/>
+      <xsd:element name="Status" type="EventRaceClassStatus"/>
+      <xsd:element name="Course" type="Course" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            The courses assigned to this class. For a mass-start event or a relay event, there are usually multiple courses per class due to the usage of spreading methods.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
+  
+  <xsd:simpleType name="EventRaceClassStatus">
+    <xsd:restriction base="xsd:NMTOKEN">
+      <xsd:enumeration value="Normal"/>
+      <xsd:enumeration value="Invalidated"/>
+      <xsd:enumeration value="InvalidatedNoFee"/>
+      <xsd:enumeration value="Excluded"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:complexType name="Fee">
+    <xsd:annotation>
+      <xsd:documentation>
+        A fee that applies when entering a class at an event or ordering a service.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Id" type="Id" minOccurs="0"/>
+      <xsd:element name="Name" type="LanguageString" minOccurs="0"/>
+      <xsd:element name="Amount" type="Amount" minOccurs="0"/>
+      <xsd:element name="ValidFromTime" type="xsd:dateTime" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            The first entry time that the entry fee is valid for.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ValidToTime" type="xsd:dateTime" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            The last entry time that the entry fee is valid for.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="FromDateOfBirth" type="xsd:date" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            The end of the birth date interval that the entry fee should be applied to. Omit if no lower birth date restriction.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ToDateOfBirth" type="xsd:date" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            The end of the birth date interval that the entry fee should be applied to. Omit if no upper birth date restriction.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
+  
+  <xsd:complexType name="Amount">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:decimal">
+        <xsd:attribute name="currency" type="xsd:string" use="optional"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
 
   <!--
     ##########
@@ -472,15 +802,15 @@
     the persons entering the competition, probably aggregated
     into teams if it is for a relay.
   -->
-  <xs:element name="EntryList">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="TeamEntry" type="TeamEntry" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element name="PersonEntry" type="PersonEntry" minOccurs="0" maxOccurs="unbounded"/>
-      </xs:sequence>
-      <xs:attribute name="iofVersion" type="xs:string" fixed="3.0"/>
-    </xs:complexType>
-  </xs:element>
+  <xsd:element name="EntryList">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="TeamEntry" type="TeamEntry" minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="PersonEntry" type="PersonEntry" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0"/>
+    </xsd:complexType>
+  </xsd:element>
 
 
   <!-- Entry
@@ -491,52 +821,52 @@
     2) a team, which holds a number of persons possibly ordered in
        a sequence within the team.
   -->
-  <xs:complexType name="PersonEntry">
-    <xs:sequence>
-      <xs:element name="Id" type="Id" minOccurs="0"/>
-      <xs:element name="Person" type="Person"/>
-      <xs:element name="Organisation" type="Organisation" minOccurs="0"/>
-      <xs:element name="ControlCard" type="ControlCard" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Score" type="Score" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="EventClass" type="EventClass" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="EventRace" type="EventRace" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Fee" type="Fee" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="AllocationControl" type="AllocationControl" minOccurs="0"/>
-      <xs:element name="EntryTime" type="xs:dateTime"/>
-    </xs:sequence>
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
+  <xsd:complexType name="PersonEntry">
+    <xsd:sequence>
+      <xsd:element name="Id" type="Id" minOccurs="0"/>
+      <xsd:element name="Person" type="Person"/>
+      <xsd:element name="Organisation" type="Organisation" minOccurs="0"/>
+      <xsd:element name="ControlCard" type="ControlCard" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Score" type="Score" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="EventClass" type="EventClass" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="EventRace" type="EventRace" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Fee" type="Fee" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="AllocationControl" type="AllocationControl" minOccurs="0"/>
+      <xsd:element name="EntryTime" type="xsd:dateTime"/>
+    </xsd:sequence>
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
   
-  <xs:complexType name="TeamEntry">
-    <xs:sequence>
-      <xs:element name="Id" type="Id" minOccurs="0"/>
-      <xs:element name="Name" type="xs:string"/>
-      <xs:element name="TeamPersonEntry" type="TeamPersonEntry" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="EventClass" type="EventClass" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="EventRace" type="EventRace" minOccurs="0" maxOccurs="unbounded"/>
+  <xsd:complexType name="TeamEntry">
+    <xsd:sequence>
+      <xsd:element name="Id" type="Id" minOccurs="0"/>
+      <xsd:element name="Name" type="xsd:string"/>
+      <xsd:element name="TeamPersonEntry" type="TeamPersonEntry" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="EventClass" type="EventClass" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="EventRace" type="EventRace" minOccurs="0" maxOccurs="unbounded"/>
       <!-- Fees for the team as a whole, not related to the individual persons -->
-      <xs:element name="Fee" type="Fee" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="AllocationControl" type="AllocationControl" minOccurs="0"/>
-      <xs:element name="EntryTime" type="xs:dateTime"/>
-    </xs:sequence>
-    <xs:attribute name="nonCompetitor" type="xs:boolean" default="false" />
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
+      <xsd:element name="Fee" type="Fee" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="AllocationControl" type="AllocationControl" minOccurs="0"/>
+      <xsd:element name="EntryTime" type="xsd:dateTime"/>
+    </xsd:sequence>
+    <xsd:attribute name="nonCompetitor" type="xsd:boolean" default="false" />
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
 
-  <xs:complexType name="TeamPersonEntry">
-    <xs:sequence>
-      <xs:element name="Person" type="Person"/>
-      <xs:element name="Organisation" type="Organisation" minOccurs="0"/>
-      <xs:element name="ControlCard" type="ControlCard" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Score" type="Score" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Leg" type="xs:integer" minOccurs="0"/>
-      <!-- Support for defining the competitor starting order within a team at a parallel relay leg (e g 25-manna) -->
-      <xs:element name="LegOrder" type="xs:integer" minOccurs="0"/>
-      <xs:element name="Fee" type="Fee" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="AllocationControl" type="AllocationControl" minOccurs="0"/>
-      <xs:element name="EntryTime" type="xs:dateTime"/>
-    </xs:sequence>
-  </xs:complexType>
+  <xsd:complexType name="TeamPersonEntry">
+    <xsd:sequence>
+      <xsd:element name="Person" type="Person"/>
+      <xsd:element name="Organisation" type="Organisation" minOccurs="0"/>
+      <xsd:element name="ControlCard" type="ControlCard" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Score" type="Score" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Leg" type="xsd:integer" minOccurs="0"/>
+      <!-- Support for defining the competitor starting order within a team at a parallel relay leg (e.g. 25-manna) -->
+      <xsd:element name="LegOrder" type="xsd:integer" minOccurs="0"/>
+      <xsd:element name="Fee" type="Fee" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="AllocationControl" type="AllocationControl" minOccurs="0"/>
+      <xsd:element name="EntryTime" type="xsd:dateTime"/>
+    </xsd:sequence>
+  </xsd:complexType>
 
   <!-- AllocationControl
     Used to state start time allocation requests.
@@ -549,24 +879,24 @@
     It is totally up to the event software and organizers whether
     they will support such requests.
   -->
-  <xs:complexType name="AllocationControl">
-    <xs:sequence>
-      <xs:element name="Organisation" type="Organisation" minOccurs="0"/>
-      <xs:element name="Person" type="Person" minOccurs="0"/>
-    </xs:sequence>
-    <xs:attribute name="type" default="Normal">
-      <xs:simpleType>
-        <xs:restriction base="xs:NMTOKEN">
-          <xs:enumeration value="LateStart"/>
-          <xs:enumeration value="Normal"/>
-          <xs:enumeration value="EarlyStart"/>
-          <xs:enumeration value="DistributedFromRef"/>
-          <xs:enumeration value="Other"/>
-          <xs:enumeration value="GroupedWithRef"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-  </xs:complexType>
+  <xsd:complexType name="AllocationControl">
+    <xsd:sequence>
+      <xsd:element name="Organisation" type="Organisation" minOccurs="0"/>
+      <xsd:element name="Person" type="Person" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="type" default="Normal">
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:NMTOKEN">
+          <xsd:enumeration value="LateStart"/>
+          <xsd:enumeration value="Normal"/>
+          <xsd:enumeration value="EarlyStart"/>
+          <xsd:enumeration value="DistributedFromRef"/>
+          <xsd:enumeration value="Other"/>
+          <xsd:enumeration value="GroupedWithRef"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
 
   <!--
     ##########
@@ -583,55 +913,55 @@
     A list containing the event (or identification) and a number
     of class start lists
   -->
-  <xs:element name="StartList">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="Event" type="Event" minOccurs="0"/>
-        <xs:element name="ClassStart" type="ClassStart" minOccurs="0" maxOccurs="unbounded"/>
-      </xs:sequence>
-      <xs:attribute name="iofVersion" type="xs:string" fixed="3.0"/>
-      <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-    </xs:complexType>
-  </xs:element>
+  <xsd:element name="StartList">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Event" type="Event" minOccurs="0"/>
+        <xsd:element name="ClassStart" type="ClassStart" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0"/>
+      <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+    </xsd:complexType>
+  </xsd:element>
 
   <!-- ClassStart
     The start list of a single class containing either individual
     start times for competitors or team start times for relays
   -->
-  <xs:complexType name="ClassStart">
-    <xs:sequence>
-      <xs:element name="EventClass" type="EventClass"/>
-      <xs:element name="TeamStart" type="TeamStart" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="PersonStart" type="PersonStart" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-    <xs:attribute name="timeResolution" type="xs:double" use="optional" default="1"/>
-  </xs:complexType>
+  <xsd:complexType name="ClassStart">
+    <xsd:sequence>
+      <xsd:element name="EventClass" type="EventClass"/>
+      <xsd:element name="TeamStart" type="TeamStart" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="PersonStart" type="PersonStart" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="timeResolution" type="xsd:double" use="optional" default="1"/>
+  </xsd:complexType>
 
   <!-- PersonStart
     The start time(s) of a single competitor. In case of a multi day
     event all start times are listed.
   -->
-  <xs:complexType name="PersonStart">
-    <xs:sequence>
-      <xs:element name="Person" type="Person" />
-      <xs:element name="Organisation" type="Organisation" minOccurs="0"/>
-      <xs:element name="Leg" type="xs:integer" minOccurs="0"/>
-      <!-- Support for defining the competitor starting order within a team at a parallel relay leg (e g 25-manna) -->
-      <xs:element name="LegOrder" type="xs:integer" minOccurs="0"/>
-      <xs:element name="Start" type="Start" minOccurs="0"/>
-      <xs:element name="CourseVariation" type="CourseVariation" minOccurs="0"/>
-      <xs:element name="ControlCard" minOccurs="0"/>
-      <xs:element name="StartName" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="TeamStart">
-    <xs:sequence>
-      <xs:element name="Name" type="xs:string"/>
-      <xs:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Start" type="Start" minOccurs="0"/>
-      <xs:element name="PersonStart" type="PersonStart" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
+  <xsd:complexType name="PersonStart">
+    <xsd:sequence>
+      <xsd:element name="Person" type="Person" />
+      <xsd:element name="Organisation" type="Organisation" minOccurs="0"/>
+      <xsd:element name="Leg" type="xsd:integer" minOccurs="0"/>
+      <!-- Support for defining the competitor starting order within a team at a parallel relay leg (e.g. 25-manna) -->
+      <xsd:element name="LegOrder" type="xsd:integer" minOccurs="0"/>
+      <xsd:element name="Start" type="Start" minOccurs="0"/>
+      <xsd:element name="Course" type="Course" minOccurs="0"/>
+      <xsd:element name="ControlCard" minOccurs="0"/>
+      <xsd:element name="StartName" type="xsd:string" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TeamStart">
+    <xsd:sequence>
+      <xsd:element name="Name" type="xsd:string"/>
+      <xsd:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Start" type="Start" minOccurs="0"/>
+      <xsd:element name="PersonStart" type="PersonStart" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
 
   <!-- Start
     The start information of a competitor of a single race.
@@ -639,13 +969,13 @@
     competitor, the start time, the team order (if relay) and the
     course length.
   -->
-  <xs:complexType name="Start">
-    <xs:sequence>
-      <xs:element name="BibNumber" type="xs:string" minOccurs="0"/>
-      <xs:element name="StartTime" type="xs:dateTime" minOccurs="0"/>
-    </xs:sequence>
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
+  <xsd:complexType name="Start">
+    <xsd:sequence>
+      <xsd:element name="BibNumber" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="StartTime" type="xsd:dateTime" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
 
   <!--
     ##########
@@ -666,82 +996,83 @@
     of class results. The list can be more or less complete as
     explained above.
   -->
-  <xs:element name="ResultList">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="Event" type="Event" minOccurs="0"/>
-        <xs:element name="ClassResult" type="ClassResult" minOccurs="0" maxOccurs="unbounded"/>
-      </xs:sequence>
-      <xs:attribute name="iofVersion" type="xs:string" fixed="3.0"/>
-      <xs:attribute name="status" default="Complete">
-        <xs:simpleType>
-          <xs:restriction base="xs:NMTOKEN">
-            <xs:enumeration value="Complete"/>
-            <xs:enumeration value="Delta"/>
-            <xs:enumeration value="Snapshot"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
-      <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-    </xs:complexType>
-  </xs:element>
+  <xsd:element name="ResultList">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Event" type="Event" minOccurs="0"/>
+        <xsd:element name="ClassResult" type="ClassResult" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0"/>
+      <xsd:attribute name="status" default="Complete">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:NMTOKEN">
+            <xsd:enumeration value="Complete"/>
+            <xsd:enumeration value="Delta"/>
+            <xsd:enumeration value="Snapshot"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:attribute>
+      <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+    </xsd:complexType>
+  </xsd:element>
 
   <!-- ClassResult
     Results from a single class. It consists of a Class and a number
     of person or team results.
   -->
-  <xs:complexType name="ClassResult">
-    <xs:sequence>
-      <xs:element name="EventClass" type="EventClass" minOccurs="0" />
-      <xs:element name="CourseVariation" type="CourseVariation" minOccurs="0" />
-      <xs:element name="PersonResult" type="PersonResult" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="TeamResult" type="TeamResult" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-    <xs:attribute name="timeResolution" type="xs:double" use="optional" default="1"/>
-  </xs:complexType>
-  <xs:complexType name="PersonResult">
-    <xs:sequence>
-      <xs:element name="Person" type="Person"/>
-      <xs:element name="Organisation" type="Organisation" minOccurs="0"/>
-      <xs:element name="Leg" type="xs:integer" minOccurs="0"/>
-      <!-- Support for defining the competitor starting order within a team at a parallel relay leg (e g 25-manna) -->
-      <xs:element name="LegOrder" type="xs:integer" minOccurs="0"/>
-      <xs:element name="Result" type="Result"/>
-      <xs:element name="CourseVariation" type="CourseVariation" minOccurs="0"/>
-      <xs:element name="ControlCard" minOccurs="0"/>
-      <xs:element name="SplitTime" minOccurs="0" maxOccurs="unbounded"/>
+  <xsd:complexType name="ClassResult">
+    <xsd:sequence>
+      <xsd:element name="EventClass" type="EventClass" minOccurs="0" />
+      <xsd:element name="Course" type="Course" minOccurs="0"/>
+      <xsd:element name="PersonResult" type="PersonResult" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="TeamResult" type="TeamResult" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="timeResolution" type="xsd:double" use="optional" default="1"/>
+  </xsd:complexType>
+  
+  <xsd:complexType name="PersonResult">
+    <xsd:sequence>
+      <xsd:element name="Person" type="Person"/>
+      <xsd:element name="Organisation" type="Organisation" minOccurs="0"/>
+      <xsd:element name="Leg" type="xsd:integer" minOccurs="0"/>
+      <!-- Support for defining the competitor starting order within a team at a parallel relay leg (e.g. 25-manna) -->
+      <xsd:element name="LegOrder" type="xsd:integer" minOccurs="0"/>
+      <xsd:element name="Result" type="Result"/>
+      <xsd:element name="Course" type="Course" minOccurs="0"/>
+      <xsd:element name="ControlCard" minOccurs="0"/>
+      <xsd:element name="SplitTime" minOccurs="0" maxOccurs="unbounded"/>
       <!-- Support for Trail-O results. -->
-      <xs:element name="ControlAnswer" type="ControlAnswer" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="ControlAnswer" type="ControlAnswer" minOccurs="0" maxOccurs="unbounded"/>
       <!-- Support for GPS routes/tracking. -->
-      <xs:element name="Route" type="Route" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="TeamResult">
-    <xs:sequence>
-      <xs:element name="Name" type="xs:string"/>
-      <xs:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Result" type="Result"/>
-      <xs:element name="PersonResult" type="PersonResult" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
+      <xsd:element name="Route" type="Route" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TeamResult">
+    <xsd:sequence>
+      <xsd:element name="Name" type="xsd:string"/>
+      <xsd:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Result" type="Result"/>
+      <xsd:element name="PersonResult" type="PersonResult" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
 
   <!-- Result
     Overall result of a single competitor. For a multiday event
     this is the accumulated result
   -->
-  <xs:complexType name="Result">
-    <xs:sequence>
-      <xs:element name="BibNumber" type="xs:string" minOccurs="0"/>
-      <xs:element name="StartTime" type="xs:dateTime" minOccurs="0"/>
-      <xs:element name="FinishTime" type="xs:dateTime" minOccurs="0"/>
+  <xsd:complexType name="Result">
+    <xsd:sequence>
+      <xsd:element name="BibNumber" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="StartTime" type="xsd:dateTime" minOccurs="0"/>
+      <xsd:element name="FinishTime" type="xsd:dateTime" minOccurs="0"/>
       <!-- Time in seconds -->
-      <xs:element name="Time" type="xs:double" minOccurs="0"/>
-      <xs:element name="Position" type="xs:integer" minOccurs="0"/>
-      <xs:element name="Status" type="ResultStatus"/>
-      <xs:element name="Score" type="Score" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
+      <xsd:element name="Time" type="xsd:double" minOccurs="0"/>
+      <xsd:element name="Position" type="xsd:integer" minOccurs="0"/>
+      <xsd:element name="Status" type="ResultStatus"/>
+      <xsd:element name="Score" type="Score" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
 
   <!-- Status
     The status of the competitor or team at the time of the result
@@ -763,25 +1094,25 @@
                              restrictions
       - Cancelled          : The competitor has cancelled his/hers entry
   -->
-  <xs:simpleType name="ResultStatus">
-    <xs:restriction base="xs:NMTOKEN">
-      <xs:enumeration value="Inactive"/>
-      <xs:enumeration value="MissingPunch"/>
-      <xs:enumeration value="DidNotEnter"/>
-      <xs:enumeration value="DidNotStart"/>
-      <xs:enumeration value="MovedUp"/>
-      <xs:enumeration value="OverTime"/>
-      <xs:enumeration value="Moved"/>
-      <xs:enumeration value="Active"/>
-      <xs:enumeration value="Disqualified"/>
-      <xs:enumeration value="DidNotFinish"/>
-      <xs:enumeration value="Cancelled"/>
-      <xs:enumeration value="SportingWithdrawal"/>
-      <xs:enumeration value="OK"/>
-      <xs:enumeration value="NotCompeting"/>
-      <xs:enumeration value="Finished"/>
-    </xs:restriction>
-  </xs:simpleType>
+  <xsd:simpleType name="ResultStatus">
+    <xsd:restriction base="xsd:NMTOKEN">
+      <xsd:enumeration value="Inactive"/>
+      <xsd:enumeration value="MissingPunch"/>
+      <xsd:enumeration value="DidNotEnter"/>
+      <xsd:enumeration value="DidNotStart"/>
+      <xsd:enumeration value="MovedUp"/>
+      <xsd:enumeration value="OverTime"/>
+      <xsd:enumeration value="Moved"/>
+      <xsd:enumeration value="Active"/>
+      <xsd:enumeration value="Disqualified"/>
+      <xsd:enumeration value="DidNotFinish"/>
+      <xsd:enumeration value="Cancelled"/>
+      <xsd:enumeration value="SportingWithdrawal"/>
+      <xsd:enumeration value="OK"/>
+      <xsd:enumeration value="NotCompeting"/>
+      <xsd:enumeration value="Finished"/>
+    </xsd:restriction>
+  </xsd:simpleType>
 
   <!-- SplitTime
     Time elapsed from start to punching the control. Each control of the 
@@ -796,22 +1127,22 @@
       Additional: Control does not belong to the course, but the competitor
                   has punched it.  
   -->
-  <xs:complexType name="SplitTime">
-    <xs:sequence>
-      <xs:element name="ControlCode" type="xs:string"/>
+  <xsd:complexType name="SplitTime">
+    <xsd:sequence>
+      <xsd:element name="ControlCode" type="xsd:string"/>
       <!-- Time in seconds -->
-      <xs:element name="Time" type="xs:double" minOccurs="0"/>
-    </xs:sequence>
-    <xs:attribute name="status" use="required">
-      <xs:simpleType>
-        <xs:restriction base="xs:NMTOKEN">
-          <xs:enumeration value="OK"/>
-          <xs:enumeration value="Missing"/>
-          <xs:enumeration value="Additional"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-  </xs:complexType>
+      <xsd:element name="Time" type="xsd:double" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="status" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:NMTOKEN">
+          <xsd:enumeration value="OK"/>
+          <xsd:enumeration value="Missing"/>
+          <xsd:enumeration value="Additional"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
 
   <!-- Result Selection
     Used to specify subresults of interest for the press (see the
@@ -819,135 +1150,29 @@
     of a list of organisations, classes and a max position
     in the list, e.g. the top 3.
   -->
-  <xs:complexType name="ResultSelection">
-    <xs:sequence>
-      <xs:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Class" type="Class" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="MaxPosition" type="xs:integer"/>
-      <xs:element name="MaxPositionForOrganisations" type="xs:integer" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
+  <xsd:complexType name="ResultSelection">
+    <xsd:sequence>
+      <xsd:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Class" type="Class" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="MaxPosition" type="xsd:integer"/>
+      <xsd:element name="MaxPositionForOrganisations" type="xsd:integer" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
 
-  <!--
-    ##########
-    ### Class
-    ##########
-   
-    Elements associated with an Event Class - this being a real
-    class in the event or a "standard" class.
-    Lists to exchange are:
-      - ClassData
-  -->
+  <xsd:complexType name="RaceAttribute" mixed="false">
+    <!-- todo: enum? -->
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string" />
+    </xsd:simpleContent>
+  </xsd:complexType>
 
-  <!-- Class Data
-    A list of classes.
-  -->
-  <xs:element name="ClassList">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="Class" type="Class" minOccurs="0" maxOccurs="unbounded"/>
-      </xs:sequence>
-      <xs:attribute name="iofVersion" type="xs:string" fixed="3.0"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:complexType name="RaceAttribute" mixed="false">
-    <!-- todo: enum -->
-    <xs:attribute name="type" type="xs:string"/>
-  </xs:complexType>
-  <xs:complexType name="ClassAttribute" mixed="false">
-    <!-- todo: enum -->
-    <xs:attribute name="type" type="xs:string"/>
-  </xs:complexType>
-
-  <!-- Class -->
-  <xs:complexType name="Class">
-    <xs:sequence>
-      <xs:element name="Id" type="Id" minOccurs="0"/>
-      <xs:element name="Name" type="xs:string" minOccurs="0"/>
-      <xs:element name="ShortName" type="xs:string" minOccurs="0"/>
-      <xs:element name="Leg" type="Leg" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Attribute" type="ClassAttribute" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-    <xs:attribute name="minAge" type="xs:integer" use="optional"/>
-    <xs:attribute name="maxAge" type="xs:integer" use="optional"/>
-    <xs:attribute name="sex" use="optional" default="B">
-      <xs:simpleType>
-        <xs:restriction base="xs:NMTOKEN">
-          <xs:enumeration value="B"/>
-          <xs:enumeration value="F"/>
-          <xs:enumeration value="M"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="teamMinAge" type="xs:integer" use="optional"/>
-    <xs:attribute name="teamMaxAge" type="xs:integer" use="optional"/>
-    <xs:attribute name="timePresentation" type="xs:boolean" use="optional" default="true"/>
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
-
-  <xs:complexType name="Leg">
-    <xs:sequence>
-      <xs:element name="Name" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-    <xs:attribute name="minCompetitors" type="xs:integer" use="optional" default="1"/>
-    <xs:attribute name="maxCompetitors" type="xs:integer" use="optional" default="1"/>
-  </xs:complexType>
-
-
-
-  <!-- Class Race Info
-    Information about a class with respect to an event.
-    The Class information above may make sense without attachment
-    to an event, the information below doesn't.
-  -->
-  <xs:complexType name="EventRaceClass">
-    <xs:sequence>
-      <xs:element name="EventRace" type="EventRace"/>
-      <xs:element name="Fee" type="Fee" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="FirstStart" type="xs:dateTime" minOccurs="0"/>
-      <!-- Time in seconds -->
-      <xs:element name="Status" type="EventRaceClassStatus"/>
-      <xs:element name="CourseVariation" type="CourseVariation" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
-  <xs:simpleType name="EventRaceClassStatus">
-    <xs:restriction base="xs:NMTOKEN">
-      <xs:enumeration value="Normal"/>
-      <xs:enumeration value="Invalidated"/>
-      <xs:enumeration value="InvalidatedNoFee"/>
-      <xs:enumeration value="Excluded"/>
-    </xs:restriction>
-  </xs:simpleType>
-
-  <!--
-    ##########
-    ### Control and Courses
-    ##########
-   
-    All elements with information about controls and courses.
-    Only exception is the Control Card, which is found in the
-    Competitor section.
-   
-    Lists to exchange:
-      - CourseData
-  -->
-
-  <!-- CourseData
-    A list of starting points, finish controls, "real" controls,
-    and courses. This defines all the control and course information.
-  -->
-  <xs:element name="CourseData">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="Map" type="Map" minOccurs="0"/>
-        <xs:element name="Control" type="Control" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element name="Course" type="Course" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element name="TeamCourseCombination" type="TeamCourseCombination" minOccurs="0" maxOccurs="unbounded"/>
-      </xs:sequence>
-      <xs:attribute name="iofVersion" type="xs:string" fixed="3.0"/>
-    </xs:complexType>
-  </xs:element>
+  <xsd:complexType name="Leg">
+    <xsd:sequence>
+      <xsd:element name="Name" type="xsd:string" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="minNumberOfCompetitors" type="xsd:integer" use="optional" default="1"/>
+    <xsd:attribute name="maxNumberOfCompetitors" type="xsd:integer" use="optional" default="1"/>
+  </xsd:complexType>
 
   <!-- Control
     A Control consists of a control code, a description, a position
@@ -955,196 +1180,193 @@
     This element is not the one used in the courses. For that, see
     CourseControl below.
   -->
-  <xs:complexType name="Control">
-    <xs:sequence>
-      <xs:element name="Code" type="xs:string"/>
-      <xs:element name="Description" type="ControlDescription" minOccurs="0"/>
-      <xs:element name="Position" type="GeoPosition" minOccurs="0"/>
-      <xs:element name="PunchingUnit" type="PunchingUnit" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="MapPosition" type="MapPosition" minOccurs="0"/>
-      <xs:element name="Comment" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
-  <xs:complexType name="ControlDescription">
-    <xs:sequence>
-      <xs:element name="Box" type="ControlDescriptionBox" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Text" type="LanguageString" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
-  <xs:complexType name="ControlDescriptionBox">
-    <xs:sequence>
-      <xs:element name="Symbol" type="ControlDescriptionSymbol" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Text" type="xs:string" minOccurs="0" />
-    </xs:sequence>
-    <xs:attribute name="column" use="required">
-      <xs:simpleType>
-        <xs:restriction base="xs:NMTOKEN">
-          <xs:enumeration value="A"/>
-          <xs:enumeration value="B"/>
-          <xs:enumeration value="C"/>
-          <xs:enumeration value="D"/>
-          <xs:enumeration value="E"/>
-          <xs:enumeration value="F"/>
-          <xs:enumeration value="G"/>
-          <xs:enumeration value="H"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="hasDiagonal" type="xs:boolean" default="false"/>
-  </xs:complexType>
-  <xs:complexType name="ControlDescriptionSymbol">
-    <xs:sequence>
-      <xs:element name="Id" type="Id" minOccurs="0"/>
-      <xs:element name="Name" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
+  <xsd:complexType name="Control">
+    <xsd:sequence>
+      <xsd:element name="Code" type="xsd:string"/>
+      <xsd:element name="Description" type="ControlDescription" minOccurs="0"/>
+      <xsd:element name="Position" type="GeoPosition" minOccurs="0"/>
+      <xsd:element name="PunchingUnit" type="PunchingUnit" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="MapPosition" type="MapPosition" minOccurs="0"/>
+      <xsd:element name="Comment" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
+  
+  <xsd:complexType name="ControlDescription">
+    <xsd:sequence>
+      <xsd:element name="Box" type="ControlDescriptionBox" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Text" type="LanguageString" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
+  
+  <xsd:complexType name="ControlDescriptionBox">
+    <xsd:sequence>
+      <xsd:element name="Symbol" type="ControlDescriptionSymbol" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Text" type="xsd:string" minOccurs="0" />
+    </xsd:sequence>
+    <xsd:attribute name="column" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:NMTOKEN">
+          <xsd:enumeration value="A"/>
+          <xsd:enumeration value="B"/>
+          <xsd:enumeration value="C"/>
+          <xsd:enumeration value="D"/>
+          <xsd:enumeration value="E"/>
+          <xsd:enumeration value="F"/>
+          <xsd:enumeration value="G"/>
+          <xsd:enumeration value="H"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="hasDiagonal" type="xsd:boolean" default="false"/>
+  </xsd:complexType>
+  
+  <xsd:complexType name="ControlDescriptionSymbol">
+    <xsd:sequence>
+      <xsd:element name="Id" type="Id" minOccurs="0"/>
+      <xsd:element name="Name" type="xsd:string" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
 
   <!-- 
-    Geographical position, e g of a control
+    Geographical position, e.g. of a control
   -->
-  <xs:complexType name="GeoPosition">
-    <xs:attribute name="lng" use="required" type="xs:double"/>
-    <xs:attribute name="lat" use="required" type="xs:double"/>
+  <xsd:complexType name="GeoPosition">
+    <xsd:attribute name="lng" use="required" type="xsd:double"/>
+    <xsd:attribute name="lat" use="required" type="xsd:double"/>
     <!-- Elevation of control in meters -->
-    <xs:attribute name="alt" use="optional" type="xs:double"/>
-  </xs:complexType>
+    <xsd:attribute name="alt" use="optional" type="xsd:double"/>
+  </xsd:complexType>
 
   <!-- Map
     Information of the map used, scale and upper left corner of the
     bitmap used in course setting software wrt. the "real" map (yes,
     this _is_ in fact used!)
   -->
-  <xs:complexType name="Map">
-    <xs:sequence>
-      <xs:element name="Scale"  type="xs:string"/>
-      <xs:element name="MapPosition" type="MapPosition"/>
-    </xs:sequence>
-  </xs:complexType>
+  <xsd:complexType name="Map">
+    <xsd:sequence>
+      <xsd:element name="Scale"  type="xsd:string"/>
+      <xsd:element name="MapPosition" type="MapPosition"/>
+    </xsd:sequence>
+  </xsd:complexType>
 
   <!-- MapPosition
     Position of the Control on the Map
   -->
-  <xs:complexType name="MapPosition">
-    <xs:attribute name="x" use="required" type="xs:double"/>
-    <xs:attribute name="y" use="required" type="xs:double"/>
-    <xs:attribute name="unit" default="mm">
-      <xs:simpleType>
-        <xs:restriction base="xs:NMTOKEN">
-          <xs:enumeration value="px"/>
-          <xs:enumeration value="mm"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-  </xs:complexType>
+  <xsd:complexType name="MapPosition">
+    <xsd:attribute name="x" use="required" type="xsd:double"/>
+    <xsd:attribute name="y" use="required" type="xsd:double"/>
+    <xsd:attribute name="unit" default="mm">
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:NMTOKEN">
+          <xsd:enumeration value="px"/>
+          <xsd:enumeration value="mm"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
 
-  <!-- Course
-    A Course consists of one or more Course Variations. This is done
-    to support relays using "gaffling".
-  -->
-  <xs:complexType name="Course">
-    <xs:sequence>
-      <xs:element name="Name" type="xs:string"/>
-      <xs:element name="Event" type="Event" minOccurs="0"/>
-      <xs:element name="EventRace" type="EventRace" minOccurs="0"/>
-      <xs:element name="Class" type="Class" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="CourseVariation" type="CourseVariation" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-    <xs:attribute name="numberOfCompetitors" type="xs:integer" use="optional"/>
-  </xs:complexType>
+  <xsd:complexType name="CourseClassData">
+    <xsd:sequence>
+      <xsd:element name="Course" type="Course"/>
+      <xsd:element name="Class" type="Class" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
 
   <!-- Course Variation
-    Consists of a name, length, climb, start point, a number of
-    course controls and a finish.
+    Consists of a name, length, climb, and a number of
+    controls including start and finish.
   -->
-  <xs:complexType name="CourseVariation">
-    <xs:sequence>
-      <xs:element name="Name" type="xs:string" minOccurs="0"/>
-      <xs:element name="Length" type="xs:double" minOccurs="0"/>
-      <xs:element name="Climb" type="xs:double" minOccurs="0"/>
+  <xsd:complexType name="Course">
+    <xsd:sequence>
+      <xsd:element name="Name" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="Length" type="xsd:double" minOccurs="0"/>
+      <xsd:element name="Climb" type="xsd:double" minOccurs="0"/>
       <!-- BEGIN 2.1 addition -->
       <!-- added minOccurs="0" - might sometimes want to express course variation id and course length but not the controls -->
-      <xs:element name="Control" type="CourseControl" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Control" type="Control" minOccurs="0" maxOccurs="unbounded"/>
       <!-- END 2.1 addition -->
-    </xs:sequence>
-    <xs:attribute name="numberOfCompetitors" type="xs:integer" use="optional"/>
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
+    </xsd:sequence>
+    <xsd:attribute name="numberOfCompetitors" type="xsd:integer" use="optional"/>
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
 
   <!-- CourseControl
-    A control included in a course. It consists of a sequence number,
+    A control included in a particular course. It consists of a sequence number,
     a "real" control, a leglength and a position on the map for the
     control text, i.e. its sequence number.
   -->
-  <xs:complexType name="CourseControl">
-    <xs:sequence>
-      <xs:element name="Text" type="xs:string"/>
-      <xs:element name="Control" type="Control"/>
-      <xs:element name="Comment" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="LegLength" type="xs:double" minOccurs="0"/>
-      <xs:element name="MapTextPosition" type="MapPosition" minOccurs="0"/>
-    </xs:sequence>
-    <xs:attribute name="type" use="required">
-      <xs:simpleType>
-        <xs:restriction base="xs:NMTOKEN">
-          <xs:enumeration value="Control"/>
-          <xs:enumeration value="Start"/>
-          <xs:enumeration value="Finish"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
+  <xsd:complexType name="CourseControl">
+    <xsd:sequence>
+      <xsd:element name="Control" type="Control"/>
+      <xsd:element name="Text" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="Comment" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="LegLength" type="xsd:double" minOccurs="0"/>
+      <xsd:element name="MapTextPosition" type="MapPosition" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="type" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:NMTOKEN">
+          <xsd:enumeration value="Control"/>
+          <xsd:enumeration value="Start"/>
+          <xsd:enumeration value="Finish"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
     <!-- see http://orienteering.org/wp-content/uploads/2010/12/Control-Descriptions-2004-symbols-only.pdf -->
-    <xs:attribute name="specialInstruction" default="None">
-      <xs:simpleType>
-        <xs:restriction base="xs:NMTOKEN">
-          <xs:enumeration value="None"/>
-          <xs:enumeration value="TapedRoute"/>
-          <xs:enumeration value="FunnelTapedRoute"/>
-          <xs:enumeration value="MandatoryCrossingPoint"/>
-          <xs:enumeration value="MandatoryOutOfBoundsAreaPassage"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
+    <xsd:attribute name="specialInstruction" default="None">
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:NMTOKEN">
+          <xsd:enumeration value="None"/>
+          <xsd:enumeration value="TapedRoute"/>
+          <xsd:enumeration value="FunnelTapedRoute"/>
+          <xsd:enumeration value="MandatoryCrossingPoint"/>
+          <xsd:enumeration value="MandatoryOutOfBoundsAreaPassage"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
     <!-- length of taped route if different from value specified in LegLength element, i e when Special Instruction 13.1 is used -->
-    <xs:attribute name="tapedRouteLength" type="xs:double" use="optional" />
-  </xs:complexType>
+    <xsd:attribute name="tapedRouteLength" type="xsd:double" use="optional" />
+  </xsd:complexType>
 
   <!-- TeamCourseCombination
     A TeamCourseCombination defines the courses assigned to the members of a team
     to support relays using "gaffling".
   -->
-  <xs:complexType name="TeamCourseCombination">
-    <xs:sequence>
-      <xs:element name="BibNumber" type="xs:string"/>
-      <xs:element name="CourseAssignment" minOccurs="1" maxOccurs="unbounded">
-        <xs:complexType mixed="false">
-          <xs:sequence>
-            <xs:element name="Leg" type="xs:integer"/>
-            <xs:element name="LegOrder" type="xs:integer" minOccurs="0"/>
-            <xs:element name="CourseVariation" type="CourseVariation"/>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
+  <xsd:complexType name="TeamCourseCombination">
+    <xsd:sequence>
+      <xsd:element name="TeamId" type="xsd:string"/>
+      <xsd:element name="CourseAssignment" minOccurs="1" maxOccurs="unbounded">
+        <xsd:complexType mixed="false">
+          <xsd:sequence>
+            <xsd:element name="BibNumber" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="Leg" type="xsd:integer"/>
+            <xsd:element name="LegOrder" type="xsd:integer" minOccurs="0"/>
+            <xsd:element name="Course" type="Course"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
 
   <!-- Punching -->
-  <xs:complexType name="PunchingUnit">
-    <xs:sequence>
-      <xs:element name="Id" type="Id"/>
-      <xs:element name="PunchingSystem" type="PunchingSystem"/>
-    </xs:sequence>
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
-  <xs:simpleType name="PunchingSystem">
-    <xs:restriction base="xs:NMTOKEN">
-      <xs:enumeration value="Manual"/>
-      <xs:enumeration value="Emit"/>
-      <xs:enumeration value="SI"/>
-      <xs:enumeration value="Other"/>
-    </xs:restriction>
-  </xs:simpleType>
+  <xsd:complexType name="PunchingUnit">
+    <xsd:sequence>
+      <xsd:element name="Id" type="Id"/>
+      <xsd:element name="PunchingSystem" type="PunchingSystem"/>
+    </xsd:sequence>
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
+  <!-- TODO: skip enumeration and make xsd:string instead, to open up for other types of punching systems? -->
+  <xsd:simpleType name="PunchingSystem">
+    <xsd:restriction base="xsd:NMTOKEN">
+      <xsd:enumeration value="Manual"/>
+      <xsd:enumeration value="Emit"/>
+      <xsd:enumeration value="SI"/>
+      <xsd:enumeration value="Other"/>
+    </xsd:restriction>
+  </xsd:simpleType>
 
   <!--
     ##########
@@ -1167,246 +1389,266 @@
     paper can have a speciel interest in the results of the
     competitors of that nationality.
   -->
-  <xs:complexType name="Press">
-    <xs:sequence>
-      <xs:element name="Name" type="xs:string"/>
-      <xs:element name="ContactPerson" type="Person" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Address" type="Address" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Contact" type="Contact" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="ResultSelection" type="ResultSelection" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-    <xs:attribute name="mediaType" use="required">
-      <xs:simpleType>
-        <xs:restriction base="xs:NMTOKEN">
-          <xs:enumeration value="Magazine"/>
-          <xs:enumeration value="TV"/>
-          <xs:enumeration value="Paper"/>
-          <xs:enumeration value="Other"/>
-          <xs:enumeration value="Web"/>
-          <xs:enumeration value="Radio"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
+  <xsd:complexType name="Press">
+    <xsd:sequence>
+      <xsd:element name="Name" type="xsd:string"/>
+      <xsd:element name="ContactPerson" type="Person" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Address" type="Address" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Contact" type="Contact" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="ResultSelection" type="ResultSelection" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="mediaType" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:NMTOKEN">
+          <xsd:enumeration value="Magazine"/>
+          <xsd:enumeration value="TV"/>
+          <xsd:enumeration value="Paper"/>
+          <xsd:enumeration value="Other"/>
+          <xsd:enumeration value="Web"/>
+          <xsd:enumeration value="Radio"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
 
   <!-- PressList
     A list of Press elements
   -->
-  <xs:element name="PressList">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="Press" type="Press" minOccurs="0" maxOccurs="unbounded"/>
-      </xs:sequence>
-      <xs:attribute name="iofVersion" type="xs:string" fixed="3.0"/>
-    </xs:complexType>
-  </xs:element>
+  <xsd:element name="PressList">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Press" type="Press" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0"/>
+    </xsd:complexType>
+  </xsd:element>
 
   <!-- Service
     A general purpose service request, e.g. for accomodation.
   -->
-  <xs:complexType name="Service">
-    <xs:sequence>
-      <xs:element name="Id" type="Id" minOccurs="0"/>
-      <xs:element name="Name" type="LanguageString" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Fee" type="Fee" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Comment" type="LanguageString" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="MaxNumber" type="xs:double" minOccurs="0"/>
-    </xs:sequence>
+  <xsd:complexType name="Service">
+    <xsd:sequence>
+      <xsd:element name="Id" type="Id" minOccurs="0"/>
+      <xsd:element name="Name" type="LanguageString" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Fee" type="Fee" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Comment" type="LanguageString" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="MaxNumber" type="xsd:double" minOccurs="0"/>
+    </xsd:sequence>
     <!-- used to mark special services, like rental cards -->
-    <xs:attribute name="type" type="xs:string" use="optional"/>
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
+    <xsd:attribute name="type" type="xsd:string" use="optional"/>
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
 
   <!-- Service Request List
     List of requests from organisations.
   -->
-  <xs:element name="ServiceRequestList">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="Event" type="Event" minOccurs="0"/>
-        <xs:element name="OrganisationServiceRequest" type="OrganisationServiceRequest" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element name="PersonServiceRequest" type="PersonServiceRequest" minOccurs="0" maxOccurs="unbounded"/>
-      </xs:sequence>
-      <xs:attribute name="iofVersion" type="xs:string" fixed="3.0"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:complexType name="OrganisationServiceRequest">
-    <xs:sequence>
-      <xs:element name="Organisation" type="Organisation"/>
-      <xs:element name="ServiceRequest" type="ServiceRequest" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="PersonServiceRequest" type="PersonServiceRequest" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="PersonServiceRequest">
-    <xs:sequence>
-      <xs:element name="Person" type="Person"/>
-      <xs:element name="ServiceRequest" type="ServiceRequest" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="ServiceRequest">
-    <xs:sequence>
-      <xs:element name="Id" type="Id" minOccurs="0"/>
-      <xs:element name="Service" type="Service"/>
-      <xs:element name="Quantity" type="xs:double"/>
-      <xs:element name="Fee" type="Fee" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="Comment" type="xs:string" minOccurs="0"/>
+  <xsd:element name="ServiceRequestList">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Event" type="Event" minOccurs="0"/>
+        <xsd:element name="OrganisationServiceRequest" type="OrganisationServiceRequest" minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="PersonServiceRequest" type="PersonServiceRequest" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0"/>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:complexType name="OrganisationServiceRequest">
+    <xsd:sequence>
+      <xsd:element name="Organisation" type="Organisation"/>
+      <xsd:element name="ServiceRequest" type="ServiceRequest" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="PersonServiceRequest" type="PersonServiceRequest" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PersonServiceRequest">
+    <xsd:sequence>
+      <xsd:element name="Person" type="Person"/>
+      <xsd:element name="ServiceRequest" type="ServiceRequest" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ServiceRequest">
+    <xsd:sequence>
+      <xsd:element name="Id" type="Id" minOccurs="0"/>
+      <xsd:element name="Service" type="Service"/>
+      <xsd:element name="Quantity" type="xsd:double"/>
+      <xsd:element name="Fee" type="Fee" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Comment" type="xsd:string" minOccurs="0"/>
       <!-- todo: support for metadata -->
-    </xs:sequence>
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
+    </xsd:sequence>
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
 
   <!-- Account -->
-  <xs:complexType name="Account" mixed="false">
-    <xs:attribute name="type" type="xs:string"/>
-  </xs:complexType>
+  <xsd:complexType name="Account" mixed="false">
+    <xsd:attribute name="type" type="xsd:string"/>
+  </xsd:complexType>
 
   <!-- Transaction
     A financial transaction between two accounts, possibly linked
     to a number of entries and/or service requests.
   -->
-  <xs:complexType name="Transaction">
-    <xs:sequence>
-      <xs:element name="Account" type="Account" minOccurs="0"/>
-      <xs:element name="Time" type="xs:dateTime" minOccurs="0" />
-      <xs:element name="Amount" type="Amount"/>
-      <xs:element name="Organisation" type="Organisation" minOccurs="0"/>
-      <xs:element name="Person" type="Person" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="TeamEntry" type="TeamEntry" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="PersonEntry" type="PersonEntry" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="OrganisationServiceRequest" type="OrganisationServiceRequest" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="PersonServiceRequest" type="PersonServiceRequest" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
+  <xsd:complexType name="Transaction">
+    <xsd:sequence>
+      <xsd:element name="Account" type="Account" minOccurs="0"/>
+      <xsd:element name="Time" type="xsd:dateTime" minOccurs="0" />
+      <xsd:element name="Amount" type="Amount"/>
+      <xsd:element name="Organisation" type="Organisation" minOccurs="0"/>
+      <xsd:element name="Person" type="Person" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="TeamEntry" type="TeamEntry" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="PersonEntry" type="PersonEntry" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="OrganisationServiceRequest" type="OrganisationServiceRequest" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="PersonServiceRequest" type="PersonServiceRequest" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
 
   <!-- TransactionList
     A list of transactions.
   -->
-  <xs:element name="TransactionList">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="Event" type="Event" minOccurs="0"/>
-        <xs:element name="Transaction" type="Transaction" minOccurs="0" maxOccurs="unbounded"/>
-      </xs:sequence>
-      <xs:attribute name="iofVersion" type="xs:string" fixed="3.0"/>
-    </xs:complexType>
-  </xs:element>
+  <xsd:element name="TransactionList">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Event" type="Event" minOccurs="0"/>
+        <xsd:element name="Transaction" type="Transaction" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0"/>
+    </xsd:complexType>
+  </xsd:element>
 
-  <!-- Address -->
-  <xs:complexType name="Address">
-    <xs:sequence>
-      <xs:element name="CareOf" type="xs:string" minOccurs="0"/>
-      <xs:element name="Street" type="xs:string"/>
-      <xs:element name="ZipCode" type="xs:string" minOccurs="0"/>
-      <xs:element name="City" type="xs:string"/>
-      <xs:element name="Country" type="Country"/>
-    </xs:sequence>
-    <xs:attribute name="type" use="required">
-      <xs:simpleType>
-        <xs:restriction base="xs:NMTOKEN">
-          <xs:enumeration value="Other"/>
-          <xs:enumeration value="Official"/>
-          <xs:enumeration value="Work"/>
-          <xs:enumeration value="Home"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
+  <xsd:complexType name="Address">
+    <xsd:annotation>
+      <xsd:documentation>
+        The postal address of a person or organisation.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="CareOf" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="Street" type="xsd:string"/>
+      <xsd:element name="ZipCode" type="xsd:string" minOccurs="0"/>
+      <xsd:element name="City" type="xsd:string"/>
+      <xsd:element name="Country" type="Country"/>
+    </xsd:sequence>
+    <!-- TODO: is 'type' really needed? consider removal, or change to xsd:string -->
+    <xsd:attribute name="type" use="required">
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:NMTOKEN">
+          <xsd:enumeration value="Other"/>
+          <xsd:enumeration value="Official"/>
+          <xsd:enumeration value="Work"/>
+          <xsd:enumeration value="Home"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
 
-  <!-- Country -->
-  <xs:complexType name="Country" mixed="false">
-    <xs:sequence>
-      <xs:element name="Id" type="Id" minOccurs="0"/>
-      <xs:element name="Name" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
+  <xsd:complexType name="Country" mixed="false">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="alpha2" type="xsd:string" use="optional">
+          <xsd:annotation>
+            <xsd:documentation>
+              The ISO 3166-1-alpha-2 code of the country as stated in http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm.
+            </xsd:documentation>
+          </xsd:annotation>
+        </xsd:attribute>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
 
-  <!-- Contact -->
-  <xs:complexType name="Contact">
-    <xs:attribute name="type" use="required">
-      <xs:simpleType>
-        <xs:restriction base="xs:NMTOKEN">
-          <xs:enumeration value="HomePhoneNumber"/>
-          <xs:enumeration value="OfficialPhoneNumber"/>
-          <xs:enumeration value="WorkPhoneNumber"/>
-          <xs:enumeration value="FaxNumber"/>
-          <xs:enumeration value="EmailAddress"/>
-          <xs:enumeration value="WebAddress"/>
-          <xs:enumeration value="Other"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="modifyTime" type="xs:dateTime" use="optional"/>
-  </xs:complexType>
+  <xsd:complexType name="Contact">
+    <xsd:annotation>
+      <xsd:documentation>
+        Contact information for a person, organisation or other entity. 
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="type" use="required">
+          <xsd:simpleType>
+            <!-- TODO: which tokens should be included? -->
+            <xsd:restriction base="xsd:NMTOKEN">
+              <xsd:enumeration value="HomePhoneNumber"/>
+              <xsd:enumeration value="MobilePhoneNumber"/>
+              <xsd:enumeration value="WorkPhoneNumber"/>
+              <xsd:enumeration value="FaxNumber"/>
+              <xsd:enumeration value="EmailAddress"/>
+              <xsd:enumeration value="WebAddress"/>
+              <xsd:enumeration value="Other"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
 
 
   <!-- Element describing the correct answer, the selected answer and the time used on a Trail-O control. -->
-  <xs:complexType name="ControlAnswer">
-    <xs:sequence>
-      <xs:element name="Answer" type="xs:string"/>
-      <xs:element name="CorrectAnswer" type="xs:string"/>
+  <xsd:complexType name="ControlAnswer">
+    <xsd:sequence>
+      <xsd:element name="Answer" type="xsd:string"/>
+      <xsd:element name="CorrectAnswer" type="xsd:string"/>
       <!-- Time in seconds -->
-      <xs:element name="Time" type="xs:double" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
+      <xsd:element name="Time" type="xsd:double" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
 
   <!--
   *** GPS ROUTES / TRACKING ***
 
   Comment: Describing a route in xml is rather "chatty", leading to very large amount of data when there are many competitors.
-  There is probably need for some compression (e g binary data expressed as a base64-encoded string).  -->
+  There is probably need for some compression (e.g. binary data expressed as a base64-encoded string).  -->
 
   <!-- A competitor's route, recorded by a tracking device. A route contains a number of route points,
   where every point has longitude, latitude, altitude (optionally) and time. -->
-  <xs:complexType name="Route">
-    <xs:sequence>
-      <xs:element name="RoutePoint" type="RoutePoint" minOccurs="0" maxOccurs="unbounded"/>
+  <xsd:complexType name="Route">
+    <xsd:sequence>
+      <xsd:element name="RoutePoint" type="RoutePoint" minOccurs="0" maxOccurs="unbounded"/>
       <!-- GZip compressed list of RoutePoints -->
-      <xs:element name="CompressedRoutePoints" minOccurs="0" type="xs:base64Binary"/>
-    </xs:sequence>
-  </xs:complexType>
+      <xsd:element name="CompressedRoutePoints" minOccurs="0" type="xsd:base64Binary"/>
+    </xsd:sequence>
+  </xsd:complexType>
 
   <!-- Point on a competitor's route. -->
-  <xs:complexType name="RoutePoint">
-    <xs:attribute name="lng" use="required" type="xs:double"/>
-    <xs:attribute name="lat" use="required" type="xs:double"/>
-    <xs:attribute name="alt" use="optional" type="xs:double"/>
-    <xs:attribute name="time" use="required" type="xs:dateTime"/>
-    <xs:attribute name="type" default="Intermediate">
-      <xs:simpleType>
-        <xs:restriction base="xs:NMTOKEN">
-          <xs:enumeration value="Intermediate"/>
-          <xs:enumeration value="Start"/>
-          <xs:enumeration value="Stop"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-  </xs:complexType>
+  <xsd:complexType name="RoutePoint">
+    <xsd:attribute name="lng" use="required" type="xsd:double"/>
+    <xsd:attribute name="lat" use="required" type="xsd:double"/>
+    <xsd:attribute name="alt" use="optional" type="xsd:double"/>
+    <xsd:attribute name="time" use="required" type="xsd:dateTime"/>
+    <xsd:attribute name="type" default="Intermediate">
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:NMTOKEN">
+          <xsd:enumeration value="Intermediate"/>
+          <xsd:enumeration value="Start"/>
+          <xsd:enumeration value="Stop"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
 
 
   <!-- Control card list for handling rental cards, proposed by Stefan Nordmark. -->
-  <xs:element name="ControlCardList">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="ControlCardOwner" type="xs:string" minOccurs="0"/>
-        <xs:element name="ControlCard" type="ControlCard" maxOccurs="unbounded"/>
-      </xs:sequence>
-      <xs:attribute name="iofVersion" type="xs:string" fixed="3.0"/>
-    </xs:complexType>
-  </xs:element>
+  <xsd:element name="ControlCardList">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ControlCardOwner" type="xsd:string" minOccurs="0"/>
+        <xsd:element name="ControlCard" type="ControlCard" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0"/>
+    </xsd:complexType>
+  </xsd:element>
 
-  <xs:complexType name="DateAndOptionalTime">
-    <xs:sequence>
-      <xs:element name="Date" type="xs:date" />
-      <xs:element name="Time" type="xs:time" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
+  <xsd:complexType name="DateAndOptionalTime">
+    <xsd:sequence>
+      <xsd:element name="Date" type="xsd:date" />
+      <xsd:element name="Time" type="xsd:time" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
 
-  <xs:complexType name="LanguageString">
-    <xs:attribute name="language" type="xs:string" use="optional"/>
-  </xs:complexType>
+  <xsd:complexType name="LanguageString">
+    <xsd:attribute name="language" type="xsd:string" use="optional"/>
+  </xsd:complexType>
 
 
-</xs:schema>
+</xsd:schema>
