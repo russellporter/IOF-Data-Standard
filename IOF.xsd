@@ -42,6 +42,8 @@
         <xsd:element name="Person" type="Person" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
       <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0"/>
+      <xsd:attribute name="createTime" type="xsd:dateTime" use="optional"/>
+      <xsd:attribute name="creator" type="xsd:string" use="optional"/>
     </xsd:complexType>
   </xsd:element>
 
@@ -56,6 +58,8 @@
         <xsd:element name="Competitor" type="Competitor" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
       <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0"/>
+      <xsd:attribute name="createTime" type="xsd:dateTime" use="optional"/>
+      <xsd:attribute name="creator" type="xsd:string" use="optional"/>
     </xsd:complexType>
   </xsd:element>
 
@@ -70,6 +74,8 @@
         <xsd:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
       <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0"/>
+      <xsd:attribute name="createTime" type="xsd:dateTime" use="optional"/>
+      <xsd:attribute name="creator" type="xsd:string" use="optional"/>
     </xsd:complexType>
   </xsd:element>
 
@@ -91,6 +97,8 @@
         <xsd:element name="PersonScore" type="PersonScore" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
       <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0"/>
+      <xsd:attribute name="createTime" type="xsd:dateTime" use="optional"/>
+      <xsd:attribute name="creator" type="xsd:string" use="optional"/>
     </xsd:complexType>
   </xsd:element>
 
@@ -105,6 +113,8 @@
         <xsd:element name="Event" type="Event" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
       <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0"/>
+      <xsd:attribute name="createTime" type="xsd:dateTime" use="optional"/>
+      <xsd:attribute name="creator" type="xsd:string" use="optional"/>
     </xsd:complexType>
   </xsd:element>
 
@@ -119,6 +129,8 @@
         <xsd:element name="Class" type="Class" minOccurs="0" maxOccurs="unbounded"/>
       </xsd:sequence>
       <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0"/>
+      <xsd:attribute name="createTime" type="xsd:dateTime" use="optional"/>
+      <xsd:attribute name="creator" type="xsd:string" use="optional"/>
     </xsd:complexType>
   </xsd:element>
 
@@ -150,6 +162,8 @@
         </xsd:element>
       </xsd:sequence>
       <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0"/>
+      <xsd:attribute name="createTime" type="xsd:dateTime" use="optional"/>
+      <xsd:attribute name="creator" type="xsd:string" use="optional"/>
     </xsd:complexType>
   </xsd:element>
 
@@ -1236,8 +1250,8 @@
   
   <xsd:complexType name="CourseClassData">
     <xsd:sequence>
-      <xsd:element name="Course" type="Course"/>
-      <xsd:element name="Class" type="Class" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Course" type="Course" minOccurs="1" maxOccurs="unbounded"/>
+      <xsd:element name="EventClass" type="EventClass" minOccurs="0" maxOccurs="unbounded"/>
     </xsd:sequence>
   </xsd:complexType>
 
@@ -1247,15 +1261,17 @@
   -->
   <xsd:complexType name="Course">
     <xsd:sequence>
+      <!-- TODO: no need for an id? -->
       <xsd:element name="Name" type="xsd:string" minOccurs="0"/>
       <xsd:element name="Length" type="xsd:double" minOccurs="0"/>
       <xsd:element name="Climb" type="xsd:double" minOccurs="0"/>
       <!-- BEGIN 2.1 addition -->
-      <!-- added minOccurs="0" - might sometimes want to express course variation id and course length but not the controls -->
-      <xsd:element name="Control" type="CourseControl" minOccurs="0" maxOccurs="unbounded"/>
+      <!-- added minOccurs="0" - might sometimes want to express course name and course length but not the controls -->
+      <xsd:element name="CourseControl" type="CourseControl" minOccurs="0" maxOccurs="unbounded"/>
       <!-- END 2.1 addition -->
     </xsd:sequence>
     <!-- defines the "base course" of the course, used for gafflings -->
+    <!-- TODO: create separate CourseGroup element instead? -->
     <xsd:attribute name="courseGroup" type="xsd:string" use="optional"/>
     <xsd:attribute name="numberOfCompetitors" type="xsd:integer" use="optional"/>
     <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
@@ -1275,6 +1291,10 @@
       <xsd:element name="MapTextPosition" type="MapPosition" minOccurs="0"/>
       <!-- LegLength is the length in meters from the previous control on the course -->
       <xsd:element name="LegLength" type="xsd:double" minOccurs="0"/>
+      <!-- Non-broken sequences of course controls having RandomOrderControl set to true can be visited in an arbitrary order.  -->
+      <xsd:element name="RandomOrderControl" type="xsd:boolean" minOccurs="0"/>
+      <!-- The score of the control in score-O events -->
+      <xsd:element name="Score" type="xsd:double" minOccurs="0"/>
       <xsd:element name="Comment" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
     </xsd:sequence>
     <xsd:attribute name="type" use="required">
