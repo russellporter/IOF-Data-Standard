@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- Entry list for an individual event, containing competitors and the classes entered -->
+<EntryList iofVersion="3.0" createTime="2011-07-20T12:16:31+02:00" creator="Example Software">
+  <PersonEntry>
+    <Person>
+      <Id>1</Id>
+      <Name>
+        <Family>Wood</Family>
+        <Given>George</Given> 
+      </Name>
+    </Person>
+    <!-- the Organisation element is to be omitted if the competitor does not represent a club -->
+    <Organisation>
+      <Id>5</Id>
+      <Name>OC Back and Forth</Name>
+      <Country code="UK">Great Britain</Country>
+    </Organisation>
+    <!-- the ControlCard element is to be omitted if the competitor wishes to rent a control card -->
+    <ControlCard punchingSystem="SI">794021</ControlCard>
+    <Class>
+      <Id>1</Id>
+      <Name>Men Elite</Name>
+    </Class>
+    <EntryTime>2011-07-14T18:20:05+01:00</EntryTime>
+  </PersonEntry>
+  <PersonEntry>
+    <Person>
+      <Id>2</Id>
+      <Name>
+        <Family>Martin</Family>
+        <Given>Edgar</Given>
+      </Name>
+    </Person>
+    <Organisation>
+      <Id>2</Id>
+      <Name>Bushmen OC</Name>
+      <Country code="UK">Great Britain</Country>
+    </Organisation>
+    <ControlCard punchingSystem="SI">299482</ControlCard>
+    <Class>
+      <Id>1</Id>
+      <Name>Men Elite</Name>
+    </Class>
+    <EntryTime>2011-07-10T13:00:04+01:00</EntryTime>
+  </PersonEntry>
+  <PersonEntry>
+    <Person>
+      <Id>3</Id>
+      <Name>
+        <Family>Lawson</Family>
+        <Given>Toni</Given>
+      </Name>
+    </Person>
+    <Organisation>
+      <Id>6</Id>
+      <Name>Doubtful Direction</Name>
+      <Country code="UK">Great Britain</Country>
+    </Organisation>
+    <ControlCard punchingSystem="SI">973078</ControlCard>
+    <Class>
+      <Id>2</Id>
+      <Name>Open</Name>
+    </Class>
+    <EntryTime>2011-07-12T05:33:17+01:00</EntryTime>
+  </PersonEntry>
+</EntryList>

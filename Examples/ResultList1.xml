@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- Result list for an individual event -->
+<ResultList iofVersion="3.0" createTime="2011-07-20T12:16:31+02:00" creator="Example Software">
+  <ClassResult>
+    <Class>
+      <Id>1</Id>
+      <Name>Men Elite</Name>
+    </Class>
+    <Course>
+      <Length>4650</Length>
+      <!-- omit the Climb element if the course climb is not known -->
+      <Climb>160</Climb>
+    </Course>
+    <PersonResult>
+      <Person>
+        <Id>1</Id>
+        <Name>
+          <Family>Wood</Family>
+          <Given>George</Given>
+        </Name>
+      </Person>
+      <!-- the Organisation element is to be omitted if the competitor does not represent a club -->
+      <Organisation>
+        <Id>5</Id>
+        <Name>OC Back and Forth</Name>
+        <Country code="UK">Great Britain</Country>
+      </Organisation>
+      <Result>
+        <BibNumber>102</BibNumber>
+        <StartTime>2011-07-30T10:00:00+01:00</StartTime>
+        <FinishTime>2011-07-30T10:33:21+01:00</FinishTime>
+        <Time>2001</Time>
+        <Position>1</Position>
+        <Status>OK</Status>
+      </Result>
+      <!-- the Course element may be used when not all competitors in the class have been assigned the same course, e.g. when butterfly loops are used -->
+      <Course>
+        <Name>Men Elite-1</Name>
+      </Course>
+      <!-- split times may be omitted, but if they are present all controls of the course that is assigned to the competitor must be included in the correct order, even if they have not been visited -->
+      <!-- start and finish punches must not be included; use StartTime and FinishTime of the Result element instead -->
+      <SplitTime>
+        <ControlCode>31</ControlCode>
+        <!-- if the control has been visited but the time is not known (e.g. due to a failing punching unit), omit the Time element -->
+        <Time>501</Time>
+      </SplitTime>
+      <SplitTime>
+        <ControlCode>32</ControlCode>
+        <Time>720</Time>
+      </SplitTime>
+      <SplitTime>
+        <ControlCode>31</ControlCode>
+        <Time>818</Time>
+      </SplitTime>
+      <SplitTime>
+        <ControlCode>33</ControlCode>
+        <Time>1136</Time>
+      </SplitTime>
+      <SplitTime>
+        <ControlCode>31</ControlCode>
+        <Time>1593</Time>
+      </SplitTime>
+    </PersonResult>
+    <!-- example of a competitor that has mispunched, in this case running butterfly loops in the wrong order (the course's control code sequence is S-31-33-31-32-31-F, but the competitor punched S-31-32-31-33-31-F) -->
+    <PersonResult>
+      <Person>
+        <Id>2</Id>
+        <Name>
+          <Family>Martin</Family>
+          <Given>Edgar</Given>
+        </Name>
+      </Person>
+      <Organisation>
+        <Id>2</Id>
+        <Name>Bushmen OC</Name>
+        <Country code="UK">Great Britain</Country>
+      </Organisation>
+      <Result>
+        <BibNumber>102</BibNumber>
+        <StartTime>2011-07-30T10:03:00+01:00</StartTime>
+        <!-- the finish time is included even if the competitor has not completed his course -->
+        <FinishTime>2011-07-30T10:39:42+01:00</FinishTime>
+        <Status>MissingPunch</Status>
+      </Result>
+      <Course>
+        <Name>Men Elite-2</Name>
+      </Course>
+      <SplitTime>
+        <ControlCode>31</ControlCode>
+        <Time>693</Time>
+      </SplitTime>
+      <SplitTime>
+        <ControlCode>33</ControlCode>
+        <Time>1581</Time>
+      </SplitTime>
+      <SplitTime>
+        <ControlCode>31</ControlCode>
+        <Time>1920</Time>
+      </SplitTime>
+      <!-- controls that have not been visited (or - as in this case - punched but not in the correct order) must still be included, but with the status attribute set to Missing -->
+      <SplitTime status="Missing">
+        <ControlCode>32</ControlCode>
+      </SplitTime>
+      <SplitTime status="Missing">
+        <ControlCode>31</ControlCode>
+      </SplitTime>
+      <!-- additional punches that do not belong to the course or are not in the correct order may be expressed using the Additional status -->
+      <SplitTime status="Additional">
+        <ControlCode>32</ControlCode>
+        <Time>966</Time>
+      </SplitTime>
+      <SplitTime status="Additional">
+        <ControlCode>31</ControlCode>
+        <Time>1379</Time>
+      </SplitTime>
+    </PersonResult>
+  </ClassResult>
+  <ClassResult>
+    <Class>
+      <Id>2</Id>
+      <Name>Open</Name>
+    </Class>
+    <Course>
+      <Length>2990</Length>
+      <Climb>120</Climb>
+    </Course>
+    <PersonResult>
+      <Person>
+        <Id>3</Id>
+        <Name>
+          <Family>Lawson</Family>
+          <Given>Toni</Given>
+        </Name>
+      </Person>
+      <Organisation>
+        <Id>6</Id>
+        <Name>Doubtful Direction</Name>
+        <Country code="UK">Great Britain</Country>
+      </Organisation>
+      <Result>
+        <StartTime>2011-07-30T10:15:00+01:00</StartTime>
+        <Status>DidNotStart</Status>
+      </Result>
+    </PersonResult>
+  </ClassResult>
+</ResultList>
