@@ -2542,10 +2542,10 @@
       </xsd:documentation>
     </xsd:annotation>
     <xsd:sequence>
-      <xsd:element name="Course" type="Course" minOccurs="1" maxOccurs="unbounded">
+      <xsd:element name="CourseGroup" type="CourseGroup" minOccurs="1" maxOccurs="unbounded">
         <xsd:annotation>
           <xsd:documentation>
-            The courses.
+            The courses, expressed as course groups.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
@@ -2596,9 +2596,6 @@
         </xsd:annotation>
       </xsd:element>
     </xsd:sequence>
-    <!-- defines the "base course" of the course, used for gafflings -->
-    <!-- TODO: create separate CourseGroup element instead? -->
-    <xsd:attribute name="courseGroup" type="xsd:string" use="optional"/>
     <xsd:attribute name="numberOfCompetitors" type="xsd:integer" use="optional">
       <xsd:annotation>
         <xsd:documentation>
@@ -2606,6 +2603,31 @@
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="CourseGroup">
+    <xsd:annotation>
+      <xsd:documentation>
+        Defines a number of courses that are grouped together, i.e. a number of gaffled courses that may be used for a relay leg.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Name" type="xsd:string" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            The name of the course group.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Course" type="Course" minOccurs="1" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            The courses in the course group.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
     <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
   </xsd:complexType>
 
