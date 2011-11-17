@@ -1,6 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!-- Entry list for a relay event, containing teams, team lineups and the classes entered -->
 <EntryList iofVersion="3.0" createTime="2011-07-20T12:16:31+02:00" creator="Example Software">
+  <Event>
+    <Name>Example event</Name>
+    <StartTime>
+      <Date>2011-07-31</Date>
+      <Time>10:00:00+01:00</Time>
+    </StartTime>
+  </Event>
   <TeamEntry>
     <!-- the name of the team, usually including an ordinal number if the club has many teams entered to the same class -->
     <Name>Forest Vagabonds 1</Name>

@@ -1,6 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!-- Entry list for an individual event, containing competitors and the classes entered -->
 <EntryList iofVersion="3.0" createTime="2011-07-20T12:16:31+02:00" creator="Example Software">
+  <Event>
+    <Name>Example event</Name>
+    <StartTime>
+      <Date>2011-07-31</Date>
+      <Time>10:00:00+01:00</Time>
+    </StartTime>
+  </Event>
   <PersonEntry>
     <Person>
       <Id>1</Id>

@@ -15,7 +15,7 @@
   TODO
   
   Try to minimize the number of root elements to a few well-defined such as EventList, CourseData, OrganisationList, ResultList, etc. 
-  Seldom used elements as PersonList, TransactionList, ServiceRequestList etc should be incorporated in the more often used elements.
+  Seldom used elements as ServiceRequestList etc should be incorporated in the more often used elements.
   
   Create two separate schema files:
   1) One file for code generation, without 'choice' elements. Reuse elements as far as possible?
@@ -32,50 +32,12 @@
       Mats Troeng, SWE
 
       Date:
-      04-2011
+      November 2011
     </xsd:documentation>
   </xsd:annotation>
   <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
 
-
-  <!-- GLOBAL ELEMENTS -->
-
-  <!-- Usage: To exchange "full" person objects (including address, email etc) between systems. No orienteering-specific information are included in the objects. -->
-  <!-- TODO: do we really need this element? CompetitorList should be fine i most (all?) cases. -->
-  <xsd:element name="PersonList">
-    <xsd:annotation>
-      <xsd:documentation>
-        List of persons. This should not be used to exchange competitors; use CompetitorList instead.
-      </xsd:documentation>
-    </xsd:annotation>
-    <xsd:complexType>
-      <xsd:sequence>
-        <!-- "full" Person elements -->
-        <xsd:element name="Person" type="Person" minOccurs="0" maxOccurs="unbounded"/>
-      </xsd:sequence>
-      <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0">
-        <xsd:annotation>
-          <xsd:documentation>
-            The version of the IOF data exchange format that the file conforms to.
-          </xsd:documentation>
-        </xsd:annotation> 
-      </xsd:attribute>
-      <xsd:attribute name="createTime" type="xsd:dateTime" use="optional">
-        <xsd:annotation>
-          <xsd:documentation>
-            The time when the file was created.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="creator" type="xsd:string" use="optional">
-        <xsd:annotation>
-          <xsd:documentation>
-            The name of the software that created the file.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-    </xsd:complexType>
-  </xsd:element>
+  <!-- ROOT ELEMENTS -->
 
   <!-- Usage: To exchange persons in an orienteering context: including default class (optionally as refid), punching card numbers, club memberships (optionally as refid), ranking scores etc. Person info contains id, first name, last name, gender, date of birth. -->
   <xsd:element name="CompetitorList">
@@ -85,42 +47,25 @@
       </xsd:documentation>
     </xsd:annotation>
     <xsd:complexType>
-      <xsd:sequence>
-        <xsd:element name="Competitor" type="Competitor" minOccurs="0" maxOccurs="unbounded"/>
-        <xsd:element name="References" minOccurs="0">
-          <xsd:complexType>
-            <xsd:annotation>
-              <xsd:documentation>
-                Elements that are referenced by idref attributes in the competitor list.
-              </xsd:documentation>
-            </xsd:annotation>
-            <xsd:sequence>
-              <xsd:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
-            </xsd:sequence>
-          </xsd:complexType>
-        </xsd:element>
-      </xsd:sequence>
-      <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0">
-        <xsd:annotation>
-          <xsd:documentation>
-            The version of the IOF data exchange format that the file conforms to.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="createTime" type="xsd:dateTime" use="optional">
-        <xsd:annotation>
-          <xsd:documentation>
-            The time when the file was created.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="creator" type="xsd:string" use="optional">
-        <xsd:annotation>
-          <xsd:documentation>
-            The name of the software that created the file.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
+      <xsd:complexContent>
+        <xsd:extension base="BaseElement">
+          <xsd:sequence>
+            <xsd:element name="Competitor" type="Competitor" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="References" minOccurs="0">
+              <xsd:complexType>
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Elements that are referenced by idref attributes in the competitor list.
+                  </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                  <xsd:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:extension>
+      </xsd:complexContent>
     </xsd:complexType>
   </xsd:element>
 
@@ -132,30 +77,13 @@
       </xsd:documentation>
     </xsd:annotation>
     <xsd:complexType>
-      <xsd:sequence>
-        <xsd:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
-      </xsd:sequence>
-      <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0">
-        <xsd:annotation>
-          <xsd:documentation>
-            The version of the IOF data exchange format that the file conforms to.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="createTime" type="xsd:dateTime" use="optional">
-        <xsd:annotation>
-          <xsd:documentation>
-            The time when the file was created.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="creator" type="xsd:string" use="optional">
-        <xsd:annotation>
-          <xsd:documentation>
-            The name of the software that created the file.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
+      <xsd:complexContent>
+        <xsd:extension base="BaseElement">
+          <xsd:sequence>
+            <xsd:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
+          </xsd:sequence>
+        </xsd:extension>
+      </xsd:complexContent>
     </xsd:complexType>
   </xsd:element>
 
@@ -167,30 +95,13 @@
       </xsd:documentation>
     </xsd:annotation>
     <xsd:complexType>
-      <xsd:sequence>
-        <xsd:element name="Event" type="Event" minOccurs="0" maxOccurs="unbounded"/>
-      </xsd:sequence>
-      <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0">
-        <xsd:annotation>
-          <xsd:documentation>
-            The version of the IOF data exchange format that the file conforms to.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="createTime" type="xsd:dateTime" use="optional">
-        <xsd:annotation>
-          <xsd:documentation>
-            The time when the file was created.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="creator" type="xsd:string" use="optional">
-        <xsd:annotation>
-          <xsd:documentation>
-            The name of the software that created the file.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
+      <xsd:complexContent>
+        <xsd:extension base="BaseElement">
+          <xsd:sequence>
+            <xsd:element name="Event" type="Event" minOccurs="0" maxOccurs="unbounded"/>
+          </xsd:sequence>
+        </xsd:extension>
+      </xsd:complexContent>
     </xsd:complexType>
   </xsd:element>
 
@@ -203,30 +114,13 @@
       </xsd:documentation>
     </xsd:annotation>
     <xsd:complexType>
-      <xsd:sequence>
-        <xsd:element name="Class" type="Class" minOccurs="0" maxOccurs="unbounded"/>
-      </xsd:sequence>
-      <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0">
-        <xsd:annotation>
-          <xsd:documentation>
-            The version of the IOF data exchange format that the file conforms to.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="createTime" type="xsd:dateTime" use="optional">
-        <xsd:annotation>
-          <xsd:documentation>
-            The time when the file was created.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="creator" type="xsd:string" use="optional">
-        <xsd:annotation>
-          <xsd:documentation>
-            The name of the software that created the file.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
+      <xsd:complexContent>
+        <xsd:extension base="BaseElement">
+          <xsd:sequence>
+            <xsd:element name="Class" type="Class" minOccurs="0" maxOccurs="unbounded"/>
+          </xsd:sequence>
+        </xsd:extension>
+      </xsd:complexContent>
     </xsd:complexType>
   </xsd:element>
 
@@ -238,74 +132,57 @@
       </xsd:documentation>
     </xsd:annotation>
     <xsd:complexType>
-      <xsd:sequence>
-        <xsd:element name="Event" type="Event">
-          <xsd:annotation>
-            <xsd:documentation>
-              The event that the entry list belongs to.
-            </xsd:documentation>
-          </xsd:annotation>
-        </xsd:element>
-        <xsd:element name="EventRace" type="EventRace" minOccurs="0">
-          <xsd:annotation>
-            <xsd:documentation>
-              The event race that the entry list belongs to, in case of a multi-day event.
-            </xsd:documentation>
-          </xsd:annotation>
-        </xsd:element>
-        <xsd:element name="TeamEntry" type="TeamEntry" minOccurs="0" maxOccurs="unbounded">
-          <xsd:annotation>
-            <xsd:documentation>
-              The teams registered for the event.
-            </xsd:documentation>
-          </xsd:annotation>
-        </xsd:element>
-        <xsd:element name="PersonEntry" type="PersonEntry" minOccurs="0" maxOccurs="unbounded">
-          <xsd:annotation>
-            <xsd:documentation>
-              The individual competitors registered for the event.
-            </xsd:documentation>
-          </xsd:annotation>
-        </xsd:element>
-        <xsd:element name="References" minOccurs="0">
-          <xsd:complexType>
-            <xsd:annotation>
-              <xsd:documentation>
-                Elements that are referenced by idref attributes in the entry list.
-              </xsd:documentation>
-            </xsd:annotation>
-            <xsd:sequence>
-              <xsd:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
-              <xsd:element name="Class" type="Class" minOccurs="0" maxOccurs="unbounded"/>
-              <xsd:element name="Course" type="Course" minOccurs="0" maxOccurs="unbounded"/>
-              <xsd:element name="Control" type="Control" minOccurs="0" maxOccurs="unbounded"/>
-              <xsd:element name="Service" type="Service" minOccurs="0" maxOccurs="unbounded"/>
-              <xsd:element name="Fee" type="Fee" minOccurs="0" maxOccurs="unbounded"/>
-            </xsd:sequence>
-          </xsd:complexType>
-        </xsd:element>
-      </xsd:sequence>
-      <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0">
-        <xsd:annotation>
-          <xsd:documentation>
-            The version of the IOF data exchange format that the file conforms to.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="createTime" type="xsd:dateTime" use="optional">
-        <xsd:annotation>
-          <xsd:documentation>
-            The time when the file was created.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="creator" type="xsd:string" use="optional">
-        <xsd:annotation>
-          <xsd:documentation>
-            The name of the software that created the file.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
+      <xsd:complexContent>
+        <xsd:extension base="BaseElement">
+          <xsd:sequence>
+            <xsd:element name="Event" type="Event">
+              <xsd:annotation>
+                <xsd:documentation>
+                  The event that the entry list belongs to.
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="EventRace" type="EventRace" minOccurs="0">
+              <xsd:annotation>
+                <xsd:documentation>
+                  The event race that the entry list belongs to, in case of a multi-day event.
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="TeamEntry" type="TeamEntry" minOccurs="0" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation>
+                  The teams registered for the event.
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="PersonEntry" type="PersonEntry" minOccurs="0" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation>
+                  The individual competitors registered for the event.
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="References" minOccurs="0">
+              <xsd:complexType>
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Elements that are referenced by idref attributes in the entry list.
+                  </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                  <xsd:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
+                  <xsd:element name="Class" type="Class" minOccurs="0" maxOccurs="unbounded"/>
+                  <xsd:element name="Course" type="Course" minOccurs="0" maxOccurs="unbounded"/>
+                  <xsd:element name="Control" type="Control" minOccurs="0" maxOccurs="unbounded"/>
+                  <xsd:element name="Service" type="Service" minOccurs="0" maxOccurs="unbounded"/>
+                  <xsd:element name="Fee" type="Fee" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:extension>
+      </xsd:complexContent>
     </xsd:complexType>
   </xsd:element>
 
@@ -317,60 +194,43 @@
       </xsd:documentation>
     </xsd:annotation>
     <xsd:complexType>
-      <xsd:sequence>
-        <xsd:element name="Event" type="Event"/>
-        <xsd:element name="EventRace" type="EventRace" minOccurs="0"/>
-        <xsd:element name="Map" type="Map" minOccurs="0"/>
-        <xsd:element name="Control" type="Control" minOccurs="0" maxOccurs="unbounded"/>
-        <xsd:element name="CourseClassData" type="CourseClassData" minOccurs="0" maxOccurs="unbounded">
-          <xsd:annotation>
-            <xsd:documentation>
-              The assignment of a course to classes.
-            </xsd:documentation>
-          </xsd:annotation>
-        </xsd:element>
-        <xsd:element name="TeamCourseCombination" type="TeamCourseCombination" minOccurs="0" maxOccurs="unbounded">
-          <xsd:annotation>
-            <xsd:documentation>
-              The assignment of courses to relay teams.
-            </xsd:documentation>
-          </xsd:annotation>
-        </xsd:element>
-        <xsd:element name="References" minOccurs="0">
-          <xsd:complexType>
-            <xsd:annotation>
-              <xsd:documentation>
-                Elements that are referenced by idref attributes in the CourseClassData element.
-              </xsd:documentation>
-            </xsd:annotation>
-            <xsd:sequence>
-              <xsd:element name="Course" type="Course" minOccurs="0" maxOccurs="unbounded"/>
-              <xsd:element name="Control" type="Control" minOccurs="0" maxOccurs="unbounded"/>
-            </xsd:sequence>
-          </xsd:complexType>
-        </xsd:element>
-      </xsd:sequence>
-      <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0">
-        <xsd:annotation>
-          <xsd:documentation>
-            The version of the IOF data exchange format that the file conforms to.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="createTime" type="xsd:dateTime" use="optional">
-        <xsd:annotation>
-          <xsd:documentation>
-            The time when the file was created.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="creator" type="xsd:string" use="optional">
-        <xsd:annotation>
-          <xsd:documentation>
-            The name of the software that created the file.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
+      <xsd:complexContent>
+        <xsd:extension base="BaseElement">
+          <xsd:sequence>
+            <xsd:element name="Event" type="Event"/>
+            <xsd:element name="EventRace" type="EventRace" minOccurs="0"/>
+            <xsd:element name="Map" type="Map" minOccurs="0"/>
+            <xsd:element name="Control" type="Control" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="CourseClassData" type="CourseClassData" minOccurs="0" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation>
+                  The assignment of a course to classes.
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="TeamCourseCombination" type="TeamCourseCombination" minOccurs="0" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation>
+                  The assignment of courses to relay teams.
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="References" minOccurs="0">
+              <xsd:complexType>
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Elements that are referenced by idref attributes in the CourseClassData element.
+                  </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                  <xsd:element name="Course" type="Course" minOccurs="0" maxOccurs="unbounded"/>
+                  <xsd:element name="Control" type="Control" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:extension>
+      </xsd:complexContent>
     </xsd:complexType>
   </xsd:element>
 
@@ -382,66 +242,49 @@
       </xsd:documentation>
     </xsd:annotation>
     <xsd:complexType>
-      <xsd:sequence>
-        <xsd:element name="Event" type="Event">
-          <xsd:annotation>
-            <xsd:documentation>
-              The event that the start lists belong to.
-            </xsd:documentation>
-          </xsd:annotation>
-        </xsd:element>
-        <xsd:element name="EventRace" type="EventRace" minOccurs="0">
-          <xsd:annotation>
-            <xsd:documentation>
-              The event race that the start lists belong to, in case of a multi-day event.
-            </xsd:documentation>
-          </xsd:annotation>
-        </xsd:element>
-        <xsd:element name="ClassStart" type="ClassStart" minOccurs="0" maxOccurs="unbounded">
-          <xsd:annotation>
-            <xsd:documentation>
-              Start lists for the classes in the event.
-            </xsd:documentation>
-          </xsd:annotation>
-        </xsd:element>
-        <xsd:element name="References" minOccurs="0">
-          <xsd:complexType>
-            <xsd:annotation>
-              <xsd:documentation>
-                Elements that are referenced by idref attributes in the start list.
-              </xsd:documentation>
-            </xsd:annotation>
-            <xsd:sequence>
-              <xsd:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
-              <xsd:element name="Course" type="Course" minOccurs="0" maxOccurs="unbounded"/>
-              <xsd:element name="Control" type="Control" minOccurs="0" maxOccurs="unbounded"/>
-              <xsd:element name="Service" type="Service" minOccurs="0" maxOccurs="unbounded"/>
-              <xsd:element name="Fee" type="Fee" minOccurs="0" maxOccurs="unbounded"/>
-            </xsd:sequence>
-          </xsd:complexType>
-        </xsd:element>
-      </xsd:sequence>
-      <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0">
-        <xsd:annotation>
-          <xsd:documentation>
-            The version of the IOF data exchange format that the file conforms to.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="createTime" type="xsd:dateTime" use="optional">
-        <xsd:annotation>
-          <xsd:documentation>
-            The time when the file was created.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="creator" type="xsd:string" use="optional">
-        <xsd:annotation>
-          <xsd:documentation>
-            The name of the software that created the file.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
+      <xsd:complexContent>
+        <xsd:extension base="BaseElement">
+          <xsd:sequence>
+            <xsd:element name="Event" type="Event">
+              <xsd:annotation>
+                <xsd:documentation>
+                  The event that the start lists belong to.
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="EventRace" type="EventRace" minOccurs="0">
+              <xsd:annotation>
+                <xsd:documentation>
+                  The event race that the start lists belong to, in case of a multi-day event.
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="ClassStart" type="ClassStart" minOccurs="0" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation>
+                  Start lists for the classes in the event.
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="References" minOccurs="0">
+              <xsd:complexType>
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Elements that are referenced by idref attributes in the start list.
+                  </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                  <xsd:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
+                  <xsd:element name="Course" type="Course" minOccurs="0" maxOccurs="unbounded"/>
+                  <xsd:element name="Control" type="Control" minOccurs="0" maxOccurs="unbounded"/>
+                  <xsd:element name="Service" type="Service" minOccurs="0" maxOccurs="unbounded"/>
+                  <xsd:element name="Fee" type="Fee" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:extension>
+      </xsd:complexContent>
     </xsd:complexType>
   </xsd:element>
 
@@ -453,123 +296,106 @@
       </xsd:documentation>
     </xsd:annotation>
     <xsd:complexType>
-      <xsd:sequence>
-        <xsd:element name="Event" type="Event">
-          <xsd:annotation>
-            <xsd:documentation>
-              The event that the result lists belong to.
-            </xsd:documentation>
-          </xsd:annotation>
-        </xsd:element>
-        <xsd:element name="EventRace" type="EventRace" minOccurs="0">
-          <xsd:annotation>
-            <xsd:documentation>
-              The event race that the result list belongs to, in case of a multi-race event.
-            </xsd:documentation>
-          </xsd:annotation>
-        </xsd:element>
-        <xsd:element name="ClassResult" type="ClassResult" minOccurs="0" maxOccurs="unbounded">
-          <xsd:annotation>
-            <xsd:documentation>
-              Result lists for the classes in the event.
-            </xsd:documentation>
-          </xsd:annotation>
-        </xsd:element>
-        <xsd:element name="References" minOccurs="0">
-          <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="BaseElement">
+          <xsd:sequence>
+            <xsd:element name="Event" type="Event">
+              <xsd:annotation>
+                <xsd:documentation>
+                  The event that the result lists belong to.
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="EventRace" type="EventRace" minOccurs="0">
+              <xsd:annotation>
+                <xsd:documentation>
+                  The event race that the result list belongs to, in case of a multi-race event.
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="ClassResult" type="ClassResult" minOccurs="0" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation>
+                  Result lists for the classes in the event.
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="References" minOccurs="0">
+              <xsd:complexType>
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Elements that are referenced by idref attributes in the result list.
+                  </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                  <xsd:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
+                  <xsd:element name="Course" type="Course" minOccurs="0" maxOccurs="unbounded"/>
+                  <xsd:element name="Control" type="Control" minOccurs="0" maxOccurs="unbounded"/>
+                  <xsd:element name="Service" type="Service" minOccurs="0" maxOccurs="unbounded"/>
+                  <xsd:element name="Fee" type="Fee" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+          <xsd:attribute name="status" default="Complete">
             <xsd:annotation>
               <xsd:documentation>
-                Elements that are referenced by idref attributes in the result list.
+                The status of the result list.
               </xsd:documentation>
             </xsd:annotation>
-            <xsd:sequence>
-              <xsd:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
-              <xsd:element name="Course" type="Course" minOccurs="0" maxOccurs="unbounded"/>
-              <xsd:element name="Control" type="Control" minOccurs="0" maxOccurs="unbounded"/>
-              <xsd:element name="Service" type="Service" minOccurs="0" maxOccurs="unbounded"/>
-              <xsd:element name="Fee" type="Fee" minOccurs="0" maxOccurs="unbounded"/>
-            </xsd:sequence>
-          </xsd:complexType>
-        </xsd:element>
-      </xsd:sequence>
-      <xsd:attribute name="status" default="Complete">
-        <xsd:annotation>
-          <xsd:documentation>
-            The status of the result list.
-          </xsd:documentation>
-        </xsd:annotation>
-        <xsd:simpleType>
-          <xsd:restriction base="xsd:NMTOKEN">
-            <xsd:enumeration value="Complete">
-              <xsd:annotation>
-                <xsd:documentation>
-                  The result list is complete, i.e. all competitors are included. Used for official results after the event.
-                </xsd:documentation>
-              </xsd:annotation>
-            </xsd:enumeration>
-            <xsd:enumeration value="Delta">
-              <xsd:annotation>
-                <xsd:documentation>
-                  The result list only contains changes since last list. Used for frequent exchange of results.
-                </xsd:documentation>
-              </xsd:annotation>
-            </xsd:enumeration>
-            <xsd:enumeration value="Snapshot">
-              <xsd:annotation>
-                <xsd:documentation>
-                  The result list is a snapshot of the current standings. Used while the event is under way.
-                </xsd:documentation>
-              </xsd:annotation>
-            </xsd:enumeration>
-          </xsd:restriction>
-        </xsd:simpleType>
-      </xsd:attribute>
-      <xsd:attribute name="type" default="EventRace">
-        <xsd:annotation>
-          <xsd:documentation>
-            The type of the results in case of a multi-race event.
-          </xsd:documentation>
-        </xsd:annotation>
-        <xsd:simpleType>
-          <xsd:restriction base="xsd:NMTOKEN">
-            <xsd:enumeration value="EventRace">
-              <xsd:annotation>
-                <xsd:documentation>
-                  The results are race results (i.e. not overall results) for the event race specified by the EventRace element.
-                </xsd:documentation>
-              </xsd:annotation>
-            </xsd:enumeration>
-            <xsd:enumeration value="Overall">
-              <xsd:annotation>
-                <xsd:documentation>
-                  The results are overall results for the event after the event race specified by the EventRace element.
-                </xsd:documentation>
-              </xsd:annotation>
-            </xsd:enumeration>
-          </xsd:restriction>
-        </xsd:simpleType>
-      </xsd:attribute>
-      <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0">
-        <xsd:annotation>
-          <xsd:documentation>
-            The version of the IOF data exchange format that the file conforms to.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="createTime" type="xsd:dateTime" use="optional">
-        <xsd:annotation>
-          <xsd:documentation>
-            The time when the file was created.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="creator" type="xsd:string" use="optional">
-        <xsd:annotation>
-          <xsd:documentation>
-            The name of the software that created the file.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:NMTOKEN">
+                <xsd:enumeration value="Complete">
+                  <xsd:annotation>
+                    <xsd:documentation>
+                      The result list is complete, i.e. all competitors are included. Used for official results after the event.
+                    </xsd:documentation>
+                  </xsd:annotation>
+                </xsd:enumeration>
+                <xsd:enumeration value="Delta">
+                  <xsd:annotation>
+                    <xsd:documentation>
+                      The result list only contains changes since last list. Used for frequent exchange of results.
+                    </xsd:documentation>
+                  </xsd:annotation>
+                </xsd:enumeration>
+                <xsd:enumeration value="Snapshot">
+                  <xsd:annotation>
+                    <xsd:documentation>
+                      The result list is a snapshot of the current standings. Used while the event is under way.
+                    </xsd:documentation>
+                  </xsd:annotation>
+                </xsd:enumeration>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:attribute>
+          <xsd:attribute name="type" default="EventRace">
+            <xsd:annotation>
+              <xsd:documentation>
+                The type of the results in case of a multi-race event.
+              </xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:NMTOKEN">
+                <xsd:enumeration value="EventRace">
+                  <xsd:annotation>
+                    <xsd:documentation>
+                      The results are race results (i.e. not overall results) for the event race specified by the EventRace element.
+                    </xsd:documentation>
+                  </xsd:annotation>
+                </xsd:enumeration>
+                <xsd:enumeration value="Overall">
+                  <xsd:annotation>
+                    <xsd:documentation>
+                      The results are overall results for the event after the event race specified by the EventRace element.
+                    </xsd:documentation>
+                  </xsd:annotation>
+                </xsd:enumeration>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:attribute>
+        </xsd:extension>
+      </xsd:complexContent>
     </xsd:complexType>
   </xsd:element>
 
@@ -582,107 +408,78 @@
       </xsd:documentation>
     </xsd:annotation>
     <xsd:complexType>
-      <xsd:sequence>
-        <xsd:element name="Event" type="Event">
-          <xsd:annotation>
-            <xsd:documentation>
-              The event that the service requests are valid for.
-            </xsd:documentation>
-          </xsd:annotation>
-        </xsd:element>
-        <xsd:element name="OrganisationServiceRequest" type="OrganisationServiceRequest" minOccurs="0" maxOccurs="unbounded">
-          <xsd:annotation>
-            <xsd:documentation>
-              Service requests made by organisations.
-            </xsd:documentation>
-          </xsd:annotation>
-        </xsd:element>          
-        <xsd:element name="PersonServiceRequest" type="PersonServiceRequest" minOccurs="0" maxOccurs="unbounded">
-          <xsd:annotation>
-            <xsd:documentation>
-              Service requests made by persons.
-            </xsd:documentation>
-          </xsd:annotation>
-        </xsd:element>
-        <xsd:element name="References" minOccurs="0">
-          <xsd:complexType>
-            <xsd:annotation>
-              <xsd:documentation>
-                Elements that are referenced by idref attributes in the service request list.
-              </xsd:documentation>
-            </xsd:annotation>
-            <xsd:sequence>
-              <xsd:element name="Fee" type="Fee" minOccurs="0" maxOccurs="unbounded"/>
-            </xsd:sequence>
-          </xsd:complexType>
-        </xsd:element>
-      </xsd:sequence>
-      <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0">
-        <xsd:annotation>
-          <xsd:documentation>
-            The version of the IOF data exchange format that the file conforms to.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="createTime" type="xsd:dateTime" use="optional">
-        <xsd:annotation>
-          <xsd:documentation>
-            The time when the file was created.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="creator" type="xsd:string" use="optional">
-        <xsd:annotation>
-          <xsd:documentation>
-            The name of the software that created the file.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
+      <xsd:complexContent>
+        <xsd:extension base="BaseElement">
+          <xsd:sequence>
+            <xsd:element name="Event" type="Event">
+              <xsd:annotation>
+                <xsd:documentation>
+                  The event that the service requests are valid for.
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="OrganisationServiceRequest" type="OrganisationServiceRequest" minOccurs="0" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation>
+                  Service requests made by organisations.
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="PersonServiceRequest" type="PersonServiceRequest" minOccurs="0" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation>
+                  Service requests made by persons.
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="References" minOccurs="0">
+              <xsd:complexType>
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Elements that are referenced by idref attributes in the service request list.
+                  </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                  <xsd:element name="Fee" type="Fee" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:extension>
+      </xsd:complexContent>
     </xsd:complexType>
   </xsd:element>
 
-  <!-- Usage: To transfer financial transactions from the entry system to the event administration system, or vice versa. -->
-  <!-- TODO: do we really need this information? AssignedFee elements in entries/results and service request list should be enough. -->
-  <xsd:element name="TransactionList">
+  <!-- END ROOT ELEMENTS -->
+
+  <xsd:complexType name="BaseElement" abstract="true">
     <xsd:annotation>
       <xsd:documentation>
-        A list of financial transactions.
+        The base root element that all root elements extend.
       </xsd:documentation>
     </xsd:annotation>
-    <xsd:complexType>
-      <xsd:sequence>
-        <xsd:element name="Event" type="Event" minOccurs="0">
-          <xsd:annotation>
-            <xsd:documentation>
-              The event that the transactions refer to.
-            </xsd:documentation>
-          </xsd:annotation>
-        </xsd:element>
-        <xsd:element name="Transaction" type="Transaction" minOccurs="0" maxOccurs="unbounded"/>
-      </xsd:sequence>
-      <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0">
-        <xsd:annotation>
-          <xsd:documentation>
-            The version of the IOF data exchange format that the file conforms to.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="createTime" type="xsd:dateTime" use="optional">
-        <xsd:annotation>
-          <xsd:documentation>
-            The time when the file was created.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="creator" type="xsd:string" use="optional">
-        <xsd:annotation>
-          <xsd:documentation>
-            The name of the software that created the file.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-    </xsd:complexType>
-  </xsd:element>
+    <xsd:attribute name="iofVersion" type="xsd:string" fixed="3.0">
+      <xsd:annotation>
+        <xsd:documentation>
+          The version of the IOF data exchange format that the file conforms to.
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="createTime" type="xsd:dateTime" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>
+          The time when the file was created.
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="creator" type="xsd:string" use="optional">
+      <xsd:annotation>
+        <xsd:documentation>
+          The name of the software that created the file.
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
 
   <!-- TODO: skip the type attribute, and introduce a new element SecondaryId what covers for e.g. World Ranking List needs? Or skip SecondaryId as well? -->
   <xsd:complexType name="Id" mixed="false">
@@ -1563,7 +1360,7 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-      <xsd:element name="AllocationControl" type="AllocationControl" minOccurs="0">
+      <xsd:element name="StartTimeAllocationRequest" type="StartTimeAllocationRequest" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation>
             Any special preferences regarding start time that has to be taken into consideration when making the start list draw.
@@ -1638,7 +1435,7 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-      <xsd:element name="AllocationControl" type="AllocationControl" minOccurs="0">
+      <xsd:element name="StartTimeAllocationRequest" type="StartTimeAllocationRequest" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation>
             Any special preferences regarding start time that has to be taken into consideration when making the start list draw.
@@ -1706,7 +1503,7 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-      <xsd:element name="AllocationControl" type="AllocationControl" minOccurs="0">
+      <xsd:element name="StartTimeAllocationRequest" type="StartTimeAllocationRequest" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation>
             Any special preferences regarding start time that has to be taken into consideration when making the start list draw.
@@ -1723,8 +1520,7 @@
     </xsd:sequence>
   </xsd:complexType>
 
-  <!-- TODO: better name of element? StartTimeAllocationRequest? -->
-  <xsd:complexType name="AllocationControl">
+  <xsd:complexType name="StartTimeAllocationRequest">
     <xsd:annotation>
       <xsd:documentation>
         Used to state start time allocation requests. It consists of a possible reference Organisation or Person and the allocation request, e.g. late start or grouped with the reference Organisation/Person. This way it is possible to state requests to the event organizer so that e.g. all members of an organisation has start times close to each other - or parents have start times far from each other. It is totally up to the event software and organizers whether they will support such requests.
@@ -1775,7 +1571,7 @@
               </xsd:documentation>
             </xsd:annotation>
           </xsd:enumeration>
-          <xsd:enumeration value="DistributedFrom">
+          <xsd:enumeration value="SeparatedFrom">
             <xsd:annotation>
               <xsd:documentation>
                 The competitor preferences to start well separated in time from the person or organisation that is given by the Person or Organisation element.
@@ -3076,75 +2872,6 @@
   <!-- TODO: is Account really needed? -->
   <xsd:complexType name="Account" mixed="false">
     <xsd:attribute name="type" type="xsd:string"/>
-  </xsd:complexType>
-
-  <xsd:complexType name="Transaction">
-    <xsd:annotation>
-      <xsd:documentation>
-        Defines a financial transaction, possibly referring to a number of entries and/or service requests.
-      </xsd:documentation>
-    </xsd:annotation>
-    <xsd:sequence>
-      <!-- TODO: is Account really needed? -->
-      <xsd:element name="Account" type="Account" minOccurs="0"/>
-      <xsd:element name="Time" type="xsd:dateTime" minOccurs="0">
-        <xsd:annotation>
-          <xsd:documentation>
-            The time when the transaction was made.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:element>
-      <xsd:element name="Amount" type="Amount">
-        <xsd:annotation>
-          <xsd:documentation>
-            The amount of money that was transfered.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:element>
-      <xsd:element name="Organisation" type="Organisation" minOccurs="0">
-        <xsd:annotation>
-          <xsd:documentation>
-            The organisation that the transaction refers to.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:element>
-      <xsd:element name="Person" type="Person" minOccurs="0" maxOccurs="unbounded">
-        <xsd:annotation>
-          <xsd:documentation>
-            The persons that the transaction refers to.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:element>
-      <xsd:element name="TeamEntry" type="TeamEntry" minOccurs="0" maxOccurs="unbounded">
-        <xsd:annotation>
-          <xsd:documentation>
-            The team entries that the transaction refers to.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:element>
-      <xsd:element name="PersonEntry" type="PersonEntry" minOccurs="0" maxOccurs="unbounded">
-        <xsd:annotation>
-          <xsd:documentation>
-            The person entries that the transaction refers to.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:element>
-      <xsd:element name="OrganisationServiceRequest" type="OrganisationServiceRequest" minOccurs="0" maxOccurs="unbounded">
-        <xsd:annotation>
-          <xsd:documentation>
-            The organisation service requests that the transaction refers to.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:element>
-      <xsd:element name="PersonServiceRequest" type="PersonServiceRequest" minOccurs="0" maxOccurs="unbounded">
-        <xsd:annotation>
-          <xsd:documentation>
-            The person service requests that the transaction refers to.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:element>
-    </xsd:sequence>
-    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
   </xsd:complexType>
 
   <xsd:complexType name="Address">
