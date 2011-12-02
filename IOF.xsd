@@ -23,7 +23,12 @@
 
 -->
 
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xml:lang="en">
+<xsd:schema xmlns="http://www.orienteering.org/datastandard/3.0"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://www.orienteering.org/datastandard/3.0"
+            elementFormDefault="qualified" 
+            xml:lang="en"
+            version="3.0">
   <xsd:annotation>
     <xsd:documentation>
       This schema describes the IOF data exchange format for a wide selection of orienteering information. The schema supersedes the previous version 2.0.3.
@@ -317,6 +322,7 @@
                 </xsd:annotation>
                 <xsd:sequence>
                   <xsd:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
+                  <xsd:element name="Class" type="Class" minOccurs="0" maxOccurs="unbounded"/>
                   <xsd:element name="Course" type="Course" minOccurs="0" maxOccurs="unbounded"/>
                   <xsd:element name="Control" type="Control" minOccurs="0" maxOccurs="unbounded"/>
                   <xsd:element name="Service" type="Service" minOccurs="0" maxOccurs="unbounded"/>
@@ -378,6 +384,7 @@
                 </xsd:annotation>
                 <xsd:sequence>
                   <xsd:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
+                  <xsd:element name="Class" type="Class" minOccurs="0" maxOccurs="unbounded"/>
                   <xsd:element name="Course" type="Course" minOccurs="0" maxOccurs="unbounded"/>
                   <xsd:element name="Control" type="Control" minOccurs="0" maxOccurs="unbounded"/>
                   <xsd:element name="Service" type="Service" minOccurs="0" maxOccurs="unbounded"/>
@@ -611,7 +618,13 @@
       <!-- TODO: allow multiple ids? If not, remove the type attribute of the Id element. -->
       <xsd:element name="Id" type="Id" minOccurs="0" maxOccurs="unbounded"/>
       <xsd:element name="Name" type="PersonName" minOccurs="0"/>
-      <xsd:element name="BirthDate" type="xsd:date" minOccurs="0"/>
+      <xsd:element name="BirthDate" type="xsd:date" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            The date when the person was born, expressed in ISO 8601 format.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
       <xsd:element name="Address" type="Address" minOccurs="0" maxOccurs="unbounded"/>
       <xsd:element name="Contact" type="Contact" minOccurs="0" maxOccurs="unbounded"/>
       <xsd:element name="Nationality" type="Country" minOccurs="0"/>
@@ -904,13 +917,6 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-      <xsd:element name="Attribute" type="Attribute" minOccurs="0" maxOccurs="unbounded">
-        <xsd:annotation>
-          <xsd:documentation>
-            Any extra information for the event.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:element>
       <xsd:element name="Extensions" type="Extensions" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation>
@@ -969,13 +975,6 @@
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="Discipline" type="RaceDiscipline" minOccurs="0" maxOccurs="unbounded"/>
-      <xsd:element name="Attribute" type="Attribute" minOccurs="0" maxOccurs="unbounded">
-        <xsd:annotation>
-          <xsd:documentation>
-            Any extra information for the race, e.g. whether the race is a championship race.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:element>
       <xsd:element name="Organiser" type="Organisation" minOccurs="0" maxOccurs="unbounded">
         <xsd:annotation>
           <xsd:documentation>
@@ -1616,20 +1615,6 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-      <xsd:element name="ControlCard" type="ControlCard" minOccurs="0" maxOccurs="unbounded">
-        <xsd:annotation>
-          <xsd:documentation>
-            Information about the control card (punching card) that the person uses at the event.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:element>
-      <xsd:element name="Score" type="Score" minOccurs="0" maxOccurs="unbounded">
-        <xsd:annotation>
-          <xsd:documentation>
-            Any score that is submitted together with the entry, e.g. World Ranking points.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:element>
       <xsd:element name="Leg" type="xsd:integer" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation>
@@ -1641,6 +1626,20 @@
         <xsd:annotation>
           <xsd:documentation>
             Defines the person's starting order within a team at a parallel relay leg.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ControlCard" type="ControlCard" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            Information about the control card (punching card) that the person uses at the event.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Score" type="Score" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            Any score that is submitted together with the entry, e.g. World Ranking points.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
@@ -2174,21 +2173,21 @@
       <xsd:element name="StartTime" type="xsd:dateTime" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation>
-            The time when the person or team that the result belongs to started.
+            The time when the person or team that the result belongs to started, expressed in ISO 8601 format.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="FinishTime" type="xsd:dateTime" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation>
-            The time when the person or team that the result belongs to finished.
+            The time when the person or team that the result belongs to finished, expressed in ISO 8601 format.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="Time" type="xsd:double" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation>
-            The time, in seconds, that is shown in the result list.
+            The time, in seconds, that is shown in the result list. Fractions of seconds (e.g. 258.7) may be used if the time resolution is higher than one second.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
@@ -2257,7 +2256,7 @@
     <xsd:attribute name="afterLeg" type="xsd:integer" use="optional">
       <xsd:annotation>
         <xsd:documentation>
-          For a relay event, defines the leg after which the results are valid. Omit this attribute for overall results, i.e. after all legs have been completed. If this attribute is set, only the Time, Position and Status subelements have to be included.
+          For a relay event, defines the leg after which the results are valid. Omit this attribute for overall results, i.e. after all legs have been completed. If this attribute is set, only the Time, Position and Status subelements have to be included. This attribute can only be set when the Result element is a subelemnet of a TeamResult.
         </xsd:documentation>
       </xsd:annotation>  
     </xsd:attribute>
@@ -2403,7 +2402,7 @@
       <xsd:element name="Time" type="xsd:double" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation>
-            The time in seconds used to give the answer, in case of a timed control.
+            The time in seconds used to give the answer, in case of a timed control. Fractions of seconds (e.g. 258.7) may be used if the time resolution is higher than one second.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
@@ -2434,7 +2433,7 @@
       <xsd:element name="Time" type="xsd:double" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation>
-            The time, in seconds, elapsed from start to punching the control.
+            The time, in seconds, elapsed from start to punching the control. Fractions of seconds (e.g. 258.7) may be used if the time resolution is higher than one second.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
@@ -2536,13 +2535,6 @@
         <xsd:annotation>
           <xsd:documentation>
             The geographical position of the control.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:element>
-      <xsd:element name="PunchingUnit" type="PunchingUnit" minOccurs="0" maxOccurs="unbounded">
-        <xsd:annotation>
-          <xsd:documentation>
-            The punching units used at this control.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
@@ -2943,32 +2935,6 @@
     </xsd:sequence>
   </xsd:complexType>
 
-  <!-- Punching -->
-  <xsd:complexType name="PunchingUnit">
-    <xsd:annotation>
-      <xsd:documentation>
-        Defines a punching unit device.
-      </xsd:documentation>
-    </xsd:annotation>
-    <xsd:sequence>
-      <xsd:element name="Id" type="Id">
-        <xsd:annotation>
-          <xsd:documentation>
-            Defines the identification (control code) of the punching unit.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:element>
-      <xsd:element name="PunchingSystem" type="xsd:string">
-        <xsd:annotation>
-          <xsd:documentation>
-            Defines the punching system.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:element>
-    </xsd:sequence>
-    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
-  </xsd:complexType>
-
   <xsd:complexType name="Service">
     <xsd:annotation>
       <xsd:documentation>
@@ -3188,14 +3154,14 @@
       <xsd:element name="Date" type="xsd:date">
         <xsd:annotation>
           <xsd:documentation>
-            The date part.
+            The date part, expressed in ISO 8601 format.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
       <xsd:element name="Time" type="xsd:time" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation>
-            The time part.
+            The time part, expressed in ISO 8601 format.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>

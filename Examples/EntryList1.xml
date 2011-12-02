@@ -1,12 +1,23 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<!-- Entry list for an individual event, containing competitors and the classes entered -->
-<EntryList iofVersion="3.0" createTime="2011-07-20T12:16:31+02:00" creator="Example Software">
+<!-- 
+  Entry list for an individual event, containing competitors and the classes entered.
+  To make the document more compact, all Organisation and Class elements are placed in the References element at the end of the file, 
+  and such elements occurring elsewhere are just holding a reference to these elements using the idref attribute.
+-->
+  <EntryList xmlns="http://www.orienteering.org/datastandard/3.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           iofVersion="3.0" 
+           createTime="2011-07-20T12:16:31+02:00" 
+           creator="Example Software">
   <Event>
     <Name>Example event</Name>
     <StartTime>
       <Date>2011-07-31</Date>
       <Time>10:00:00+01:00</Time>
     </StartTime>
+    <!-- all classes in the event, full information in References element at the end of the file -->
+    <Class idref="1"/>
+    <Class idref="2"/>
   </Event>
   <PersonEntry>
     <Person>
@@ -17,17 +28,10 @@
       </Name>
     </Person>
     <!-- the Organisation element is to be omitted if the competitor does not represent a club -->
-    <Organisation>
-      <Id>5</Id>
-      <Name>OC Back and Forth</Name>
-      <Country code="UK">Great Britain</Country>
-    </Organisation>
+    <Organisation idref="5"/>
     <!-- the ControlCard element is to be omitted if the competitor wishes to rent a control card -->
-    <ControlCard punchingSystem="SI">794021</ControlCard>
-    <Class>
-      <Id>1</Id>
-      <Name>Men Elite</Name>
-    </Class>
+    <ControlCard>794021</ControlCard>
+    <Class idref="1"/>
     <EntryTime>2011-07-14T18:20:05+01:00</EntryTime>
   </PersonEntry>
   <PersonEntry>
@@ -38,16 +42,9 @@
         <Given>Edgar</Given>
       </Name>
     </Person>
-    <Organisation>
-      <Id>2</Id>
-      <Name>Bushmen OC</Name>
-      <Country code="UK">Great Britain</Country>
-    </Organisation>
-    <ControlCard punchingSystem="SI">299482</ControlCard>
-    <Class>
-      <Id>1</Id>
-      <Name>Men Elite</Name>
-    </Class>
+    <Organisation idref="2"/>
+    <!-- this competitor wants to rent a control card, and thus the ControlCard element is omitted -->
+    <Class idref="1"/>
     <EntryTime>2011-07-10T13:00:04+01:00</EntryTime>
   </PersonEntry>
   <PersonEntry>
@@ -58,16 +55,31 @@
         <Given>Toni</Given>
       </Name>
     </Person>
+    <!-- this competitor does not represent a club, and thus the Organisation element is omitted -->
+    <ControlCard>973078</ControlCard>
+    <Class idref="2"/>
+    <EntryTime>2011-07-12T05:33:17+01:00</EntryTime>
+  </PersonEntry>
+  <References>
+    <!-- organisations -->
     <Organisation>
-      <Id>6</Id>
-      <Name>Doubtful Direction</Name>
+      <Id>2</Id>
+      <Name>Bushmen OC</Name>
       <Country code="UK">Great Britain</Country>
     </Organisation>
-    <ControlCard punchingSystem="SI">973078</ControlCard>
+    <Organisation>
+      <Id>5</Id>
+      <Name>OC Back and Forth</Name>
+      <Country code="UK">Great Britain</Country>
+    </Organisation>
+    <!-- classes -->
+    <Class>
+      <Id>1</Id>
+      <Name>Men Elite</Name>
+    </Class>
     <Class>
       <Id>2</Id>
       <Name>Open</Name>
     </Class>
-    <EntryTime>2011-07-12T05:33:17+01:00</EntryTime>
-  </PersonEntry>
+  </References>
 </EntryList>

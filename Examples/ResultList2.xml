@@ -3,43 +3,52 @@
   Result list for a relay event containing one class with three legs, where first and third leg competitors are either 
   assigned course A or B, and second leg competitors are assigned course C. The second leg may be run by one to three 
   competitors per team, of which the fastest one exchanges to the third leg competitor. 
+  To make the document more compact, all Organisation, Class and Course elements are placed in the References element at the end of the file, 
+  and such elements occurring elsewhere are just holding a reference to these elements using the idref attribute.
 -->
-<ResultList iofVersion="3.0" createTime="2011-07-20T12:16:31+02:00" creator="Example Software" status="Complete">
+<ResultList xmlns="http://www.orienteering.org/datastandard/3.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            iofVersion="3.0"
+            createTime="2011-07-31T22:46:33+01:00" 
+            creator="Example Software"
+            status="Complete">
   <Event>
     <Name>Example event</Name>
     <StartTime>
       <Date>2011-07-31</Date>
       <Time>10:00:00+01:00</Time>
     </StartTime>
+    <!-- all classes in the event, full information in References element at the end of the file -->
+    <Class idref="1"/>
   </Event>
+
   <ClassResult>
-    <Class>
-      <Id>1</Id>
-      <Name>Open</Name>
-    </Class>
+    <Class idref="1"/>
     
     <TeamResult>
       <!-- the name of the team, usually including an ordinal number if the club has many teams entered to the same class -->
       <Name>Forest Vagabonds 1</Name>
       <!-- if the team consists of competitors representing multiple clubs, use one Organisation element for each club -->
-      <Organisation>
-        <Id>4</Id>
-        <Name>Forest Vagabonds</Name>
-        <Country code="UK">Great Britain</Country>
-      </Organisation>
+      <Organisation idref="4"/>
       <!-- the overall result -->
       <Result>
         <BibNumber>1</BibNumber>
+        <!-- start and finish times are expressed in ISO 8601 format, optionally including time zone information: YYYY-MM-DDThh:mm:ss[.s[s[s]]][((+|-)hh:mm)|Z] -->
+        <!-- for a detailed specification, see http://www.w3.org/TR/xmlschema-2/#dateTime -->
         <StartTime>2011-07-31T14:00:00+01:00</StartTime>
         <FinishTime>2011-07-31T15:02:21+01:00</FinishTime>
+        <!-- times are expressed in seconds -->
         <Time>3741</Time>
         <Position>1</Position>
         <Status>OK</Status>
       </Result>
       <!-- results after each leg, except for the last leg which is already present in the first Result element -->
       <Result afterLeg="1">
+        <!-- times are expressed in seconds, use period as decimal separator for fractions of seconds -->
         <Time>1438</Time>
+        <!-- the position in the result list for the given leg -->
         <Position>2</Position>
+        <!-- the result status, see the xml schema file for all status codes -->
         <Status>OK</Status>
       </Result>
       <Result afterLeg="2">
@@ -59,20 +68,21 @@
         <Leg>1</Leg>
         <Result>
           <BibNumber>1-1</BibNumber>
+          <!-- start and finish times are expressed in ISO 8601 format, optionally including time zone information: YYYY-MM-DDThh:mm:ss[.s[s[s]]][((+|-)hh:mm)|Z] -->
+          <!-- for a detailed specification, see http://www.w3.org/TR/xmlschema-2/#dateTime -->
           <StartTime>2011-07-31T14:00:00+01:00</StartTime>
           <FinishTime>2011-07-31T14:23:58+01:00</FinishTime>
+          <!-- times are expressed in seconds, use period as decimal separator for fractions of seconds -->
           <Time>1438</Time>
           <!-- this is the position among all competitors on this leg -->
           <Position type="Leg">2</Position>
           <!-- this is the position among all competitors that have the same course as this competitor -->
           <Position type="Course">2</Position>
+          <!-- the result status, see the xml schema file for all status codes -->
           <Status>OK</Status>
         </Result>
         <!-- when spreading methods are used, include the course that the runner has been assigned -->
-        <Course>
-          <Name>A</Name>
-          <Length>4010</Length>
-        </Course>
+        <Course idref="1"/>
         <!-- split times may be omitted, but if they are present all controls of the course that is assigned to the competitor must be included in the correct order -->
         <SplitTime>
           <ControlCode>31</ControlCode>
@@ -108,10 +118,7 @@
           <Position type="Course">1</Position>
           <Status>OK</Status>
         </Result>
-        <Course>
-          <Name>C</Name>
-          <Length>3800</Length>
-        </Course>
+        <Course idref="3"/>
         <SplitTime>
           <ControlCode>44</ControlCode>
           <Time>601</Time>
@@ -145,10 +152,7 @@
           <Position type="Course">3</Position>
           <Status>OK</Status>
         </Result>
-        <Course>
-          <Name>C</Name>
-          <Length>3800</Length>
-        </Course>
+        <Course idref="3"/>
         <SplitTime>
           <ControlCode>44</ControlCode>
           <Time>635</Time>
@@ -182,10 +186,7 @@
           <Position type="Course">4</Position>
           <Status>OK</Status>
         </Result>
-        <Course>
-          <Name>C</Name>
-          <Length>3800</Length>
-        </Course>
+        <Course idref="3"/>
         <SplitTime>
           <ControlCode>44</ControlCode>
           <Time>1307</Time>
@@ -218,10 +219,7 @@
           <Position type="Course">1</Position>
           <Status>OK</Status>
         </Result>
-        <Course>
-          <Name>B</Name>
-          <Length>4040</Length>
-        </Course>
+        <Course idref="2"/>
         <SplitTime>
           <ControlCode>32</ControlCode>
           <Time>371</Time>
@@ -242,16 +240,8 @@
       <!-- all clubs making up the combination team are normally present in the team's name -->
       <Name>Super Fast Orienteers / Unintentional Navigators</Name>
       <!-- one Organisation element for each club -->
-      <Organisation>
-        <Id>1</Id>
-        <Name>Super Fast Orienteers</Name>
-        <Country code="UK">Great Britain</Country>
-      </Organisation>
-      <Organisation>
-        <Id>3</Id>
-        <Name>Unintentional Navigators</Name>
-        <Country code="UK">Great Britain</Country>
-      </Organisation>
+      <Organisation idref="1"/>
+      <Organisation idref="3"/>
       <Result>
         <BibNumber>2</BibNumber>
         <StartTime>2011-07-31T14:00:00+01:00</StartTime>
@@ -279,12 +269,8 @@
             <Given>Jeffrey</Given>
           </Name>
         </Person>
-        <!-- if a combination team member's club membership is known, it may be expressed by using the Organisation element -->
-        <Organisation>
-          <Id>1</Id>
-          <Name>Super Fast Orienteers</Name>
-          <Country code="UK">Great Britain</Country>
-        </Organisation>
+        <!-- if a combination team member's club membership is known, it should be expressed by using the Organisation element -->
+        <Organisation idref="1"/>
         <Leg>1</Leg>
         <Result>
           <BibNumber>2-1</BibNumber>
@@ -295,10 +281,7 @@
           <Position type="Course">2</Position>
           <Status>OK</Status>
         </Result>
-        <Course>
-          <Name>B</Name>
-          <Length>4040</Length>
-        </Course>
+        <Course idref="2"/>
         <SplitTime>
           <ControlCode>32</ControlCode>
           <Time>447</Time>
@@ -321,11 +304,7 @@
             <Given>Nicole</Given>
           </Name>
         </Person>
-        <Organisation>
-          <Id>3</Id>
-          <Name>Unintentional Navigators</Name>
-          <Country code="UK">Great Britain</Country>
-        </Organisation>
+        <Organisation idref="3"/>
         <Leg>2</Leg>
         <LegOrder>1</LegOrder>
         <Result>
@@ -337,10 +316,7 @@
           <Position type="Course">2</Position>
           <Status>OK</Status>
         </Result>
-        <Course>
-          <Name>C</Name>
-          <Length>3800</Length>
-        </Course>
+        <Course idref="3"/>
         <SplitTime>
           <ControlCode>44</ControlCode>
           <Time>601</Time>
@@ -363,11 +339,7 @@
             <Given>Jim</Given>
           </Name>
         </Person>
-        <Organisation>
-          <Id>1</Id>
-          <Name>Super Fast Orienteers</Name>
-          <Country code="UK">Great Britain</Country>
-        </Organisation>
+        <Organisation idref="1"/>
         <Leg>3</Leg>
         <Result>
           <BibNumber>2-3</BibNumber>
@@ -378,10 +350,7 @@
           <Position type="Course">1</Position>
           <Status>OK</Status>
         </Result>
-        <Course>
-          <Name>A</Name>
-          <Length>4010</Length>
-        </Course>
+        <Course idref="1"/>
         <SplitTime>
           <ControlCode>31</ControlCode>
           <Time>196</Time>
@@ -396,6 +365,45 @@
         </SplitTime>
       </PersonResult>
     </TeamResult>    
-    
   </ClassResult>
+
+  <References>
+    <Organisation>
+      <Id>1</Id>
+      <Name>Super Fast Orienteers</Name>
+      <Country code="UK">Great Britain</Country>
+    </Organisation>
+    <Organisation>
+      <Id>3</Id>
+      <Name>Unintentional Navigators</Name>
+      <Country code="UK">Great Britain</Country>
+    </Organisation>
+    <Organisation>
+      <Id>4</Id>
+      <Name>Forest Vagabonds</Name>
+      <Country code="UK">Great Britain</Country>
+    </Organisation>
+
+    <Class>
+      <Id>1</Id>
+      <Name>Open</Name>
+    </Class>
+
+    <Course>
+      <Id>1</Id>
+      <Name>A</Name>
+      <Length>4010</Length>
+    </Course>
+    <Course>
+      <Id>2</Id>
+      <Name>B</Name>
+      <Length>4040</Length>
+    </Course>
+    <Course>
+      <Id>3</Id>
+      <Name>C</Name>
+      <Length>3800</Length>
+    </Course>
+
+  </References>
 </ResultList>

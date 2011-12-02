@@ -1,22 +1,28 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<!-- Entry list for a relay event, containing teams, team lineups and the classes entered -->
-<EntryList iofVersion="3.0" createTime="2011-07-20T12:16:31+02:00" creator="Example Software">
+<!-- 
+  Entry list for a relay event, containing teams, team lineups and the classes entered.
+  To make the document more compact, all Organisation and Class elements are placed in the References element at the end of the file, 
+  and such elements occurring elsewhere are just holding a reference to these elements using the idref attribute.
+-->
+<EntryList xmlns="http://www.orienteering.org/datastandard/3.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           iofVersion="3.0"
+           createTime="2011-07-20T12:16:31+02:00"
+           creator="Example Software">
   <Event>
     <Name>Example event</Name>
     <StartTime>
       <Date>2011-07-31</Date>
       <Time>10:00:00+01:00</Time>
     </StartTime>
+    <!-- all classes in the event, full information in References element at the end of the file -->
+    <Class idref="1"/>
   </Event>
   <TeamEntry>
     <!-- the name of the team, usually including an ordinal number if the club has many teams entered to the same class -->
     <Name>Forest Vagabonds 1</Name>
     <!-- if the team consists of competitors representing multiple clubs, use one Organisation element for each club -->
-    <Organisation>
-      <Id>4</Id>
-      <Name>Forest Vagabonds</Name>
-      <Country code="UK">Great Britain</Country>
-    </Organisation>
+    <Organisation idref="4"/>
     <!-- the TeamEntryPerson elements hold the team lineup information, and should be omitted if the lineup is not known -->
     <TeamEntryPerson>
       <Person>
@@ -26,9 +32,9 @@
           <Given>Samuel</Given>
         </Name>
       </Person>
+      <Leg>1</Leg>
       <!-- the ControlCard element is to be omitted if the competitor wishes to rent a control card -->
       <ControlCard>54321</ControlCard>
-      <Leg>1</Leg>
     </TeamEntryPerson>
     <TeamEntryPerson>
       <Person>
@@ -38,10 +44,10 @@
           <Given>Penny</Given>
         </Name>
       </Person>
-      <ControlCard>59476</ControlCard>
       <Leg>2</Leg>
       <!-- LegOrder is used only when the relay contains parallel legs or when a particular leg allows multiple competitors -->
       <LegOrder>1</LegOrder>
+      <ControlCard>59476</ControlCard>
     </TeamEntryPerson>
     <TeamEntryPerson>
       <Person>
@@ -51,9 +57,9 @@
           <Given>Anne</Given>
         </Name>
       </Person>
-      <ControlCard>96463</ControlCard>
       <Leg>2</Leg>
       <LegOrder>2</LegOrder>
+      <ControlCard>96463</ControlCard>
     </TeamEntryPerson>
     <TeamEntryPerson>
       <Person>
@@ -63,9 +69,9 @@
           <Given>Brent</Given>
         </Name>
       </Person>
-      <ControlCard>10583</ControlCard>
       <Leg>2</Leg>
       <LegOrder>3</LegOrder>
+      <ControlCard>10583</ControlCard>
     </TeamEntryPerson>
     <TeamEntryPerson>
       <Person>
@@ -75,13 +81,10 @@
           <Given>Allison</Given>
         </Name>
       </Person>
-      <ControlCard>68490</ControlCard>
       <Leg>3</Leg>
+      <ControlCard>68490</ControlCard>
     </TeamEntryPerson>
-    <Class>
-      <Id>1</Id>
-      <Name>Open</Name>
-    </Class>
+    <Class idref="1"/>
     <EntryTime>2011-07-12T21:05:58+01:00</EntryTime>
   </TeamEntry>
   <!-- an example of a team where the team members represent different clubs, known as a combination team -->
@@ -89,6 +92,50 @@
     <!-- all clubs making up the combination team are normally present in the team's name -->
     <Name>Super Fast Orienteers / Unintentional Navigators</Name>
     <!-- one Organisation element for each club -->
+    <Organisation idref="1"/>
+    <Organisation idref="3"/>
+    <TeamEntryPerson>
+      <Person>
+        <Id>8</Id>
+        <Name>
+          <Family>Parker</Family>
+          <Given>Jeffrey</Given>
+        </Name>
+      </Person>
+      <!-- if a combination team member's club membership is known, it may be expressed by using the Organisation element -->
+      <Organisation idref="1"/>
+      <Leg>2</Leg>
+      <ControlCard>33354</ControlCard>
+    </TeamEntryPerson>
+    <TeamEntryPerson>
+      <Person>
+        <Id>9</Id>
+        <Name>
+          <Family>Simmons</Family>
+          <Given>Nicole</Given>
+        </Name>
+      </Person>
+      <Organisation idref="3"/>
+      <Leg>1</Leg>
+      <ControlCard>19930</ControlCard>
+    </TeamEntryPerson>
+    <TeamEntryPerson>
+      <Person>
+        <Id>10</Id>
+        <Name>
+          <Family>Hughes</Family>
+          <Given>Jim</Given>
+        </Name>
+      </Person>
+      <Organisation idref="1"/>
+      <Leg>3</Leg>
+      <ControlCard>67942</ControlCard>
+    </TeamEntryPerson>
+    <Class idref="1"/>
+    <EntryTime>2011-07-13T18:19:59+01:00</EntryTime>
+  </TeamEntry>
+
+  <References>
     <Organisation>
       <Id>1</Id>
       <Name>Super Fast Orienteers</Name>
@@ -99,59 +146,15 @@
       <Name>Unintentional Navigators</Name>
       <Country code="UK">Great Britain</Country>
     </Organisation>
-    <TeamEntryPerson>
-      <Person>
-        <Id>8</Id>
-        <Name>
-          <Family>Parker</Family>
-          <Given>Jeffrey</Given>
-        </Name>
-      </Person>
-      <!-- if a combination team member's club membership is known, it may be expressed by using the Organisation element -->
-      <Organisation>
-        <Id>1</Id>
-        <Name>Super Fast Orienteers</Name>
-        <Country code="UK">Great Britain</Country>
-      </Organisation>
-      <ControlCard>33354</ControlCard>
-      <Leg>2</Leg>
-    </TeamEntryPerson>
-    <TeamEntryPerson>
-      <Person>
-        <Id>9</Id>
-        <Name>
-          <Family>Simmons</Family>
-          <Given>Nicole</Given>
-        </Name>
-      </Person>
-      <Organisation>
-        <Id>3</Id>
-        <Name>Unintentional Navigators</Name>
-        <Country code="UK">Great Britain</Country>
-      </Organisation>
-      <ControlCard>19930</ControlCard>
-      <Leg>1</Leg>
-    </TeamEntryPerson>
-    <TeamEntryPerson>
-      <Person>
-        <Id>10</Id>
-        <Name>
-          <Family>Hughes</Family>
-          <Given>Jim</Given>
-        </Name>
-      </Person>
-      <Organisation>
-        <Id>1</Id>
-        <Name>Super Fast Orienteers</Name>
-        <Country code="UK">Great Britain</Country>
-      </Organisation>
-      <ControlCard>67942</ControlCard>
-      <Leg>3</Leg>
-    </TeamEntryPerson>
+    <Organisation>
+      <Id>4</Id>
+      <Name>Forest Vagabonds</Name>
+      <Country code="UK">Great Britain</Country>
+    </Organisation>
+
     <Class>
       <Id>1</Id>
       <Name>Open</Name>
     </Class>
-    <EntryTime>2011-07-13T18:19:59+01:00</EntryTime>
-  </TeamEntry>
+  </References>
 </EntryList>

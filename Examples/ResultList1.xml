@@ -1,21 +1,32 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<!-- Result list for an individual event -->
-<ResultList iofVersion="3.0" createTime="2011-07-20T12:16:31+02:00" creator="Example Software">
+<!-- 
+  Result list for an individual event where one of the classes use multiple courses (butterfly-loop style).
+  To make the document more compact, all Organisation, Class and Course elements are placed in the References element at the end of the file, 
+  and such elements occurring elsewhere are just holding a reference to these elements using the idref attribute.
+-->
+<ResultList xmlns="http://www.orienteering.org/datastandard/3.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            iofVersion="3.0" 
+            createTime="2011-07-31T22:46:33+01:00" 
+            creator="Example Software"
+            status="Complete">
   <Event>
     <Name>Example event</Name>
     <StartTime>
       <Date>2011-07-31</Date>
       <Time>10:00:00+01:00</Time>
     </StartTime>
+    <!-- all classes in the event, full information in References element at the end of the file -->
+    <Class idref="1"/>
+    <Class idref="2"/>
   </Event>
   <ClassResult>
-    <Class>
-      <Id>1</Id>
-      <Name>Men Elite</Name>
-    </Class>
+    <Class idref="1"/>
+    <!-- if there are multiple courses per class, a Course element without any id may be included to express the properties of an average pseudo course -->
     <Course>
+      <!-- course length is expressed in meters -->
       <Length>4650</Length>
-      <!-- omit the Climb element if the course climb is not known -->
+      <!-- course climb is expressed in meters; omit the Climb element if the course climb is not known -->
       <Climb>160</Climb>
     </Course>
     <PersonResult>
@@ -27,23 +38,22 @@
         </Name>
       </Person>
       <!-- the Organisation element is to be omitted if the competitor does not represent a club -->
-      <Organisation>
-        <Id>5</Id>
-        <Name>OC Back and Forth</Name>
-        <Country code="UK">Great Britain</Country>
-      </Organisation>
+      <Organisation idref="5"/>
       <Result>
         <BibNumber>102</BibNumber>
+        <!-- start and finish times are expressed in ISO 8601 format, optionally including time zone information: YYYY-MM-DDThh:mm:ss[.s[s[s]]][((+|-)hh:mm)|Z] -->
+        <!-- for a detailed specification, see http://www.w3.org/TR/xmlschema-2/#dateTime -->
         <StartTime>2011-07-30T10:00:00+01:00</StartTime>
         <FinishTime>2011-07-30T10:33:21+01:00</FinishTime>
+        <!-- times are expressed in seconds, use period as decimal separator for fractions of seconds -->
         <Time>2001</Time>
+        <!-- the position in the result list -->
         <Position>1</Position>
+        <!-- the result status, see the xml schema file for all status codes -->
         <Status>OK</Status>
       </Result>
-      <!-- the Course element may be used when not all competitors in the class have been assigned the same course, e.g. when butterfly loops are used -->
-      <Course>
-        <Name>Men Elite-1</Name>
-      </Course>
+      <!-- the Course element may be used on person result level when not all competitors in the class have been assigned the same course, e.g. when butterfly loops are used -->
+      <Course idref="1"/>
       <!-- split times may be omitted, but if they are present all controls of the course that is assigned to the competitor must be included in the correct order, even if they have not been visited -->
       <!-- start and finish punches must not be included; use StartTime and FinishTime of the Result element instead -->
       <SplitTime>
@@ -77,11 +87,7 @@
           <Given>Edgar</Given>
         </Name>
       </Person>
-      <Organisation>
-        <Id>2</Id>
-        <Name>Bushmen OC</Name>
-        <Country code="UK">Great Britain</Country>
-      </Organisation>
+      <Organisation idref="2"/>
       <Result>
         <BibNumber>102</BibNumber>
         <StartTime>2011-07-30T10:03:00+01:00</StartTime>
@@ -89,9 +95,7 @@
         <FinishTime>2011-07-30T10:39:42+01:00</FinishTime>
         <Status>MissingPunch</Status>
       </Result>
-      <Course>
-        <Name>Men Elite-2</Name>
-      </Course>
+      <Course idref="2"/>
       <SplitTime>
         <ControlCode>31</ControlCode>
         <Time>693</Time>
@@ -123,14 +127,8 @@
     </PersonResult>
   </ClassResult>
   <ClassResult>
-    <Class>
-      <Id>2</Id>
-      <Name>Open</Name>
-    </Class>
-    <Course>
-      <Length>2990</Length>
-      <Climb>120</Climb>
-    </Course>
+    <Class idref="3"/>
+    <Course idref="3"/>
     <PersonResult>
       <Person>
         <Id>3</Id>
@@ -139,15 +137,57 @@
           <Given>Toni</Given>
         </Name>
       </Person>
-      <Organisation>
-        <Id>6</Id>
-        <Name>Doubtful Direction</Name>
-        <Country code="UK">Great Britain</Country>
-      </Organisation>
+      <Organisation idref="6" />
       <Result>
         <StartTime>2011-07-30T10:15:00+01:00</StartTime>
         <Status>DidNotStart</Status>
       </Result>
     </PersonResult>
   </ClassResult>
+  
+  <References>
+    <Organisation>
+      <Id>2</Id>
+      <Name>Bushmen OC</Name>
+      <Country code="UK">Great Britain</Country>
+    </Organisation>
+    <Organisation>
+      <Id>5</Id>
+      <Name>OC Back and Forth</Name>
+      <Country code="UK">Great Britain</Country>
+    </Organisation>
+    <Organisation>
+      <Id>6</Id>
+      <Name>Doubtful Direction</Name>
+      <Country code="UK">Great Britain</Country>
+    </Organisation>
+
+    <Class>
+      <Id>1</Id>
+      <Name>Men Elite</Name>
+    </Class>
+    <Class>
+      <Id>2</Id>
+      <Name>Open</Name>
+    </Class>
+
+    <Course>
+      <Id>1</Id>
+      <Name>Men Elite-1</Name>
+      <Length>4650</Length>
+      <Climb>160</Climb>
+    </Course>
+    <Course>
+      <Id>2</Id>
+      <Name>Men Elite-2</Name>
+      <Length>4650</Length>
+      <Climb>160</Climb>
+    </Course>
+    <Course>
+      <Id>3</Id>
+      <Name>Open</Name>
+      <Length>2990</Length>
+      <Climb>120</Climb>
+    </Course>
+  </References>
 </ResultList>
