@@ -240,7 +240,6 @@
             <xsd:element name="Event" type="Event"/>
             <xsd:element name="EventRace" type="EventRace" minOccurs="0"/>
             <xsd:element name="Map" type="Map" minOccurs="0"/>
-            <xsd:element name="Control" type="Control" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="CourseClassData" type="CourseClassData" minOccurs="0" maxOccurs="unbounded">
               <xsd:annotation>
                 <xsd:documentation>
@@ -2524,7 +2523,7 @@
       </xsd:documentation>
     </xsd:annotation>
     <xsd:sequence>
-      <xsd:element name="Code" type="xsd:string">
+      <xsd:element name="Id" type="xsd:string" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation>
             The code of the control.
@@ -2553,6 +2552,8 @@
         </xsd:annotation>
       </xsd:element>
     </xsd:sequence>
+    <!-- todo: only use in certain situations -->
+    <xsd:attribute name="idref" type="xsd:string" use="optional"/>
     <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
   </xsd:complexType>
 
@@ -2818,13 +2819,6 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-      <xsd:element name="RandomOrderControl" type="xsd:boolean" minOccurs="0">
-        <xsd:annotation>
-          <xsd:documentation>
-            Non-broken sequences of course controls having RandomOrderControl set to true can be visited in an arbitrary order.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:element>
       <xsd:element name="Score" type="xsd:double" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation>
@@ -2854,7 +2848,14 @@
         </xsd:restriction>
       </xsd:simpleType>
     </xsd:attribute>
-    <xsd:attribute name="specialInstruction" default="None">
+    <xsd:attribute name="randomOrder" type="xsd:boolean" use="optional" default="false">
+      <xsd:annotation>
+        <xsd:documentation>
+          Non-broken sequences of course controls having randomOrder set to true can be visited in an arbitrary order.
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="specialInstruction" use="optional" default="None">
       <xsd:annotation>
         <xsd:documentation>
           Any special instruction applied at the control, see http://orienteering.org/wp-content/uploads/2010/12/Control-Descriptions-2004-symbols-only.pdf, page 15.

@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+  Course information for an event.
+  To make the document more compact, Control elements are placed in the References element at the end of the file, 
+  and such elements occurring elsewhere are just holding a reference to these elements using the idref attribute.
+-->
+<CourseData xmlns="http://www.orienteering.org/datastandard/3.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            iofVersion="3.0"
+            createTime="2011-07-20T12:16:31+01:00"
+            creator="Example Software">
+  <Event>
+    <Name>Example event</Name>
+  </Event>
+
+  <CourseClassData>
+    <!-- a course group is a container for a number of courses -->
+    <!-- if a class uses multiple courses, place all these courses inside the same course group -->
+    <!-- if a class uses a single course, the course group will contain only this course  -->
+    <CourseGroup>
+      <Name>Open</Name>
+      <!-- defines a course -->
+      <Course>
+        <Name>Open A</Name>
+        <!-- course length in meters -->
+        <Length>1770</Length>
+        <!-- course climb in meters -->
+        <Climb>45</Climb>
+        <!-- ordered sequence of controls, including start and finish -->
+        <CourseControl type="Start">
+          <Control idref="S"/>
+          <!-- for the start, LegLength is the length in meters from the time start to the start flag -->
+          <LegLength>50</LegLength>
+        </CourseControl>
+        <CourseControl type="Control">
+          <Control idref="31"/>
+          <!-- the text printed next to the control circle, usually the control number -->
+          <MapText>1</MapText>
+          <!-- the center of the text relative to the center of the control circle -->
+          <MapTextPosition unit="mm" x="-15" y="8"/>
+          <!-- the length in meters from the previous control to this control -->
+          <LegLength>410</LegLength>
+        </CourseControl>
+        <CourseControl type="Control">
+          <Control idref="32"/>
+          <MapText>2</MapText>
+          <MapTextPosition unit="mm" x="11" y="-14"/>
+          <LegLength>360</LegLength>
+        </CourseControl>
+        <CourseControl type="Control">
+          <Control idref="100"/>
+          <MapText>3</MapText>
+          <MapTextPosition unit="mm" x="-12" y="12"/>
+          <LegLength>800</LegLength>
+        </CourseControl>
+        <CourseControl type="Finish" >
+          <Control idref="F"/>
+          <LegLength>150</LegLength>
+        </CourseControl>
+      </Course>
+      <Course>
+        <Name>Open B</Name>
+        <Length>1770</Length>
+        <Climb>45</Climb>
+        <CourseControl type="Start">
+          <Control idref="S"/>
+          <LegLength>50</LegLength>
+        </CourseControl>
+        <CourseControl type="Control">
+          <Control idref="31"/>
+          <MapText>1</MapText>
+          <MapTextPosition unit="mm" x="-15" y="8"/>
+          <LegLength>410</LegLength>
+        </CourseControl>
+        <CourseControl type="Control">
+          <Control idref="33"/>
+          <MapText>2</MapText>
+          <MapTextPosition unit="mm" x="11" y="-14"/>
+          <LegLength>360</LegLength>
+        </CourseControl>
+        <CourseControl type="Control">
+          <Control idref="100"/>
+          <MapText>3</MapText>
+          <MapTextPosition unit="mm" x="-12" y="12"/>
+          <LegLength>800</LegLength>
+        </CourseControl>
+        <CourseControl type="Finish" >
+          <Control idref="F"/>
+          <LegLength>150</LegLength>
+        </CourseControl>
+      </Course>    
+    </CourseGroup>
+    <!-- the class(es) using the course(s) in the course group -->
+    <Class>
+      <Id>1</Id>
+      <Name>Men Open</Name>
+    </Class>
+    <Class>
+      <Id>2</Id>
+      <Name>Women Open</Name>
+    </Class>
+  </CourseClassData>
+
+  <References>
+    <!-- all controls are listed here -->
+    <!-- use the control code as id for normal controls, and for example 'S' and 'F' for start and finish -->
+    <Control>
+      <Id>S</Id>
+    </Control>
+    <Control>
+      <Id>31</Id>
+    </Control>
+    <Control>
+      <Id>32</Id>
+    </Control>
+    <Control>
+      <Id>33</Id>
+    </Control>
+    <Control>
+      <Id>34</Id>
+    </Control>
+    <Control>
+      <Id>35</Id>
+    </Control>
+    <Control>
+      <Id>100</Id>
+    </Control>
+    <Control>
+      <Id>F</Id>
+    </Control>
+  </References>
+
+</CourseData>
