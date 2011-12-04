@@ -949,7 +949,13 @@
       </xsd:documentation>
     </xsd:annotation>
     <xsd:sequence>
-      <xsd:element name="Id" type="Id" minOccurs="0"/>
+      <xsd:element name="EventRaceNumber" type="Id" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            The ordinal number of the race in the multi-race event, starting at 1.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
       <xsd:element name="Name" type="xsd:string" minOccurs="0"/>
       <xsd:element name="StartTime" type="DateAndOptionalTime" minOccurs="0">
         <xsd:annotation>
@@ -2791,10 +2797,10 @@
       </xsd:documentation>
     </xsd:annotation>
     <xsd:sequence>
-      <xsd:element name="Control" type="Control">
+      <xsd:element name="Control" type="Control" minOccurs="1" maxOccurs="unbounded">
         <xsd:annotation>
           <xsd:documentation>
-            The control, without course-specific information.
+            The control(s), without course-specific information. Specifying multiple controls means that the competitor is required to punch one of the controls, but not all of them.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
