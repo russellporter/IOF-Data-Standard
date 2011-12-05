@@ -56,7 +56,7 @@
         <Position>1</Position>
         <Status>OK</Status>
       </Result>
-      
+
       <PersonResult>
         <Person>
           <Id>3</Id>
@@ -96,6 +96,19 @@
           <ControlCode>100</ControlCode>
           <Time>1386</Time>
         </SplitTime>
+        <!-- competitor fees defined on general level; for example entry fees -->
+        <AssignedFee>
+          <Fee idref="1"/>
+        </AssignedFee>
+        <!-- ordered services and fees related to these; for example rental card fee -->
+        <!-- this competitor has requested a rental card -->
+        <ServiceRequest>
+          <Service idref="1"/>
+          <Quantity>1</Quantity>
+          <AssignedFee>
+            <Fee idref="4"/>
+          </AssignedFee>
+        </ServiceRequest>
       </PersonResult>
       
       <PersonResult>
@@ -131,6 +144,10 @@
           <ControlCode>100</ControlCode>
           <Time>1188</Time>
         </SplitTime>
+        <!-- this fee is specified on competitor level -->
+        <AssignedFee>
+          <Fee idref="2"/>
+        </AssignedFee>
       </PersonResult>
 
       <PersonResult>
@@ -165,6 +182,9 @@
           <ControlCode>100</ControlCode>
           <Time>1322</Time>
         </SplitTime>
+        <AssignedFee>
+          <Fee idref="1"/>
+        </AssignedFee>
       </PersonResult>
 
       <PersonResult>
@@ -199,6 +219,9 @@
           <ControlCode>100</ControlCode>
           <Time>2050</Time>
         </SplitTime>
+        <AssignedFee>
+          <Fee idref="2"/>
+        </AssignedFee>
       </PersonResult>
 
       <PersonResult>
@@ -232,7 +255,15 @@
           <ControlCode>100</ControlCode>
           <Time>1025</Time>
         </SplitTime>
+        <AssignedFee>
+          <Fee idref="1"/>
+        </AssignedFee>
       </PersonResult>
+
+      <!-- this fee is specified on team level -->
+      <AssignedFee>
+        <Fee idref="3"/>
+      </AssignedFee>
     </TeamResult>
 
     <!-- an example of a team where the team members represent different clubs, known as a combination team -->
@@ -294,6 +325,9 @@
           <ControlCode>100</ControlCode>
           <Time>1390</Time>
         </SplitTime>
+        <AssignedFee>
+          <Fee idref="2"/>
+        </AssignedFee>
       </PersonResult>
 
       <PersonResult>
@@ -329,6 +363,9 @@
           <ControlCode>100</ControlCode>
           <Time>1194</Time>
         </SplitTime>
+        <AssignedFee>
+          <Fee idref="1"/>
+        </AssignedFee>
       </PersonResult>
 
       <PersonResult>
@@ -364,6 +401,9 @@
           <Time>1149</Time>
         </SplitTime>
       </PersonResult>
+      <AssignedFee>
+        <Fee idref="2"/>
+      </AssignedFee>
     </TeamResult>    
   </ClassResult>
 
@@ -404,6 +444,33 @@
       <Name>C</Name>
       <Length>3800</Length>
     </Course>
+
+    <Service>
+      <Id>1</Id>
+      <Name>Rental card</Name>
+      <Fee idref="4"/>
+    </Service>
+    
+    <Fee>
+      <Id>1</Id>
+      <Name>Adult competitor fee</Name>
+      <Amount currency="EUR">10</Amount>
+    </Fee>
+    <Fee>
+      <Id>2</Id>
+      <Name>Youth competitor fee</Name>
+      <Amount currency="EUR">5</Amount>
+    </Fee>
+    <Fee>
+      <Id>3</Id>
+      <Name>Team late entry fee</Name>
+      <Amount currency="EUR">15</Amount>
+    </Fee>
+    <Fee>
+      <Id>4</Id>
+      <Name>Rental card fee</Name>
+      <Amount currency="EUR">2</Amount>
+    </Fee>
 
   </References>
 </ResultList>

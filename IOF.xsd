@@ -2945,7 +2945,7 @@
   <xsd:complexType name="Service">
     <xsd:annotation>
       <xsd:documentation>
-        Defines a general purpose service request, e.g. for accomodation.
+        Defines a general purpose service request, e.g. for rental card or accomodation.
       </xsd:documentation>
     </xsd:annotation>
     <xsd:sequence>
@@ -2993,6 +2993,8 @@
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
+    <!-- todo: only use in certain situations -->
+    <xsd:attribute name="idref" type="xsd:string" use="optional"/>
     <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
   </xsd:complexType>
   
@@ -3181,13 +3183,17 @@
         Defines a text that is given in a particular language.
       </xsd:documentation>
     </xsd:annotation>
-    <xsd:attribute name="language" type="xsd:string" use="optional">
-      <xsd:annotation>
-        <xsd:documentation>
-          The ISO 639-1 two-letter code of the language as stated in http://www.loc.gov/standards/iso639-2/php/code_list.php.
-        </xsd:documentation>
-      </xsd:annotation>
-    </xsd:attribute>
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="language" type="xsd:string" use="optional">
+          <xsd:annotation>
+            <xsd:documentation>
+              The ISO 639-1 two-letter code of the language as stated in http://www.loc.gov/standards/iso639-2/php/code_list.php.
+            </xsd:documentation>
+          </xsd:annotation>
+        </xsd:attribute>
+      </xsd:extension>
+    </xsd:simpleContent>
   </xsd:complexType>
 
   <xsd:complexType name="Extensions">
