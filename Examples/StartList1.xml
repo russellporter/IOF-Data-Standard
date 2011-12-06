@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- 
   Start list for an individual event.
   To make the document more compact, all Organisation, Class and Course elements are placed in the References element at the end of the file, 
@@ -83,17 +83,17 @@
     <Organisation>
       <Id>2</Id>
       <Name>Bushmen OC</Name>
-      <Country code="UK">Great Britain</Country>
+      <Country code="GB">Great Britain</Country>
     </Organisation>
     <Organisation>
       <Id>5</Id>
       <Name>OC Back and Forth</Name>
-      <Country code="UK">Great Britain</Country>
+      <Country code="GB">Great Britain</Country>
     </Organisation>
     <Organisation>
       <Id>6</Id>
       <Name>Doubtful Direction</Name>
-      <Country code="UK">Great Britain</Country>
+      <Country code="GB">Great Britain</Country>
     </Organisation>
 
     <Class>

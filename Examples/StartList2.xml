@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- 
   Start list for a relay event containing one class with three legs. The second leg may be run by one to three 
   competitors per team, of which the fastest one exchanges to the third leg competitor. 
@@ -164,17 +164,17 @@
     <Organisation>
       <Id>1</Id>
       <Name>Super Fast Orienteers</Name>
-      <Country code="UK">Great Britain</Country>
+      <Country code="GB">Great Britain</Country>
     </Organisation>
     <Organisation>
       <Id>3</Id>
       <Name>Unintentional Navigators</Name>
-      <Country code="UK">Great Britain</Country>
+      <Country code="GB">Great Britain</Country>
     </Organisation>
     <Organisation>
       <Id>4</Id>
       <Name>Forest Vagabonds</Name>
-      <Country code="UK">Great Britain</Country>
+      <Country code="GB">Great Britain</Country>
     </Organisation>
 
     <Class>

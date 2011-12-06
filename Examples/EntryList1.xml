@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- 
   Entry list for an individual event, containing competitors and the classes entered.
   To make the document more compact, all Organisation and Class elements are placed in the References element at the end of the file, 
@@ -65,12 +65,12 @@
     <Organisation>
       <Id>2</Id>
       <Name>Bushmen OC</Name>
-      <Country code="UK">Great Britain</Country>
+      <Country code="GB">Great Britain</Country>
     </Organisation>
     <Organisation>
       <Id>5</Id>
       <Name>OC Back and Forth</Name>
-      <Country code="UK">Great Britain</Country>
+      <Country code="GB">Great Britain</Country>
     </Organisation>
     <!-- classes -->
     <Class>
