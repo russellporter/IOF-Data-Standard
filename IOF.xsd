@@ -1243,6 +1243,38 @@
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
+    <xsd:attribute name="resultListMode" use="optional" default="Default">
+      <xsd:annotation>
+        <xsd:documentation>
+          Defines the kind of information to include in the result list, and how to sort it. For example, the result list of a beginner's class may include just "finished" or "did not finish" instead of the actual times.
+        </xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:NMTOKEN">
+          <xsd:enumeration value="Default">
+            <xsd:annotation>
+              <xsd:documentation>
+                The result list should include place and time for each competitor, and be ordered by place.
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="Unordered">
+            <xsd:annotation>
+              <xsd:documentation>
+                The result list should include place and time for each competitor, but be unordered with respect to times (e.g. sorted by competitor name).
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+          <xsd:enumeration value="UnorderedNoTimes">
+            <xsd:annotation>
+              <xsd:documentation>
+                The result list should not include any places and times, and be unordered with respect to times (e.g. sorted by competitor name).
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:enumeration>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
     <!-- todo: only use in certain situations -->
     <xsd:attribute name="idref" type="xsd:string" use="optional"/>
     <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
@@ -2285,7 +2317,7 @@
       <xsd:enumeration value="Finished">
         <xsd:annotation>
           <xsd:documentation>
-            Has not yet started.
+            Finished but not yet validated.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:enumeration>
@@ -2334,7 +2366,7 @@
       <xsd:enumeration value="SportingWithdrawal">
         <xsd:annotation>
           <xsd:documentation>
-            Sporting Withdrawal (e.g. helping an injured competitor).
+            Sporting withdrawal (e.g. helping an injured competitor).
           </xsd:documentation>
         </xsd:annotation>
       </xsd:enumeration>
@@ -2529,7 +2561,7 @@
       </xsd:documentation>
     </xsd:annotation>
     <xsd:sequence>
-      <xsd:element name="Id" type="xsd:string" minOccurs="0">
+      <xsd:element name="Id" type="Id" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation>
             The code of the control.
