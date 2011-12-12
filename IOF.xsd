@@ -721,7 +721,7 @@
     </xsd:annotation>
     <xsd:simpleContent>
       <xsd:extension base="xsd:double">
-        <xsd:attribute name="type" use="required" type="xsd:string"/>
+        <xsd:attribute name="type" use="optional" type="xsd:string"/>
       </xsd:extension>
     </xsd:simpleContent>
   </xsd:complexType>
