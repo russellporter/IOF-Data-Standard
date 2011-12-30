@@ -44,7 +44,7 @@
 
   <!-- ROOT ELEMENTS -->
 
-  <!-- Usage: To exchange persons in an orienteering context: including default class (optionally as refid), punching card numbers, club memberships (optionally as refid), ranking scores etc. Person info contains id, first name, last name, gender, date of birth. -->
+  <!-- Usage: To exchange persons in an orienteering context: including club memberships (optionally as refid), punching card numbers, default classes (optionally as refid), ranking scores etc. Person info contains id, first name, last name, gender, date of birth. -->
   <xsd:element name="CompetitorList">
     <xsd:annotation>
       <xsd:documentation>
@@ -65,6 +65,7 @@
                 </xsd:annotation>
                 <xsd:sequence>
                   <xsd:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
+                  <xsd:element name="Class" type="Class" minOccurs="0" maxOccurs="unbounded"/>
                 </xsd:sequence>
               </xsd:complexType>
             </xsd:element>
@@ -675,6 +676,13 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
+      <xsd:element name="Class" type="Class" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            The default classes of the competitor.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
       <xsd:element name="Score" type="Score" minOccurs="0" maxOccurs="unbounded">
         <xsd:annotation>
           <xsd:documentation>
@@ -1156,17 +1164,17 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
+      <xsd:element name="ClassType" type="ClassType" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            The class type(s) for the class.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
       <xsd:element name="Leg" type="Leg" minOccurs="0" maxOccurs="unbounded">
         <xsd:annotation>
           <xsd:documentation>
             Information about the legs, if the class is a relay class.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:element>
-      <xsd:element name="PunchingSystem" type="xsd:string" minOccurs="0">
-        <xsd:annotation>
-          <xsd:documentation>
-            The punching system used for the class.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
@@ -1181,6 +1189,20 @@
         <xsd:annotation>
           <xsd:documentation>
             Race-specific information for the class, e.g. course(s) assigned to the class.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="TooFewEntriesSubstituteClass" type="Class" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            The class that competitors in this class should be transferred to if there are too few entries in this class.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="TooManyEntriesSubstituteClass" type="Class" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            The class that competitors that are not qualified (e.g. due to too low ranking) should be transferred to if there are too many entries in this class.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
@@ -1280,6 +1302,24 @@
     <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
   </xsd:complexType>
 
+  <xsd:complexType name="ClassType">
+    <xsd:annotation>
+      <xsd:documentation>
+        Defines a class type, which is used to group classes in categories.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Id" type="Id" minOccurs="0"/>
+      <xsd:element name="Name" type="xsd:string" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            The name of the class type.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
   <xsd:simpleType name="EventClassStatus">
     <xsd:annotation>
       <xsd:documentation>
@@ -1322,6 +1362,13 @@
         <xsd:annotation>
           <xsd:documentation>
             The event race that the information applies to.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="PunchingSystem" type="xsd:string" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            The punching system used for the class at the event race.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
@@ -1416,6 +1463,13 @@
         </xsd:annotation>
       </xsd:element>
     </xsd:sequence>
+    <xsd:attribute name="taxable" type="xsd:boolean" use="optional" default="true">
+      <xsd:annotation>
+        <xsd:documentation>
+          Defines whether the fee should be considered when calculating taxes for an event.
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
     <!-- todo: only use in certain situations -->
     <xsd:attribute name="idref" type="xsd:string" use="optional"/>
     <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
@@ -1488,7 +1542,7 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-      <xsd:element name="ControlCard" type="ControlCard" minOccurs="0" maxOccurs="unbounded">
+      <xsd:element name="ControlCard" type="ControlCard" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation>
             Information about the control card (punching card) that the person uses at the event.
@@ -1666,7 +1720,7 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-      <xsd:element name="ControlCard" type="ControlCard" minOccurs="0" maxOccurs="unbounded">
+      <xsd:element name="ControlCard" type="ControlCard" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation>
             Information about the control card (punching card) that the person uses at the event.
@@ -1684,20 +1738,6 @@
         <xsd:annotation>
           <xsd:documentation>
             The fees that this particular person has to pay when entering the event. Fees assigned to the team as a whole should be defined in the TeamEntry element.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:element>
-      <xsd:element name="StartTimeAllocationRequest" type="StartTimeAllocationRequest" minOccurs="0">
-        <xsd:annotation>
-          <xsd:documentation>
-            Any special preferences regarding start time that has to be taken into consideration when making the start list draw.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:element>
-      <xsd:element name="EntryTime" type="xsd:dateTime" minOccurs="0">
-        <xsd:annotation>
-          <xsd:documentation>
-            The time when the entry was first submitted.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
@@ -3010,6 +3050,13 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
+      <xsd:element name="RequestedNumber" type="xsd:double" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            The number of instances of this service that has been requested.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
       <xsd:element name="Extensions" type="Extensions" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation>
@@ -3095,10 +3142,17 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-      <xsd:element name="Quantity" type="xsd:double">
+      <xsd:element name="RequestedQuantity" type="xsd:double">
         <xsd:annotation>
           <xsd:documentation>
-            The quantity (number of units) of the service that is requested.
+            The quantity (number of instances) of the service that is requested.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="DelivieredQuantity" type="xsd:double">
+        <xsd:annotation>
+          <xsd:documentation>
+            The quantity (number of instances) of the service that has been delivered. Can differ from RequestedQuantity when the available number of instances of a service is limited.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
@@ -3173,6 +3227,7 @@
           <xsd:simpleType>
             <xsd:restriction base="xsd:NMTOKEN">
               <xsd:enumeration value="PhoneNumber"/>
+              <xsd:enumeration value="MobilePhoneNumber"/>
               <xsd:enumeration value="FaxNumber"/>
               <xsd:enumeration value="EmailAddress"/>
               <xsd:enumeration value="WebAddress"/>
