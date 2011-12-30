@@ -133,7 +133,6 @@
   </xsd:element>
 
   <!-- Usage: To exchange base class lists between systems. -->
-  <!-- TODO: do we really need this element? -->
   <xsd:element name="ClassList">
     <xsd:annotation>
       <xsd:documentation>
@@ -145,6 +144,18 @@
         <xsd:extension base="BaseElement">
           <xsd:sequence>
             <xsd:element name="Class" type="Class" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="References" minOccurs="0">
+              <xsd:complexType>
+                <xsd:annotation>
+                  <xsd:documentation>
+                    Elements that are referenced by idref attributes in the entry list.
+                  </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                  <xsd:element name="ClassType" type="ClassType" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
             <xsd:element name="Extensions" type="Extensions" minOccurs="0">
               <xsd:annotation>
                 <xsd:documentation>
@@ -1316,6 +1327,9 @@
         </xsd:annotation>
       </xsd:element>
     </xsd:sequence>
+    <!-- todo: only use in certain situations -->
+    <xsd:attribute name="idref" type="xsd:string" use="optional"/>
+    <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
   </xsd:complexType>
 
   <xsd:simpleType name="EventClassStatus">
@@ -1425,6 +1439,13 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
+      <xsd:element name="TaxableAmount" type="Amount" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            The fee amount that is taxable, i.e. considered when calculating taxes for an event.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
       <xsd:element name="ValidFromTime" type="xsd:dateTime" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation>
@@ -1461,13 +1482,6 @@
         </xsd:annotation>
       </xsd:element>
     </xsd:sequence>
-    <xsd:attribute name="taxable" type="xsd:boolean" use="optional" default="true">
-      <xsd:annotation>
-        <xsd:documentation>
-          Defines whether the fee should be considered when calculating taxes for an event.
-        </xsd:documentation>
-      </xsd:annotation>
-    </xsd:attribute>
     <!-- todo: only use in certain situations -->
     <xsd:attribute name="idref" type="xsd:string" use="optional"/>
     <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
@@ -3147,10 +3161,17 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-      <xsd:element name="DelivieredQuantity" type="xsd:double">
+      <xsd:element name="DeliveredQuantity" type="xsd:double" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation>
             The quantity (number of instances) of the service that has been delivered. Can differ from RequestedQuantity when the available number of instances of a service is limited.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Comment" type="xsd:string" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            Any extra information or comment attached to the service request.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>

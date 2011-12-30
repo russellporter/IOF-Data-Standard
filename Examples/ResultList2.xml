@@ -104,7 +104,7 @@
         <!-- this competitor has requested a rental card -->
         <ServiceRequest>
           <Service idref="1"/>
-          <Quantity>1</Quantity>
+          <RequestedQuantity>1</RequestedQuantity>
           <AssignedFee>
             <Fee idref="4"/>
           </AssignedFee>
@@ -455,11 +455,13 @@
       <Id>1</Id>
       <Name>Adult competitor fee</Name>
       <Amount currency="EUR">10</Amount>
+      <TaxableAmount currency="EUR">8</TaxableAmount>
     </Fee>
     <Fee>
       <Id>2</Id>
       <Name>Youth competitor fee</Name>
       <Amount currency="EUR">5</Amount>
+      <TaxableAmount currency="EUR">4</TaxableAmount>
     </Fee>
     <Fee>
       <Id>3</Id>
