@@ -771,13 +771,6 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-      <xsd:element name="ChildOrganisation" type="Organisation" minOccurs="0" maxOccurs="unbounded">
-        <xsd:annotation>
-          <xsd:documentation>
-            The children of this organisation, e.g. a number of clubs for a regional organisation.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:element>
       <xsd:element name="Country" type="Country" minOccurs="0"/>
       <xsd:element name="Address" type="Address" minOccurs="0" maxOccurs="unbounded"/>
       <xsd:element name="Contact" type="Contact" minOccurs="0" maxOccurs="unbounded"/>
@@ -894,8 +887,13 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-      <!-- TODO: is account information really necessary? -->
-      <xsd:element name="Account" type="Account" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Account" type="Account" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation>
+            The bank account for the event.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
       <xsd:element name="URL" type="EventURL" minOccurs="0" maxOccurs="unbounded">
         <xsd:annotation>
           <xsd:documentation>
@@ -3174,9 +3172,23 @@
     <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
   </xsd:complexType>
 
-  <!-- TODO: is Account really needed? -->
   <xsd:complexType name="Account" mixed="false">
-    <xsd:attribute name="type" type="xsd:string"/>
+    <xsd:annotation>
+      <xsd:documentation>
+        The bank account of an organisation or an event. 
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="type" type="xsd:string" use="optional">
+          <xsd:annotation>
+            <xsd:documentation>
+              The account type.
+            </xsd:documentation>
+          </xsd:annotation>
+        </xsd:attribute>
+      </xsd:extension>
+    </xsd:simpleContent>
   </xsd:complexType>
 
   <xsd:complexType name="Address">

@@ -44,6 +44,9 @@
     <!-- specify punching system using the 'punchingSystem' attribute -->
     <ControlCard punchingSystem="SI">12345</ControlCard>
     <ControlCard punchingSystem="Emit">67890</ControlCard>
+    <!-- the default class(es) for the competitor in priority order, used to automatically suggest a class in an event -->
+    <Class idref="3"/>
+    <Class idref="4"/>
   </Competitor>
 
   <Competitor>
@@ -58,6 +61,7 @@
     </Person>
     <Organisation idref="1"/>
     <ControlCard punchingSystem="SI">54345</ControlCard>
+    <Class idref="2"/>
   </Competitor>
 
   <Competitor>
@@ -75,6 +79,7 @@
     <Organisation idref="3"/>
     <ControlCard punchingSystem="SI">99999</ControlCard>
     <ControlCard punchingSystem="Emit">88888</ControlCard>
+    <Class idref="3"/>
   </Competitor>
 
   <Competitor>
@@ -87,12 +92,13 @@
       <BirthDate>1966-06-13</BirthDate>
       <Nationality code="GB">Great Britain</Nationality>
     </Person>
-    <!-- this person is not member of any organisation and owns no control cards, so Organisation and ControlCard elements are omitted -->
+    <!-- this person is not member of any organisation, owns no control cards and has no default classes defined, -->
+    <!-- so Organisation, ControlCard and Class elements are omitted -->
   </Competitor>
 
   <References>
     <Organisation>
-      <!-- an identifier that is known by all parts involved in the data exchange, for example a federation competitor database identifier -->
+      <!-- an identifier that is known by all parts involved in the data exchange, for example a federation database identifier -->
       <Id>1</Id>
       <Name>Super Fast Orienteers</Name>
       <Country code="GB">Great Britain</Country>
@@ -107,5 +113,22 @@
       <Name>Unintentional Navigators</Name>
       <Country code="GB">Great Britain</Country>
     </Organisation>
+    <Class>
+      <!-- an identifier that is known by all parts involved in the data exchange, for example a federation database identifier -->
+      <Id>1</Id>
+      <Name>Men Elite</Name>
+    </Class>
+    <Class>
+      <Id>2</Id>
+      <Name>Women Elite</Name>
+    </Class>
+    <Class>
+      <Id>3</Id>
+      <Name>Men Open</Name>
+    </Class>
+    <Class>
+      <Id>4</Id>
+      <Name>Women Open</Name>
+    </Class>
   </References>
 </CompetitorList>
