@@ -715,7 +715,7 @@
   <xsd:complexType name="ControlCard">
     <xsd:annotation>
       <xsd:documentation>
-        The unique identifier of the control card, i.e. 'card number'.
+        The unique identifier of the control card, i.e. card number.
       </xsd:documentation>
     </xsd:annotation>
     <xsd:simpleContent>
@@ -2014,7 +2014,7 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
-      <xsd:element name="ControlCard" minOccurs="0">
+      <xsd:element name="ControlCard" type="ControlCard" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation>
             Defines the control card assigned to the person.
@@ -2225,6 +2225,13 @@
         <xsd:annotation>
           <xsd:documentation>
             Defines the answer for a trail-O control.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ControlCard" type="ControlCard" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            Defines the control card assigned to the person.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
