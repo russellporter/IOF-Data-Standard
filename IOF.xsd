@@ -56,19 +56,6 @@
         <xsd:extension base="BaseElement">
           <xsd:sequence>
             <xsd:element name="Competitor" type="Competitor" minOccurs="0" maxOccurs="unbounded"/>
-            <xsd:element name="References" minOccurs="0">
-              <xsd:complexType>
-                <xsd:annotation>
-                  <xsd:documentation>
-                    Elements that are referenced by idref attributes in the competitor list.
-                  </xsd:documentation>
-                </xsd:annotation>
-                <xsd:sequence>
-                  <xsd:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
-                  <xsd:element name="Class" type="Class" minOccurs="0" maxOccurs="unbounded"/>
-                </xsd:sequence>
-              </xsd:complexType>
-            </xsd:element>
             <xsd:element name="Extensions" type="Extensions" minOccurs="0">
               <xsd:annotation>
                 <xsd:documentation>
@@ -144,18 +131,6 @@
         <xsd:extension base="BaseElement">
           <xsd:sequence>
             <xsd:element name="Class" type="Class" minOccurs="0" maxOccurs="unbounded"/>
-            <xsd:element name="References" minOccurs="0">
-              <xsd:complexType>
-                <xsd:annotation>
-                  <xsd:documentation>
-                    Elements that are referenced by idref attributes in the entry list.
-                  </xsd:documentation>
-                </xsd:annotation>
-                <xsd:sequence>
-                  <xsd:element name="ClassType" type="ClassType" minOccurs="0" maxOccurs="unbounded"/>
-                </xsd:sequence>
-              </xsd:complexType>
-            </xsd:element>
             <xsd:element name="Extensions" type="Extensions" minOccurs="0">
               <xsd:annotation>
                 <xsd:documentation>
@@ -208,23 +183,6 @@
                 </xsd:documentation>
               </xsd:annotation>
             </xsd:element>
-            <xsd:element name="References" minOccurs="0">
-              <xsd:complexType>
-                <xsd:annotation>
-                  <xsd:documentation>
-                    Elements that are referenced by idref attributes in the entry list.
-                  </xsd:documentation>
-                </xsd:annotation>
-                <xsd:sequence>
-                  <xsd:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
-                  <xsd:element name="Class" type="Class" minOccurs="0" maxOccurs="unbounded"/>
-                  <xsd:element name="Course" type="Course" minOccurs="0" maxOccurs="unbounded"/>
-                  <xsd:element name="Control" type="Control" minOccurs="0" maxOccurs="unbounded"/>
-                  <xsd:element name="Service" type="Service" minOccurs="0" maxOccurs="unbounded"/>
-                  <xsd:element name="Fee" type="Fee" minOccurs="0" maxOccurs="unbounded"/>
-                </xsd:sequence>
-              </xsd:complexType>
-            </xsd:element>
             <xsd:element name="Extensions" type="Extensions" minOccurs="0">
               <xsd:annotation>
                 <xsd:documentation>
@@ -265,19 +223,6 @@
                   The assignment of courses to relay teams.
                 </xsd:documentation>
               </xsd:annotation>
-            </xsd:element>
-            <xsd:element name="References" minOccurs="0">
-              <xsd:complexType>
-                <xsd:annotation>
-                  <xsd:documentation>
-                    Elements that are referenced by idref attributes in the CourseClassData element.
-                  </xsd:documentation>
-                </xsd:annotation>
-                <xsd:sequence>
-                  <xsd:element name="Course" type="Course" minOccurs="0" maxOccurs="unbounded"/>
-                  <xsd:element name="Control" type="Control" minOccurs="0" maxOccurs="unbounded"/>
-                </xsd:sequence>
-              </xsd:complexType>
             </xsd:element>
             <xsd:element name="Extensions" type="Extensions" minOccurs="0">
               <xsd:annotation>
@@ -324,23 +269,6 @@
                 </xsd:documentation>
               </xsd:annotation>
             </xsd:element>
-            <xsd:element name="References" minOccurs="0">
-              <xsd:complexType>
-                <xsd:annotation>
-                  <xsd:documentation>
-                    Elements that are referenced by idref attributes in the start list.
-                  </xsd:documentation>
-                </xsd:annotation>
-                <xsd:sequence>
-                  <xsd:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
-                  <xsd:element name="Class" type="Class" minOccurs="0" maxOccurs="unbounded"/>
-                  <xsd:element name="Course" type="Course" minOccurs="0" maxOccurs="unbounded"/>
-                  <xsd:element name="Control" type="Control" minOccurs="0" maxOccurs="unbounded"/>
-                  <xsd:element name="Service" type="Service" minOccurs="0" maxOccurs="unbounded"/>
-                  <xsd:element name="Fee" type="Fee" minOccurs="0" maxOccurs="unbounded"/>
-                </xsd:sequence>
-              </xsd:complexType>
-            </xsd:element>
             <xsd:element name="Extensions" type="Extensions" minOccurs="0">
               <xsd:annotation>
                 <xsd:documentation>
@@ -385,23 +313,6 @@
                   Result lists for the classes in the event.
                 </xsd:documentation>
               </xsd:annotation>
-            </xsd:element>
-            <xsd:element name="References" minOccurs="0">
-              <xsd:complexType>
-                <xsd:annotation>
-                  <xsd:documentation>
-                    Elements that are referenced by idref attributes in the result list.
-                  </xsd:documentation>
-                </xsd:annotation>
-                <xsd:sequence>
-                  <xsd:element name="Organisation" type="Organisation" minOccurs="0" maxOccurs="unbounded"/>
-                  <xsd:element name="Class" type="Class" minOccurs="0" maxOccurs="unbounded"/>
-                  <xsd:element name="Course" type="Course" minOccurs="0" maxOccurs="unbounded"/>
-                  <xsd:element name="Control" type="Control" minOccurs="0" maxOccurs="unbounded"/>
-                  <xsd:element name="Service" type="Service" minOccurs="0" maxOccurs="unbounded"/>
-                  <xsd:element name="Fee" type="Fee" minOccurs="0" maxOccurs="unbounded"/>
-                </xsd:sequence>
-              </xsd:complexType>
             </xsd:element>
             <xsd:element name="Extensions" type="Extensions" minOccurs="0">
               <xsd:annotation>
@@ -505,18 +416,6 @@
                   Service requests made by persons.
                 </xsd:documentation>
               </xsd:annotation>
-            </xsd:element>
-            <xsd:element name="References" minOccurs="0">
-              <xsd:complexType>
-                <xsd:annotation>
-                  <xsd:documentation>
-                    Elements that are referenced by idref attributes in the service request list.
-                  </xsd:documentation>
-                </xsd:annotation>
-                <xsd:sequence>
-                  <xsd:element name="Fee" type="Fee" minOccurs="0" maxOccurs="unbounded"/>
-                </xsd:sequence>
-              </xsd:complexType>
             </xsd:element>
             <xsd:element name="Extensions" type="Extensions" minOccurs="0">
               <xsd:annotation>
@@ -801,8 +700,6 @@
         </xsd:annotation>
       </xsd:element>
     </xsd:sequence>
-    <!-- todo: only use in certain situations -->
-    <xsd:attribute name="idref" type="xsd:string" use="optional"/>
     <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
   </xsd:complexType>
 
@@ -1306,8 +1203,6 @@
         </xsd:restriction>
       </xsd:simpleType>
     </xsd:attribute>
-    <!-- todo: only use in certain situations -->
-    <xsd:attribute name="idref" type="xsd:string" use="optional"/>
     <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
   </xsd:complexType>
 
@@ -1327,8 +1222,6 @@
         </xsd:annotation>
       </xsd:element>
     </xsd:sequence>
-    <!-- todo: only use in certain situations -->
-    <xsd:attribute name="idref" type="xsd:string" use="optional"/>
     <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
   </xsd:complexType>
 
@@ -1548,8 +1441,6 @@
         </xsd:annotation>
       </xsd:element>
     </xsd:sequence>
-    <!-- todo: only use in certain situations -->
-    <xsd:attribute name="idref" type="xsd:string" use="optional"/>
     <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
   </xsd:complexType>
   
@@ -2228,6 +2119,13 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>
+      <xsd:element name="Route" type="Route" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+            Defines the person's route recorded by a tracking device.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
       <xsd:element name="ControlCard" type="ControlCard" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation>
@@ -2641,6 +2539,46 @@
     </xsd:attribute>
   </xsd:complexType>
 
+  <xsd:complexType name="Route">
+    <xsd:annotation>
+      <xsd:documentation>
+        Defines a route, i.e. a number of geographical positions (waypoints) describing a competitor's navigation throughout a course.
+
+        As routes contain large amounts of information, a compact storage format is utilized to keep the overall file size small. A route is stored as a base64-encoded byte sequence of waypoints. A waypoint is represented as described below. All multi-byte data types are stored in big-endian byte order (most significant byte first). Typically, a one-hour route with one-second waypoint recording interval occupies around 40 kilobytes.
+
+        Each waypoint byte sequence starts with a waypoint header byte:
+        Waypoint header byte, bit 1: Waypoint type. 0 for normal waypoint, 1 for interruption waypoint. An interruption waypoint is a waypoint that is the last waypoint before an interruption in the route occurs, e.g. due to a satellite signal receiving failure. The last waypoint of a route should be a normal waypoint, not an interruption waypoint.
+        Waypoint header byte, bit 2: Time storage mode. 0 for full storage mode (6 bytes) or 1 for delta storage mode (2 bytes). For a description of the storage modes, see below.
+        Waypoint header byte, bit 3: Latitude storage mode. 0 for full storage mode (4 bytes) or 1 for delta storage mode (2 bytes). For a description of the storage modes, see below.
+        Waypoint header byte, bit 4: Longitude storage mode. 0 for full storage mode (4 bytes) or 1 for delta storage mode (2 bytes). For a description of the storage modes, see below.
+        Waypoint header byte, bit 5: Altitude presence. 0 if an altitude value is not present, 1 if it is present.
+        Waypoint header byte, bit 6: Altitude storage mode. 0 for full storage mode (3 bytes) or 1 for delta storage mode (1 byte). For a description of the storage modes, see below. Set to 0 if altitude is not present.
+        Waypoint header byte, bit 7: Unused, always 0.
+        Waypoint header byte, bit 8: Unused, always 0.
+
+        After the waypoint byte comes the time byte sequence. Depending on the time storage mode defined in the waypoint header, the time byte sequence is either 6 bytes (full) or 2 bytes (delta) long.
+        Full storage mode: The following 6 bytes are an unsigned 48-bit integer defining the waypoint's time as the number of milliseconds (1/1000 seconds) since January 1, 1900, 00:00:00 UTC.
+        Delta storage mode: The following 2 bytes are an unsigned 16-bit integer defining the waypoint's time as the number of milliseconds to add to the last waypoint's time.
+        Consequently, delta storage mode is used when the waypoint's time is less than 65.536 seconds later than the last waypoint's time. The time of the first waypoint of a route is always stored in full storage mode.
+
+        Next, the latitude byte sequence appears. Depending on the latitude storage mode defined in the waypoint header, the latitude byte sequence is either 4 bytes (full) or 2 bytes (delta) long.
+        Full storage mode: The following 4 bytes are a signed 32-bit integer defining the waypoint's latitude as microdegrees (1/1000000 degrees) relative to the equator. A negative value implies a latitude south of the equator. A microdegree is approximately equivalent to 0.1 meters.
+        Delta storage mode: The following 2 bytes are a signed 16-bit integer defining the waypoint's latitude as the number of microdegrees to add to the last waypoint's latitude.
+        Consequently, delta storage mode is used when the waypoint's latitude differs less than -0.032768 to 0.032767 degrees from the last waypoint's latitude. The latitude of the first waypoint of a route is always stored in full storage mode.
+
+        Next, the longitude byte sequence appears. It works in analogy with the latitude byte sequence. The longitude is relative to the Greenwich meridian, and a negative value implies a longitude west of the Greenwich meridian. A microdegree is approximately equivalent to 0.1 meters at the equator and infinitely small at the poles.
+
+        If the altitude presence bit in the waypoint header bit is set to 1, the altitude comes next. Depending on the altitude storage mode defined in the waypoint header, the altitude byte sequence is either 3 bytes (full) or 1 byte (delta) long.
+        Full storage mode: The following 3 bytes are a signed 24-bit integer defining the waypoint's altitude as decimeters (1/10 meters) relative to the sea level.
+        Delta storage mode: The following byte is a signed 8-bit integer defining the waypoint's altitude as the number of decimeters to add to the last waypoint's altitude.
+        Consequently, delta storage mode is used when the waypoint's altitude differs less than -12.8 to 12.7 meters from the last waypoint's altitude. The altitude of the first waypoint of a route is always stored in full storage mode.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:base64Binary"/>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
   <xsd:complexType name="Leg">
     <xsd:annotation>
       <xsd:documentation>
@@ -2715,8 +2653,6 @@
         </xsd:annotation>
       </xsd:element>
     </xsd:sequence>
-    <!-- todo: only use in certain situations -->
-    <xsd:attribute name="idref" type="xsd:string" use="optional"/>
     <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
   </xsd:complexType>
 
@@ -2910,8 +2846,6 @@
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <!-- todo: only use in certain situations -->
-    <xsd:attribute name="idref" type="xsd:string" use="optional"/>
     <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
   </xsd:complexType>
 
@@ -3157,8 +3091,6 @@
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    <!-- todo: only use in certain situations -->
-    <xsd:attribute name="idref" type="xsd:string" use="optional"/>
     <xsd:attribute name="modifyTime" type="xsd:dateTime" use="optional"/>
   </xsd:complexType>
   

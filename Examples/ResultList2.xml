@@ -3,8 +3,6 @@
   Result list for a relay event containing one class with three legs, where first and third leg competitors are either 
   assigned course A or B, and second leg competitors are assigned course C. The second leg may be run by one to three 
   competitors per team, of which the fastest one exchanges to the third leg competitor. 
-  To make the document more compact, all Organisation, Class and Course elements are placed in the References element at the end of the file, 
-  and such elements occurring elsewhere are just holding a reference to these elements using the idref attribute.
 -->
 <ResultList xmlns="http://www.orienteering.org/datastandard/3.0"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -18,18 +16,23 @@
       <Date>2011-07-31</Date>
       <Time>10:00:00+01:00</Time>
     </StartTime>
-    <!-- all classes in the event, full information in References element at the end of the file -->
-    <Class idref="1"/>
   </Event>
 
   <ClassResult>
-    <Class idref="1"/>
-    
+    <Class>
+      <Id>1</Id>
+      <Name>Open</Name>
+    </Class>
+
     <TeamResult>
       <!-- the name of the team, usually including an ordinal number if the club has many teams entered to the same class -->
       <Name>Forest Vagabonds 1</Name>
       <!-- if the team consists of competitors representing multiple clubs, use one Organisation element for each club -->
-      <Organisation idref="4"/>
+      <Organisation>
+        <Id>4</Id>
+        <Name>Forest Vagabonds</Name>
+        <Country code="GB">Great Britain</Country>
+      </Organisation>
       <!-- the overall result -->
       <Result>
         <BibNumber>1</BibNumber>
@@ -82,7 +85,11 @@
           <Status>OK</Status>
         </Result>
         <!-- when spreading methods are used, include the course that the runner has been assigned -->
-        <Course idref="1"/>
+        <Course>
+          <Id>1</Id>
+          <Name>A</Name>
+          <Length>4010</Length>
+        </Course>
         <!-- split times may be omitted, but if they are present all controls of the course that is assigned to the competitor must be included in the correct order -->
         <SplitTime>
           <ControlCode>31</ControlCode>
@@ -98,15 +105,32 @@
         </SplitTime>
         <!-- competitor fees defined on general level; for example entry fees -->
         <AssignedFee>
-          <Fee idref="1"/>
+          <Fee>
+            <Id>1</Id>
+            <Name>Adult competitor fee</Name>
+            <Amount currency="EUR">10</Amount>
+            <TaxableAmount currency="EUR">8</TaxableAmount>
+          </Fee>
         </AssignedFee>
         <!-- ordered services and fees related to these; for example rental card fee -->
         <!-- this competitor has requested a rental card -->
         <ServiceRequest>
-          <Service idref="1"/>
+          <Service>
+            <Id>1</Id>
+            <Name>Rental card</Name>
+            <Fee>
+              <Id>4</Id>
+              <Name>Rental card fee</Name>
+              <Amount currency="EUR">2</Amount>
+            </Fee>
+          </Service>
           <RequestedQuantity>1</RequestedQuantity>
           <AssignedFee>
-            <Fee idref="4"/>
+            <Fee>
+              <Id>4</Id>
+              <Name>Rental card fee</Name>
+              <Amount currency="EUR">2</Amount>
+            </Fee>
           </AssignedFee>
         </ServiceRequest>
       </PersonResult>
@@ -131,7 +155,11 @@
           <Position type="Course">1</Position>
           <Status>OK</Status>
         </Result>
-        <Course idref="3"/>
+        <Course>
+          <Id>3</Id>
+          <Name>C</Name>
+          <Length>3800</Length>
+        </Course>
         <SplitTime>
           <ControlCode>44</ControlCode>
           <Time>601</Time>
@@ -146,7 +174,12 @@
         </SplitTime>
         <!-- this fee is specified on competitor level -->
         <AssignedFee>
-          <Fee idref="2"/>
+          <Fee>
+            <Id>2</Id>
+            <Name>Youth competitor fee</Name>
+            <Amount currency="EUR">5</Amount>
+            <TaxableAmount currency="EUR">4</TaxableAmount>
+          </Fee>
         </AssignedFee>
       </PersonResult>
 
@@ -169,7 +202,11 @@
           <Position type="Course">3</Position>
           <Status>OK</Status>
         </Result>
-        <Course idref="3"/>
+        <Course>
+          <Id>3</Id>
+          <Name>C</Name>
+          <Length>3800</Length>
+        </Course>
         <SplitTime>
           <ControlCode>44</ControlCode>
           <Time>635</Time>
@@ -183,7 +220,12 @@
           <Time>1322</Time>
         </SplitTime>
         <AssignedFee>
-          <Fee idref="1"/>
+          <Fee>
+            <Id>1</Id>
+            <Name>Adult competitor fee</Name>
+            <Amount currency="EUR">10</Amount>
+            <TaxableAmount currency="EUR">8</TaxableAmount>
+          </Fee>
         </AssignedFee>
       </PersonResult>
 
@@ -206,7 +248,11 @@
           <Position type="Course">4</Position>
           <Status>OK</Status>
         </Result>
-        <Course idref="3"/>
+        <Course>
+          <Id>3</Id>
+          <Name>C</Name>
+          <Length>3800</Length>
+        </Course>
         <SplitTime>
           <ControlCode>44</ControlCode>
           <Time>1307</Time>
@@ -220,7 +266,12 @@
           <Time>2050</Time>
         </SplitTime>
         <AssignedFee>
-          <Fee idref="2"/>
+          <Fee>
+            <Id>2</Id>
+            <Name>Youth competitor fee</Name>
+            <Amount currency="EUR">5</Amount>
+            <TaxableAmount currency="EUR">4</TaxableAmount>
+          </Fee>
         </AssignedFee>
       </PersonResult>
 
@@ -242,7 +293,11 @@
           <Position type="Course">1</Position>
           <Status>OK</Status>
         </Result>
-        <Course idref="2"/>
+        <Course>
+          <Id>2</Id>
+          <Name>B</Name>
+          <Length>4040</Length>
+        </Course>
         <SplitTime>
           <ControlCode>32</ControlCode>
           <Time>371</Time>
@@ -256,13 +311,22 @@
           <Time>1025</Time>
         </SplitTime>
         <AssignedFee>
-          <Fee idref="1"/>
+          <Fee>
+            <Id>1</Id>
+            <Name>Adult competitor fee</Name>
+            <Amount currency="EUR">10</Amount>
+            <TaxableAmount currency="EUR">8</TaxableAmount>
+          </Fee>
         </AssignedFee>
       </PersonResult>
 
       <!-- this fee is specified on team level -->
       <AssignedFee>
-        <Fee idref="3"/>
+        <Fee>
+          <Id>3</Id>
+          <Name>Team late entry fee</Name>
+          <Amount currency="EUR">15</Amount>
+        </Fee>
       </AssignedFee>
     </TeamResult>
 
@@ -271,8 +335,16 @@
       <!-- all clubs making up the combination team are normally present in the team's name -->
       <Name>Super Fast Orienteers / Unintentional Navigators</Name>
       <!-- one Organisation element for each club -->
-      <Organisation idref="1"/>
-      <Organisation idref="3"/>
+      <Organisation>
+        <Id>1</Id>
+        <Name>Super Fast Orienteers</Name>
+        <Country code="GB">Great Britain</Country>
+      </Organisation>
+      <Organisation>
+        <Id>3</Id>
+        <Name>Unintentional Navigators</Name>
+        <Country code="GB">Great Britain</Country>
+      </Organisation>
       <Result>
         <BibNumber>2</BibNumber>
         <StartTime>2011-07-31T14:00:00+01:00</StartTime>
@@ -301,7 +373,11 @@
           </Name>
         </Person>
         <!-- if a combination team member's club membership is known, it should be expressed by using the Organisation element -->
-        <Organisation idref="1"/>
+        <Organisation>
+          <Id>1</Id>
+          <Name>Super Fast Orienteers</Name>
+          <Country code="GB">Great Britain</Country>
+        </Organisation>
         <Leg>1</Leg>
         <Result>
           <BibNumber>2-1</BibNumber>
@@ -312,7 +388,11 @@
           <Position type="Course">2</Position>
           <Status>OK</Status>
         </Result>
-        <Course idref="2"/>
+        <Course>
+          <Id>2</Id>
+          <Name>B</Name>
+          <Length>4040</Length>
+        </Course>
         <SplitTime>
           <ControlCode>32</ControlCode>
           <Time>447</Time>
@@ -326,7 +406,12 @@
           <Time>1390</Time>
         </SplitTime>
         <AssignedFee>
-          <Fee idref="2"/>
+          <Fee>
+            <Id>2</Id>
+            <Name>Youth competitor fee</Name>
+            <Amount currency="EUR">5</Amount>
+            <TaxableAmount currency="EUR">4</TaxableAmount>
+          </Fee>
         </AssignedFee>
       </PersonResult>
 
@@ -338,7 +423,11 @@
             <Given>Nicole</Given>
           </Name>
         </Person>
-        <Organisation idref="3"/>
+        <Organisation>
+          <Id>3</Id>
+          <Name>Unintentional Navigators</Name>
+          <Country code="GB">Great Britain</Country>
+        </Organisation>
         <Leg>2</Leg>
         <LegOrder>1</LegOrder>
         <Result>
@@ -350,7 +439,11 @@
           <Position type="Course">2</Position>
           <Status>OK</Status>
         </Result>
-        <Course idref="3"/>
+        <Course>
+          <Id>3</Id>
+          <Name>C</Name>
+          <Length>3800</Length>
+        </Course>
         <SplitTime>
           <ControlCode>44</ControlCode>
           <Time>601</Time>
@@ -364,7 +457,12 @@
           <Time>1194</Time>
         </SplitTime>
         <AssignedFee>
-          <Fee idref="1"/>
+          <Fee>
+            <Id>1</Id>
+            <Name>Adult competitor fee</Name>
+            <Amount currency="EUR">10</Amount>
+            <TaxableAmount currency="EUR">8</TaxableAmount>
+          </Fee>
         </AssignedFee>
       </PersonResult>
 
@@ -376,7 +474,11 @@
             <Given>Jim</Given>
           </Name>
         </Person>
-        <Organisation idref="1"/>
+        <Organisation>
+          <Id>1</Id>
+          <Name>Super Fast Orienteers</Name>
+          <Country code="GB">Great Britain</Country>
+        </Organisation>
         <Leg>3</Leg>
         <Result>
           <BibNumber>2-3</BibNumber>
@@ -387,7 +489,11 @@
           <Position type="Course">1</Position>
           <Status>OK</Status>
         </Result>
-        <Course idref="1"/>
+        <Course>
+          <Id>1</Id>
+          <Name>A</Name>
+          <Length>4010</Length>
+        </Course>
         <SplitTime>
           <ControlCode>31</ControlCode>
           <Time>196</Time>
@@ -402,77 +508,13 @@
         </SplitTime>
       </PersonResult>
       <AssignedFee>
-        <Fee idref="2"/>
+        <Fee>
+          <Id>2</Id>
+          <Name>Youth competitor fee</Name>
+          <Amount currency="EUR">5</Amount>
+          <TaxableAmount currency="EUR">4</TaxableAmount>
+        </Fee>
       </AssignedFee>
     </TeamResult>    
   </ClassResult>
-
-  <References>
-    <Organisation>
-      <Id>1</Id>
-      <Name>Super Fast Orienteers</Name>
-      <Country code="GB">Great Britain</Country>
-    </Organisation>
-    <Organisation>
-      <Id>3</Id>
-      <Name>Unintentional Navigators</Name>
-      <Country code="GB">Great Britain</Country>
-    </Organisation>
-    <Organisation>
-      <Id>4</Id>
-      <Name>Forest Vagabonds</Name>
-      <Country code="GB">Great Britain</Country>
-    </Organisation>
-
-    <Class>
-      <Id>1</Id>
-      <Name>Open</Name>
-    </Class>
-
-    <Course>
-      <Id>1</Id>
-      <Name>A</Name>
-      <Length>4010</Length>
-    </Course>
-    <Course>
-      <Id>2</Id>
-      <Name>B</Name>
-      <Length>4040</Length>
-    </Course>
-    <Course>
-      <Id>3</Id>
-      <Name>C</Name>
-      <Length>3800</Length>
-    </Course>
-
-    <Service>
-      <Id>1</Id>
-      <Name>Rental card</Name>
-      <Fee idref="4"/>
-    </Service>
-    
-    <Fee>
-      <Id>1</Id>
-      <Name>Adult competitor fee</Name>
-      <Amount currency="EUR">10</Amount>
-      <TaxableAmount currency="EUR">8</TaxableAmount>
-    </Fee>
-    <Fee>
-      <Id>2</Id>
-      <Name>Youth competitor fee</Name>
-      <Amount currency="EUR">5</Amount>
-      <TaxableAmount currency="EUR">4</TaxableAmount>
-    </Fee>
-    <Fee>
-      <Id>3</Id>
-      <Name>Team late entry fee</Name>
-      <Amount currency="EUR">15</Amount>
-    </Fee>
-    <Fee>
-      <Id>4</Id>
-      <Name>Rental card fee</Name>
-      <Amount currency="EUR">2</Amount>
-    </Fee>
-
-  </References>
 </ResultList>

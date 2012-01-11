@@ -1,8 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!-- 
   List of competitors to be exchanged between for example a competitor database and an event administration software.
-  To make the document more compact, all Organisation elements are placed in the References element at the end of the file, 
-  and such elements occurring elsewhere are just holding a reference to these elements using the idref attribute.
 -->
 <CompetitorList xmlns="http://www.orienteering.org/datastandard/3.0"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -38,15 +36,31 @@
     </Person>
     <!-- the organisations (clubs) that the person is a member of -->
     <!-- if more than one, list in order of preference -->
-    <Organisation idref="3"/>
-    <Organisation idref="2"/>
+    <Organisation>
+      <!-- an identifier that is known by all parts involved in the data exchange, for example a federation database identifier -->
+      <Id>3</Id>
+      <Name>Unintentional Navigators</Name>
+      <Country code="GB">Great Britain</Country>
+    </Organisation>
+    <Organisation>
+      <Id>2</Id>
+      <Name>Bushmen OC</Name>
+      <Country code="GB">Great Britain</Country>
+    </Organisation>
     <!-- the control card(s) that the person owns -->
     <!-- specify punching system using the 'punchingSystem' attribute -->
     <ControlCard punchingSystem="SI">12345</ControlCard>
     <ControlCard punchingSystem="Emit">67890</ControlCard>
     <!-- the default class(es) for the competitor in priority order, used to automatically suggest a class in an event -->
-    <Class idref="3"/>
-    <Class idref="4"/>
+    <Class>
+      <!-- an identifier that is known by all parts involved in the data exchange, for example a federation database identifier -->
+      <Id>3</Id>
+      <Name>Men Open</Name>
+    </Class>
+    <Class>
+      <Id>4</Id>
+      <Name>Women Open</Name>
+    </Class>
   </Competitor>
 
   <Competitor>
@@ -59,9 +73,16 @@
       <BirthDate>1958-01-22</BirthDate>
       <Nationality code="GB">Great Britain</Nationality>
     </Person>
-    <Organisation idref="1"/>
+    <Organisation>
+      <Id>1</Id>
+      <Name>Super Fast Orienteers</Name>
+      <Country code="GB">Great Britain</Country>
+    </Organisation>
     <ControlCard punchingSystem="SI">54345</ControlCard>
-    <Class idref="2"/>
+    <Class>
+      <Id>2</Id>
+      <Name>Women Elite</Name>
+    </Class>
   </Competitor>
 
   <Competitor>
@@ -74,12 +95,27 @@
       <BirthDate>1986-11-12</BirthDate>
       <Nationality code="DE">Germany</Nationality>
     </Person>
-    <Organisation idref="1"/>
-    <Organisation idref="2"/>
-    <Organisation idref="3"/>
+    <Organisation>
+      <Id>1</Id>
+      <Name>Super Fast Orienteers</Name>
+      <Country code="GB">Great Britain</Country>
+    </Organisation>
+    <Organisation>
+      <Id>2</Id>
+      <Name>Bushmen OC</Name>
+      <Country code="GB">Great Britain</Country>
+    </Organisation>
+    <Organisation>
+      <Id>3</Id>
+      <Name>Unintentional Navigators</Name>
+      <Country code="GB">Great Britain</Country>
+    </Organisation>
     <ControlCard punchingSystem="SI">99999</ControlCard>
     <ControlCard punchingSystem="Emit">88888</ControlCard>
-    <Class idref="3"/>
+    <Class>
+      <Id>3</Id>
+      <Name>Men Open</Name>
+    </Class>
   </Competitor>
 
   <Competitor>
@@ -95,40 +131,4 @@
     <!-- this person is not member of any organisation, owns no control cards and has no default classes defined, -->
     <!-- so Organisation, ControlCard and Class elements are omitted -->
   </Competitor>
-
-  <References>
-    <Organisation>
-      <!-- an identifier that is known by all parts involved in the data exchange, for example a federation database identifier -->
-      <Id>1</Id>
-      <Name>Super Fast Orienteers</Name>
-      <Country code="GB">Great Britain</Country>
-    </Organisation>
-    <Organisation>
-      <Id>2</Id>
-      <Name>Bushmen OC</Name>
-      <Country code="GB">Great Britain</Country>
-    </Organisation>
-    <Organisation>
-      <Id>3</Id>
-      <Name>Unintentional Navigators</Name>
-      <Country code="GB">Great Britain</Country>
-    </Organisation>
-    <Class>
-      <!-- an identifier that is known by all parts involved in the data exchange, for example a federation database identifier -->
-      <Id>1</Id>
-      <Name>Men Elite</Name>
-    </Class>
-    <Class>
-      <Id>2</Id>
-      <Name>Women Elite</Name>
-    </Class>
-    <Class>
-      <Id>3</Id>
-      <Name>Men Open</Name>
-    </Class>
-    <Class>
-      <Id>4</Id>
-      <Name>Women Open</Name>
-    </Class>
-  </References>
 </CompetitorList>
